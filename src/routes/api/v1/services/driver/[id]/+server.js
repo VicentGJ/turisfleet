@@ -1,31 +1,32 @@
 import sequelize from "$lib/db";
 import { error, json } from "@sveltejs/kit";
-import { carTable as table } from "$lib/tables.js";
+import { driverTable as table } from "$/lib/tables";
+
 export async function GET({ params }) {
-    const plate_number = params.plate
+    const id_number = params.id
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
-            `SELECT * FROM ${table} WHERE plate_number = :plate_number`,
+            `SELECT * FROM ${table} WHERE id_number = :id_number`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
-                replacements: { plate_number }
+                replacements: { id_number }
             }
         )
         return result;
     });
-    if (result.length == 0) throw error(404, { 'message': `Car with plate number ${plate_number} not found` })
+    if (result.length == 0) throw error(404, { 'message': `Driver with id number ${id_number} not found` })
     return json(result[0]);
 }
 
 
 export async function DELETE({ params }) {
-    const plate_number = params.plate
+    const id_number = params.id
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
-            `DELETE FROM ${table} WHERE plate_number = :plate_number`,
+            `DELETE FROM ${table} WHERE id_number = :id_number`,
             {
-                replacements: { plate_number, table },
+                replacements: { id_number },
                 type: sequelize.QueryTypes.DELETE,
                 transaction: t,
             }
@@ -37,33 +38,28 @@ export async function DELETE({ params }) {
 
 
 export async function PUT({ params, request }) {
-    const identifier = params.plate
-    const body = await request.json();//new attribute values for car
+    const identifier = params.id
+    const body = await request.json();//new attribute values for driver
     const result = await sequelize.transaction(async (t) => {
         await sequelize.query(
-            `
-            UPDATE ${table}
-            SET plate_number = :plate_number, seat_amount = :seat_amount, available_km = :available_km 
-            WHERE plate_number = :identifier
-            `,
+            `UPDATE ${table} SET id_number = :id_number, name = :name, address = :address, category = :category WHERE id_number = :identifier`,
             {
                 type: sequelize.QueryTypes.UPDATE,
                 transaction: t,
                 replacements: {
                     ...body,
-                    identifier
+                    identifier,
                 }
             }
         )
         //get the edited tuple to return
         const result = await sequelize.query(
-            `SELECT * FROM ${table} WHERE plate_number = :plate_number`,
+            `SELECT * FROM ${table} WHERE id_number = :id_number`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
                 replacements: {
-                    plate_number: body.plate_number,
-                    table
+                    id_number: body.id_number,
                 }
             }
         )

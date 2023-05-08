@@ -1,18 +1,19 @@
 import sequelize from "$lib/db";
 import { json, error } from "@sveltejs/kit";
-import { carTable as table } from "$lib/tables.js";
+import { driverTable as table } from "$/lib/tables";
+
 export async function GET({ url }) {
     const { searchParams: params } = url //query parameters
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
-            `SELECT get_cars()`,
+            `SELECT get_drivers()`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
             }
         );
 
-        const cursor = result[0].get_cars;
+        const cursor = result[0].get_drivers;
         const cars = await sequelize.query(
             `FETCH ${params.get('limit')} IN "${cursor}"`,
             {
@@ -27,25 +28,26 @@ export async function GET({ url }) {
 
 
 export async function POST({ request }) {
-    const body = await request.json(); //new car
+    const body = await request.json(); //new driver
     const result = await sequelize.transaction(async (t) => {
         try {
             await sequelize.query(
-                `SELECT insert_car(:plate_number, :brand, :seat_amount, :available_km)`,
+                `SELECT insert_driver(:id_number, :name, :address, :category)`,
                 {
                     replacements: body,
                     type: sequelize.QueryTypes.SELECT,
                     transaction: t,
                 }
             );
-            //select the created car to return it
+            //select the created driver to return it
             const created = await sequelize.query(
-                `SELECT * FROM ${table} c WHERE c.plate_number = :plate_number`,
+                `SELECT * FROM ${table} d WHERE d.id_number = :id_number`,
                 {
                     type: sequelize.QueryTypes.SELECT,
                     transaction: t,
                     replacements: {
-                        plate_number: body.plate_number,
+                        id_number: body.id_number,
+                        table
                     }
                 }
             )
