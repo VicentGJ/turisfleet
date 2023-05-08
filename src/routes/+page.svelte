@@ -1,40 +1,21 @@
-<script>
-  import PlaceHolder from "$services/PlaceHolderExample";
+<script lang="ts">
   import { onMount } from "svelte";
-  import { scale } from "svelte/transition";
-  let workers = [];
-  let headers = [];
-  onMount(() => {
-    const ph = PlaceHolder.getInstance();
-    ph.getWorkersFromCompany(1, 5).then((ws) => {
-      workers = ws;
-      Object.entries(workers[0]).forEach(([key, value]) => {
-        headers = [...headers, key];
-      });
-    });
+  import CarService from "$services/CarService";
+  onMount(async () => {
+    const carService = CarService.getInstance();
+    // await carService.getCars();
+    // await carService.getCar("LB1CM");
+    // await carService.createCar({
+    //   plate_number: "GRWSG",
+    //   brand: "Tesla",
+    //   seat_amount: 4,
+    //   available_km: 600,
+    // });
+    // await carService.deleteCar("GRWSG")
+    // await carService.updateCar("AFG1K", {
+    //   available_km: 900,
+    //   plate_number: "GRWSG",
+    //   seat_amount: 5,
+    // });
   });
 </script>
-
-<!-- test -->
-{#if workers.length}
-  <table>
-    <thead>
-      <tr>
-        {#each headers as header}
-          <th>{header}</th>
-        {/each}
-      </tr>
-    </thead>
-    <tbody>
-      {#each workers as obrero}
-        <tr>
-          {#each Object.entries(obrero) as [key, value], index}
-            <td in:scale={{ delay: 100 * index, duration: 200 }}>
-              {value}
-            </td>
-          {/each}
-        </tr>
-      {/each}
-    </tbody>
-  </table>
-{/if}

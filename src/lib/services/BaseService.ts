@@ -18,4 +18,14 @@ export default abstract class BaseService {
       return SERVICES_PROXY_BASE + this.service + extra;
     else return SERVICES_PROXY_BASE + this.service + "/" + extra;
   }
+
+  protected makeParams(params: Object): string {
+    let queryParams = "?";
+    const queryBuilder = new URLSearchParams();
+    Object.entries(params).forEach(([key, value]) => {
+      queryBuilder.append(key, value);
+    });
+    queryParams += queryBuilder.toString();
+    return queryParams;
+  }
 }
