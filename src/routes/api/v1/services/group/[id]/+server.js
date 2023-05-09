@@ -57,10 +57,11 @@ export async function PUT({ params, request }) {
             }
         )
         return await sequelize.query(
-            `SELECT * FROM ${table} ORDER BY id_group DESC LIMIT 1`,
+            `SELECT * FROM ${table} WHERE id_group = :identifier`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
+                replacements: { identifier }
             }
         )
     })

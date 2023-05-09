@@ -59,10 +59,13 @@ export async function PUT({ params, request }) {
         )
         return await sequelize.query(
             `SELECT * FROM ${table}
-            ORDER BY id_driver DESC LIMIT 1`,
+            WHERE id_number=:id_number`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
+                replacements: {
+                    id_number: body.id_number
+                }
             }
         )
     })
