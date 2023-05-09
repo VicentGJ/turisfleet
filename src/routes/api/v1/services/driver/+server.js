@@ -40,19 +40,13 @@ export async function POST({ request }) {
                     transaction: t,
                 }
             );
-            //select the created driver to return it
-            const created = await sequelize.query(
-                `SELECT * FROM ${table} d WHERE d.id_number = :id_number`,
+            return await sequelize.query(
+                `SELECT * FROM ${table} ORDER BY id_driver DESC LIMIT 1`,
                 {
                     type: sequelize.QueryTypes.SELECT,
                     transaction: t,
-                    replacements: {
-                        id_number: body.id_number,
-                        table
-                    }
                 }
-            )
-            return created;
+            );
         } catch (e) {
             throw error(400, e)
         }

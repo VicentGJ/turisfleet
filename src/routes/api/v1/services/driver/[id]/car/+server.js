@@ -30,43 +30,12 @@ export async function GET({ params }) {
     return json(result[0]);
 }
 
-export async function POST({ params, request }) {
-    const identifier = params.id
-    const body = await request.json();
-    const result = sequelize.transaction(async (t) => {
-        await sequelize.query(
-            `UPDATE ${table}
-            SET idcar = :id_car
-            WHERE id_number = :identifier`,
-            {
-                type: sequelize.QueryTypes.UPDATE,
-                transaction: t,
-                replacements: {
-                    identifier,
-                    ...body
-                }
-
-            }
-        )
-        const result = await sequelize.query(
-            `SELECT * FROM ${table} WHERE id_number = :identifier`,
-            {
-                type: sequelize.QueryTypes.SELECT,
-                transaction: t,
-                replacements: { identifier }
-            }
-        )
-        return result
-    })
-    if (result.length === 0) throw new error(404, { message: `Couldn't find the recently created driver` })
-    return json(result[0])
-}
-
 export async function DELETE({ params }) {
     const id_number = params.id
     const result = await sequelize.transaction(async (t) => {
         await sequelize.query(
-            `UPDATE ${table} SET idcar = NULL WHERE id_number = :id_number`,
+            `UPDATE ${table} SET idcar = NULL 
+            WHERE id_number = :id_number`,
             {
                 type: sequelize.QueryTypes.UPDATE,
                 transaction: t,
@@ -74,7 +43,8 @@ export async function DELETE({ params }) {
             }
         )
         return await sequelize.query(
-            `SELECT * FROM ${table} WHERE id_number = :id_number`,
+            `SELECT * FROM ${table} 
+            WHERE id_number = :id_number`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
@@ -89,9 +59,28 @@ export async function DELETE({ params }) {
 
 export async function PUT({ params, request }) {
     const identifier = params.id
-    const body = await request.json();//new attribute values for driver
+    const body = await request.json();
     const result = await sequelize.transaction(async (t) => {
-        //TODO
+        await sequelize.query(
+            `UPDATE ${table} SET idcar=:id_car WHERE id_number=:identifier`,
+            {
+                type: sequelize.QueryTypes.UPDATE,
+                transaction: t,
+                replacements: {
+                    ...body,
+                    identifier
+                }
+            }
+        )
+        return await sequelize.query(
+            `SELECT * FROM ${table} WHERE id_number=:identifier`,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                transaction: t,
+                replacements: { identifier }
+            }
+        )
     })
+    console.log(result)
     return json(result[0]);
 }

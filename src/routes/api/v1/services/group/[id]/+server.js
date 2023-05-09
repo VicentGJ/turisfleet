@@ -56,15 +56,13 @@ export async function PUT({ params, request }) {
                 }
             }
         )
-        //get the edited tuple to return
-        const result = await sequelize.query(
+        return await sequelize.query(
             `SELECT * FROM ${table} ORDER BY id_group DESC LIMIT 1`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
             }
         )
-        return result
     })
     if (result.length === 0) throw new error(404, { message: `Group with id ${identifier} not found` })
     return json(result[0]);

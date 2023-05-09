@@ -88,21 +88,9 @@ export default class DriverService extends BaseService {
     });
   }
 
-  public async setDriverCar(id_driver: string, id_car: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id_driver + "/car"), {
-        method: "POST",
-        body: JSON.stringify({ id_car }),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
-  }
-
   public async updateDriverCar(
     id_driver: string,
-    id_car: string
+    id_car: string | null
   ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id_driver + "/car"), {
