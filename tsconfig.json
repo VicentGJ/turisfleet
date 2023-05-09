@@ -19,8 +19,8 @@
       "$stores/*": ["./src/libs/stores/*"],
       "$static": ["./static"],
       "$static/*": ["./static/*"],
-      "$services": ["./src/lib/services"],
       "$services/*": ["./src/lib/services/*"],
+      "$services": ["./src/lib/services/services"],
       "$lib": ["./src/lib"],
       "$lib/*": ["./src/lib/*"]
     }

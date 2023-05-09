@@ -1,6 +1,6 @@
 import sequelize from "$lib/db";
 import { error, json } from "@sveltejs/kit";
-import { driverTable as table } from "$/lib/tables";
+import { driverTable as table } from "$lib/tables";
 
 export async function GET({ params }) {
     const id_number = params.id
@@ -15,7 +15,7 @@ export async function GET({ params }) {
         )
         return result;
     });
-    if (result.length == 0) throw error(404, { 'message': `Driver with id number ${id_number} not found` })
+    if (result.length == 0) throw error(404, { 'message': `Driver with id ${id_number} not found` })
     return json(result[0]);
 }
 
@@ -65,5 +65,7 @@ export async function PUT({ params, request }) {
         )
         return result
     })
+
+    if (result.length === 0) throw new error(404, { message: `Driver with id ${identifier} not found` })
     return json(result[0]);
 }

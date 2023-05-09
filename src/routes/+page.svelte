@@ -1,10 +1,8 @@
 <script lang="ts">
   import { onMount } from "svelte";
-  import CarService from "$services/CarService";
-  import DriverService from "$/lib/services/DriverService";
-  import { LicenceCategory } from "$/lib/types/DriverTypes";
+  import { carService, driverService, groupService } from "$services";
+  import { LicenceCategory } from "$lib/types/DriverTypes";
   onMount(async () => {
-    const carService = CarService.getInstance();
     // await carService.getCars();
     // await carService.getCar("LB1CM");
     // await carService.createCar({
@@ -19,8 +17,7 @@
     //   plate_number: "GRWSG",
     //   seat_amount: 5,
     // });
-
-    const driverService = DriverService.getInstance();
+    //----------------------------------------------------------------
     // driverService.getDrivers();
     // driverService.createDriver({
     //   address: "11 e/ 198 y 200 #19802, Siboney",
@@ -37,5 +34,17 @@
     // await driverService.setDriverCar("01060568482", "5");
     // await driverService.getDriverCar("01060568482");
     // driverService.removeDriverCar("01060568482");
+    //----------------------------------------------------------------
+    // await groupService.getGroups();
+    // await groupService.getGroup(22);
+    // await groupService.createGroup({
+    //   country: "Japan",
+    //   tourist_amount: 50,
+    // });
+    // await groupService.updateGroup(22, {
+    //   country: "Japan",
+    //   tourist_amount: 60,
+    // });
+    // await groupService.deleteGroup(22);
   });
 </script>

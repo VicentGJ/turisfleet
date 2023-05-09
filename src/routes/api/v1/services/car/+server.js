@@ -1,8 +1,9 @@
 import sequelize from "$lib/db";
 import { json, error } from "@sveltejs/kit";
-import { carTable as table } from "$lib/tables.js";
+import { carTable as table } from "$lib/tables";
 export async function GET({ url }) {
     const { searchParams: params } = url //query parameters
+    const limit = params.get('limit');
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
             `SELECT get_cars()`,
@@ -14,7 +15,7 @@ export async function GET({ url }) {
 
         const cursor = result[0].get_cars;
         const cars = await sequelize.query(
-            `FETCH ${params.get('limit')} IN "${cursor}"`,
+            `FETCH ${limit} IN "${cursor}"`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
