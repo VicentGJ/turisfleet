@@ -61,7 +61,7 @@
       </select>
     </div>
     <div class="input-container">
-      <label for="">Copiloto</label>
+      <label for="">Copilot</label>
       <select name="" id="" bind:value={values.id_copilot}>
         {#each copilots as copilot}
           <option value={copilot.id_driver}>{copilot.name}</option>
