@@ -2,12 +2,17 @@
   import { durationObjToStr } from "$lib/utils";
   import Tabs from "$/components/Shared/Tabs.svelte";
   import Table from "$/components/Table/Table.svelte";
-  import { programView } from "$/lib/stores/basic_stores";
+  import { loading, programView } from "$/lib/stores/basic_stores";
   import { browser } from "$app/environment";
   import Loading from "$components/Shared/Loading.svelte";
   import { programService } from "$services";
-  let requestCompleted = false;
+  import CreateProgram from "$/components/Forms/Program/CreateProgram.svelte";
+  import CreateSpecificProgram from "$/components/Forms/Program/CreateSpecificProgram.svelte";
+  let showCreateProgram = false;
+  let showCreateSpecificProgram = false;
   let items: [] = [];
+  let createButtonText = "";
+
   $: tabs = [
     {
       name: "Specific Programs",
@@ -23,29 +28,44 @@
 
   $: if (browser && $programView) {
     items = [];
-    requestCompleted = false;
+    $loading = true;
+    refreshItems();
     switch ($programView) {
       case "specific-programs":
-        programService.getSpecificPrograms().then((i) => {
-          requestCompleted = true;
-          i.map((i: any) => {
-            i["duration"] = durationObjToStr(i.duration);
-            return i;
-          });
-          items = i;
-        });
+        createButtonText = "Insert Specific Program";
         break;
       case "programs":
-        programService.getPrograms().then((i) => {
-          requestCompleted = true;
-          items = i;
-        });
+        createButtonText = "Insert Program";
         break;
     }
   }
 
   const handleRowClick = ({ detail }: any) => {};
-
+  const handleCreateClicked = () => {
+    switch ($programView) {
+      case "programs":
+        showCreateProgram = true;
+        break;
+      case "specific-programs":
+        showCreateSpecificProgram = true;
+        break;
+    }
+  };
+  const handleDeleteClicked = ({ detail }: any) => {
+    $loading = true;
+    switch ($programView) {
+      case "specific-programs":
+        programService
+          .deleteSpecificProgram(detail.id_specific_program)
+          .then(() => refreshItems());
+        break;
+      case "programs":
+        programService
+          .deleteProgram(detail.id_program)
+          .then(() => refreshItems());
+        break;
+    }
+  };
   const changeView = ({ detail }: any) => {
     const index = detail;
     const temp = tabs;
@@ -59,23 +79,47 @@
       tabs = [...tabs, t];
     });
   };
+  const refreshItems = () => {
+    $loading = true;
+    switch ($programView) {
+      case "programs":
+        programService.getPrograms().then((i) => {
+          $loading = false;
+          items = i;
+        });
+        break;
+      case "specific-programs":
+        programService.getSpecificPrograms().then((i) => {
+          $loading = false;
+          i.map((i: any) => {
+            i["duration"] = durationObjToStr(i.duration);
+            return i;
+          });
+          items = i;
+        });
+        break;
+    }
+  };
 </script>
 
 <Tabs bind:tabs on:change-tab={changeView} />
-{#if items.length || requestCompleted}
-  <Table bind:items on:row-clicked={handleRowClick} />
-{:else}
-  <div class="loading-container">
-    <Loading />
-  </div>
-{/if}
+<Table
+  bind:items
+  bind:createButtonText
+  on:row-clicked={handleRowClick}
+  on:create-clicked={handleCreateClicked}
+  on:delete-clicked={handleDeleteClicked}
+/>
 
-<style>
-  .loading-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
+{#if showCreateProgram}
+  <CreateProgram
+    bind:showCreate={showCreateProgram}
+    on:created={refreshItems}
+  />
+{/if}
+{#if showCreateSpecificProgram}
+  <CreateSpecificProgram
+    bind:showCreate={showCreateSpecificProgram}
+    on:created={refreshItems}
+  />
+{/if}

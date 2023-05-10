@@ -1,33 +1,40 @@
 <script>
-  import Loading from "$components/Shared/Loading.svelte";
+  import CreateDriver from "$/components/Forms/Driver/CreateDriver.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { driverService } from "$/lib/services/services";
+  import { loading } from "$/lib/stores/basic_stores";
   import { onMount } from "svelte";
-  let requestCompleted = false;
   let items = [];
+  let showCreate = false;
   onMount(() => {
-    driverService.getDrivers().then((i) => {
-      requestCompleted = true;
-      items = i;
-    });
+    refreshItems();
   });
   const handleRowClick = ({ detail }) => {};
+  const handleCreateClicked = () => {
+    showCreate = true;
+  };
+  const handleDeleteClicked = ({ detail }) => {
+    $loading = true;
+    driverService.deleteDriver(detail.id_number).then(() => refreshItems());
+  };
+
+  const refreshItems = () => {
+    $loading = true;
+    driverService.getDrivers().then((i) => {
+      $loading = false;
+      items = i;
+    });
+  };
 </script>
 
-{#if items.length || requestCompleted}
-  <Table bind:items on:row-clicked={handleRowClick} />
-{:else}
-  <div class="loading-container">
-    <Loading />
-  </div>
-{/if}
+<Table
+  bind:items
+  createButtonText="Insert Driver"
+  on:row-clicked={handleRowClick}
+  on:create-clicked={handleCreateClicked}
+  on:delete-clicked={handleDeleteClicked}
+/>
 
-<style>
-  .loading-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
+{#if showCreate}
+  <CreateDriver bind:showCreate on:created={refreshItems} />
+{/if}

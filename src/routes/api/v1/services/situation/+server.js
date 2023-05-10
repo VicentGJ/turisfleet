@@ -5,22 +5,15 @@ import { situationsTable as table } from "$lib/tables";
 export async function GET({ url }) {
     const { searchParams: params } = url //query parameters
     const limit = params.get("limit")
+    const situation_type = params.get("situation_type")
     const result = await sequelize.transaction(async (t) => {
-        const result = await sequelize.query(
-            `SELECT get_situations()`,
+        return await sequelize.query(
+            `SELECT * FROM situations ${situation_type != 'any' ? "WHERE situation_type=\'" + situation_type + "\'" : ''} LIMIT ${limit}`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
             }
         );
-
-        const cursor = result[0].get_situations;
-        return await sequelize.query(
-            `FETCH ${limit} IN "${cursor}"`,
-            {
-                type: sequelize.QueryTypes.SELECT,
-                transaction: t,
-            });
     });
     return json(result);
 }

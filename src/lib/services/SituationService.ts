@@ -20,9 +20,12 @@ export default class SituationService extends BaseService {
     return SituationService.instance;
   }
 
-  public async getSituations(limit: number | "ALL" = 200): Promise<any> {
+  public async getSituations(
+    limit: number | "ALL" = 200,
+    situation_type: "any" | "driver" | "car" = "any"
+  ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      const queryParams = this.makeParams({ limit });
+      const queryParams = this.makeParams({ limit, situation_type });
       fetch(this.url(queryParams), {
         method: "GET",
       })

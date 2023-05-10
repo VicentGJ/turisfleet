@@ -1,4 +1,5 @@
 <script>
+  import { loading } from "./../lib/stores/basic_stores.ts";
   import "$/css/app.css";
   import "$/css/variables.css";
   import "$/css/animations.css";
@@ -7,6 +8,7 @@
   import { goto } from "$app/navigation";
   import { view } from "$/lib/stores/basic_stores";
   import { browser } from "$app/environment";
+  import Loading from "$/components/Shared/Loading.svelte";
   $: $view && browser && goto($view);
 </script>
 
@@ -20,6 +22,9 @@
       <slot />
     </div>
   </div>
+  {#if $loading}
+    <Loading />
+  {/if}
 </div>
 
 <style>

@@ -1,12 +1,18 @@
 <script lang="ts">
+  import CreateCarSituation from "./../../components/Forms/Situation/CreateCarSituation.svelte";
+  import { loading } from "$stores/basic_stores";
   import Tabs from "$/components/Shared/Tabs.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { situationView } from "$/lib/stores/basic_stores";
   import { browser } from "$app/environment";
-  import Loading from "$components/Shared/Loading.svelte";
   import { situationService } from "$services";
-  let requestCompleted = false;
+  import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
+  import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
+  let showCreateSituation = false;
+  let showCreateCarSituation = false;
+  let showCreateDriverSituation = false;
   let items: [] = [];
+  let createButtonText = "";
   $: tabs = [
     {
       name: "Car Situations",
@@ -27,31 +33,61 @@
 
   $: if (browser && $situationView) {
     items = [];
-    requestCompleted = false;
+    $loading = true;
+    refreshItems();
     switch ($situationView) {
       case "car-situations":
-        situationService.getCarSituations().then((i) => {
-          requestCompleted = true;
-          items = i;
-        });
+        createButtonText = "Insert Car Situation";
         break;
       case "driver-situations":
-        situationService.getDriverSituations().then((i) => {
-          requestCompleted = true;
-          items = i;
-        });
+        createButtonText = "Insert Driver Situation";
         break;
       case "situations":
-        situationService.getSituations().then((i) => {
-          requestCompleted = true;
-          items = i;
-        });
+        createButtonText = "Insert Situation";
         break;
     }
   }
 
   const handleRowClick = ({ detail }: any) => {};
-
+  const handleCreateClicked = () => {
+    switch ($situationView) {
+      case "situations":
+        showCreateSituation = true;
+        break;
+      case "car-situations":
+        showCreateCarSituation = true;
+        break;
+      case "driver-situations":
+        showCreateDriverSituation = true;
+        break;
+    }
+  };
+  const handleDeleteClicked = ({ detail }: any) => {
+    $loading = true;
+    switch ($situationView) {
+      case "car-situations":
+        situationService
+          .deleteCarSituation({
+            car_id_car: detail.car_id_car,
+            date: detail.date,
+          })
+          .then(() => refreshItems());
+        break;
+      case "driver-situations":
+        situationService
+          .deleteDriverSituation({
+            driver_id_driver: detail.driver_id_driver,
+            date: detail.date,
+          })
+          .then(() => refreshItems());
+        break;
+      case "situations":
+        situationService
+          .deleteSituation(detail.id_situation)
+          .then(() => refreshItems());
+        break;
+    }
+  };
   const changeView = ({ detail }: any) => {
     const index = detail;
     const temp = tabs;
@@ -65,23 +101,55 @@
       tabs = [...tabs, t];
     });
   };
+
+  const refreshItems = () => {
+    $loading = true;
+    switch ($situationView) {
+      case "situations":
+        situationService.getSituations().then((i) => {
+          $loading = false;
+          items = i;
+        });
+        break;
+      case "car-situations":
+        situationService.getCarSituations().then((i) => {
+          $loading = false;
+          items = i;
+        });
+        break;
+      case "driver-situations":
+        situationService.getDriverSituations().then((i) => {
+          $loading = false;
+          items = i;
+        });
+        break;
+    }
+  };
 </script>
 
 <Tabs bind:tabs on:change-tab={changeView} />
-{#if items.length || requestCompleted}
-  <Table bind:items on:row-clicked={handleRowClick} />
-{:else}
-  <div class="loading-container">
-    <Loading />
-  </div>
+<Table
+  bind:items
+  bind:createButtonText
+  on:row-clicked={handleRowClick}
+  on:create-clicked={handleCreateClicked}
+  on:delete-clicked={handleDeleteClicked}
+/>
+{#if showCreateSituation}
+  <CreateSituation
+    bind:showCreate={showCreateSituation}
+    on:created={refreshItems}
+  />
 {/if}
-
-<style>
-  .loading-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
+{#if showCreateCarSituation}
+  <CreateCarSituation
+    bind:showCreate={showCreateCarSituation}
+    on:created={refreshItems}
+  />
+{/if}
+{#if showCreateDriverSituation}
+  <CreateDriverSituation
+    bind:showCreate={showCreateDriverSituation}
+    on:created={refreshItems}
+  />
+{/if}

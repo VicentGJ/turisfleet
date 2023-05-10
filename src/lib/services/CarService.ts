@@ -51,9 +51,9 @@ export default class CarService extends BaseService {
     });
   }
 
-  public async deleteCar(carID: string): Promise<any> {
+  public async deleteCar(plate: string | number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      fetch(this.url(carID), {
+      fetch(this.url(plate.toString()), {
         method: "DELETE",
       })
         .then((response) => response.json())

@@ -1,33 +1,38 @@
 <script>
-  import Loading from "$components/Shared/Loading.svelte";
+  import CreateRequest from "$/components/Forms/Request/CreateRequest.svelte";
   import Table from "$/components/Table/Table.svelte";
+  import { loading } from "$/lib/stores/basic_stores";
   import { requestService } from "$services";
   import { onMount } from "svelte";
-  let requestCompleted = false;
   let items = [];
+  let showCreate = true;
   onMount(() => {
-    requestService.getRequests().then((i) => {
-      requestCompleted = true;
-      items = i;
-    });
+    refreshItems();
   });
   const handleRowClick = ({ detail }) => {};
+  const handleCreateClicked = () => {
+    showCreate = true;
+  };
+  const handleDeleteClicked = ({ detail }) => {
+    $loading = true;
+    requestService.deleteRequest(detail.id_request).then(() => refreshItems());
+  };
+  const refreshItems = () => {
+    $loading = true;
+    requestService.getRequests().then((i) => {
+      $loading = false;
+      items = i;
+    });
+  };
 </script>
 
-{#if items.length || requestCompleted}
-  <Table bind:items on:row-clicked={handleRowClick} />
-{:else}
-  <div class="loading-container">
-    <Loading />
-  </div>
+<Table
+  bind:items
+  createButtonText="Insert Car"
+  on:row-clicked={handleRowClick}
+  on:create-clicked={handleCreateClicked}
+  on:delete-clicked={handleDeleteClicked}
+/>
+{#if showCreate}
+  <CreateRequest bind:showCreate on:created={refreshItems} />
 {/if}
-
-<style>
-  .loading-container {
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-  }
-</style>
