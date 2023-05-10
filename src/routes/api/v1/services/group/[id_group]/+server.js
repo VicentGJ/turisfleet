@@ -3,7 +3,7 @@ import { error, json } from "@sveltejs/kit";
 import { groupTable as table } from "$lib/tables";
 
 export async function GET({ params }) {
-    const id_group = params.id
+    const { id_group } = params
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
             `SELECT * FROM ${table} WHERE id_group = :id_group`,
@@ -21,7 +21,7 @@ export async function GET({ params }) {
 
 
 export async function DELETE({ params }) {
-    const id_group = params.id
+    const { id_group } = params
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
             `DELETE FROM ${table} WHERE id_group = :id_group`,
@@ -38,7 +38,7 @@ export async function DELETE({ params }) {
 
 
 export async function PUT({ params, request }) {
-    const identifier = params.id
+    const { id_group: identifier } = params
     const body = await request.json();//new attribute values for car
     const result = await sequelize.transaction(async (t) => {
         await sequelize.query(
