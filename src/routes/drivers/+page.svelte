@@ -1,15 +1,21 @@
 <script>
   import CreateDriver from "$/components/Forms/Driver/CreateDriver.svelte";
+  import UpdateDriver from "$/components/Forms/Driver/UpdateDriver.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { driverService } from "$/lib/services/services";
   import { loading } from "$/lib/stores/basic_stores";
   import { onMount } from "svelte";
   let items = [];
   let showCreate = false;
+  let showUpdate = false;
+  let itemToUpdate;
   onMount(() => {
     refreshItems();
   });
-  const handleRowClick = ({ detail }) => {};
+  const handleRowClick = ({ detail }) => {
+    itemToUpdate = detail;
+    showUpdate = true;
+  };
   const handleCreateClicked = () => {
     showCreate = true;
   };
@@ -37,4 +43,7 @@
 
 {#if showCreate}
   <CreateDriver bind:showCreate on:created={refreshItems} />
+{/if}
+{#if showUpdate}
+  <UpdateDriver bind:showUpdate on:updated={refreshItems} bind:itemToUpdate />
 {/if}

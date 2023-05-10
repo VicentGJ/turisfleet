@@ -61,7 +61,8 @@
                 <img
                   src="trash.svg"
                   alt=""
-                  on:click={() => deleteClicked(item)}
+                  on:click|capture|preventDefault|stopPropagation={() =>
+                    deleteClicked(item)}
                   class="clickable-icon"
                 />
               </td>

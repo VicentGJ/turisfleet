@@ -1,56 +1,60 @@
 <script lang="ts">
+  import { durationObjToStr, durationStrToObj } from "$lib/utils";
+  import { LicenceCategory } from "$lib/types/DriverTypes";
   import { createEventDispatcher, onMount } from "svelte";
-  import { programService } from "$/lib/services/services";
   import BaseForm from "../BaseForm.svelte";
+  import { programService } from "$services";
   import { loading } from "$/lib/stores/basic_stores";
-  import { durationObjToStr } from "$/lib/utils";
-  export let showCreate = false;
-  let programs: any = [];
+  export let showUpdate = false;
+  export let itemToUpdate: any;
 
-  const dispatch = createEventDispatcher();
-  onMount(() => {
+  $: {
+    console.log(itemToUpdate.duration);
+    console.log(values.duration);
+  }
+  let programs: any = [];
+  onMount(async () => {
     $loading = true;
-    programService.getPrograms().then((p) => {
-      programs = p;
-      values.id_program = programs[0].id_program;
-      $loading = false;
-    });
-  });
-  $: values = {
-    description: "",
-    duration: {
-      days: "",
-      hours: "",
-      minutes: "",
-    },
-    id_program: 0,
-    km: 0,
-    start: "",
-  };
-  const cancel = () => {
-    showCreate = false;
-  };
-  const create = async () => {
-    let parsedValues = {
-      ...values,
-      duration: durationObjToStr(values.duration),
-    };
-    $loading = true;
-    await programService.createSpecificProgram(parsedValues);
+    await programService.getPrograms().then((p) => (programs = p));
     $loading = false;
-    dispatch("created");
-    showCreate = false;
+  });
+  const dispatch = createEventDispatcher();
+  let values = {
+    description: itemToUpdate.description,
+    duration: durationStrToObj(itemToUpdate.duration) as any,
+    id_program: itemToUpdate.id_program,
+    km: itemToUpdate.km,
+    start: itemToUpdate.start,
+  };
+
+  const cancel = () => {
+    showUpdate = false;
+    itemToUpdate = undefined;
+  };
+  const update = async () => {
+    $loading = true;
+    await programService.updateSpecificProgram(
+      itemToUpdate.id_specific_program,
+      {
+        ...values,
+        duration: durationObjToStr(values.duration),
+      }
+    );
+    $loading = false;
+    dispatch("updated");
+    itemToUpdate = undefined;
+    showUpdate = false;
   };
   const close = () => {
-    showCreate = false;
+    cancel();
   };
 </script>
 
 <BaseForm
-  title="Insert Specific Program"
-  primaryBtnTxt="Insert Specific Program"
+  title="Update Specific Program"
+  primaryBtnTxt="Update Specific Program"
   on:close-clicked={close}
-  on:primary-clicked={create}
+  on:primary-clicked={update}
   on:secondary-clicked={cancel}
 >
   <div class="form-body">

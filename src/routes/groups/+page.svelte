@@ -3,13 +3,19 @@
   import { groupService } from "$/lib/services/services";
   import { loading } from "$/lib/stores/basic_stores";
   import CreateGroup from "$components/Forms/Group/CreateGroup.svelte";
+  import UpdateGroup from "$/components/Forms/Group/UpdateGroup.svelte";
   import { onMount } from "svelte";
   let items = [];
   let showCreate = false;
+  let showUpdate = false;
+  let itemToUpdate = false;
   onMount(() => {
     refreshItems();
   });
-  const handleRowClick = ({ detail }) => {};
+  const handleRowClick = ({ detail }) => {
+    itemToUpdate = detail;
+    showUpdate = true;
+  };
   const handleCreateClicked = () => {
     showCreate = true;
   };
@@ -35,4 +41,8 @@
 />
 {#if showCreate}
   <CreateGroup bind:showCreate on:created={refreshItems} />
+{/if}
+
+{#if showUpdate}
+  <UpdateGroup bind:showUpdate on:updated={refreshItems} bind:itemToUpdate />
 {/if}

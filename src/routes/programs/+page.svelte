@@ -1,4 +1,5 @@
 <script lang="ts">
+  import UpdateSpecificProgram from "./../../components/Forms/Program/UpdateSpecificProgram.svelte";
   import { durationObjToStr } from "$lib/utils";
   import Tabs from "$/components/Shared/Tabs.svelte";
   import Table from "$/components/Table/Table.svelte";
@@ -8,8 +9,14 @@
   import { programService } from "$services";
   import CreateProgram from "$/components/Forms/Program/CreateProgram.svelte";
   import CreateSpecificProgram from "$/components/Forms/Program/CreateSpecificProgram.svelte";
+  import UpdateProgram from "$/components/Forms/Program/UpdateProgram.svelte";
   let showCreateProgram = false;
   let showCreateSpecificProgram = false;
+
+  let showUpdateProgram = false;
+  let showUpdateSpecificProgram = false;
+
+  let itemToUpdate: any;
   let items: [] = [];
   let createButtonText = "";
 
@@ -40,7 +47,17 @@
     }
   }
 
-  const handleRowClick = ({ detail }: any) => {};
+  const handleRowClick = ({ detail }: any) => {
+    itemToUpdate = detail;
+    switch ($programView) {
+      case "programs":
+        showUpdateProgram = true;
+        break;
+      case "specific-programs":
+        showUpdateSpecificProgram = true;
+        break;
+    }
+  };
   const handleCreateClicked = () => {
     switch ($programView) {
       case "programs":
@@ -79,6 +96,7 @@
       tabs = [...tabs, t];
     });
   };
+
   const refreshItems = () => {
     $loading = true;
     switch ($programView) {
@@ -121,5 +139,19 @@
   <CreateSpecificProgram
     bind:showCreate={showCreateSpecificProgram}
     on:created={refreshItems}
+  />
+{/if}
+{#if showUpdateProgram}
+  <UpdateProgram
+    bind:showUpdate={showUpdateProgram}
+    on:updated={refreshItems}
+    bind:itemToUpdate
+  />
+{/if}
+{#if showUpdateSpecificProgram}
+  <UpdateSpecificProgram
+    bind:showUpdate={showUpdateSpecificProgram}
+    on:updated={refreshItems}
+    bind:itemToUpdate
   />
 {/if}
