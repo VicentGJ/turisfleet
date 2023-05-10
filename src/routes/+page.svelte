@@ -1,15 +1,8 @@
 <script lang="ts">
+  import { view } from "$stores/basic_stores";
   import { onMount } from "svelte";
-  import { programService } from "$services";
-  const durationObjToStr = (duration: object): string => {
-    let result = "";
-    Object.entries(duration).forEach(([key, value]) => {
-      result += `${value} ${key} `;
-    });
-
-    return result.trim();
-  };
-  onMount(async () => {
-    
+  import { goto } from "$app/navigation";
+  onMount(() => {
+    goto($view);
   });
 </script>
