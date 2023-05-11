@@ -12,7 +12,7 @@ export default abstract class BaseService {
   }
 
   protected url(extra?: string, api_version = "v1") {
-    const SERVICES_PROXY_BASE = `${env.SV_APP_HOST}/api/${api_version}/services`;
+    const SERVICES_PROXY_BASE = `/api/${api_version}/services`;
     if (!extra) return SERVICES_PROXY_BASE + this.service;
     else if (extra.startsWith("?"))
       return SERVICES_PROXY_BASE + this.service + extra;
