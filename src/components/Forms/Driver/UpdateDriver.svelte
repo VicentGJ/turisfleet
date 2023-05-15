@@ -1,20 +1,26 @@
 <script lang="ts">
   import { LicenceCategory } from "$lib/types/DriverTypes";
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
   import BaseForm from "../BaseForm.svelte";
-  import { driverService } from "$services";
+  import { driverService, carService } from "$services";
   import { loading } from "$/lib/stores/basic_stores";
   export let showUpdate = false;
   export let itemToUpdate: any;
-
+  let cars: any[] = [];
   const dispatch = createEventDispatcher();
+  onMount(async () => {
+    cars = [{ id_car: -1 }];
+    $loading = true;
+    await carService.getCars().then((c) => (cars = [...cars, ...c]));
+    $loading = false;
+  });
   let values = {
     name: itemToUpdate.name,
     address: itemToUpdate.address,
     id_number: itemToUpdate.id_number,
+    id_car: itemToUpdate.idcar,
     category: itemToUpdate.category,
   };
-
   const cancel = () => {
     showUpdate = false;
     itemToUpdate = undefined;
@@ -56,8 +62,8 @@
     <div class="input-container">
       <label for="">Licence Category *</label>
       <select name="" id="" bind:value={values.category}>
-        {#each Object.values(LicenceCategory) as option}
-          <option value={option}>{option}</option>
+        {#each Object.values(LicenceCategory) as category}
+          <option value={category}>{category}</option>
         {/each}
       </select>
     </div>
@@ -69,6 +75,26 @@
         bind:value={values.address}
         placeholder="address"
       />
+    </div>
+    <div class="input-container">
+      <label for="">Car *</label>
+      <select name="" id="" bind:value={values.id_car}>
+        {#each cars as car}
+          {#if car.id_car === -1}
+            <option value={null} selected={itemToUpdate.idcar === null}>
+              None
+            </option>
+          {:else}
+            <option
+              value={car.id_car}
+              selected={itemToUpdate.idcar === car.id_car}
+            >
+              {[car.plate_number]}
+              {car.brand}
+            </option>
+          {/if}
+        {/each}
+      </select>
     </div>
   </div>
 </BaseForm>

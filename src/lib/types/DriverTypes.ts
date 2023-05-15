@@ -6,6 +6,7 @@ export interface DriverCreate {
 }
 export interface DriverUpdate {
   id_number: string;
+  id_car: string;
   name: string;
   address: string;
   category: LicenceCategory;

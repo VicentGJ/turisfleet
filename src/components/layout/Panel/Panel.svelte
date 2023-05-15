@@ -56,9 +56,8 @@
     flex-direction: column;
     gap: 20px;
     position: relative;
-    margin: 5px 0;
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    margin-left: 4px;
+    border-radius: 8px;
   }
   h1 {
     margin: 0;

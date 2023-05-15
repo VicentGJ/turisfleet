@@ -11,37 +11,6 @@ body {
     color: rgba(33, 33, 33, 0.928);
 }
 
-/* default table styles */
-table {
-    text-align: left;
-    position: relative;
-    border-collapse: collapse;
-    width: 100%;
-}
-
-thead {
-    overflow: scroll;
-}
-
-td,
-th {
-    padding: 8px;
-}
-
-tr:nth-child(even) {
-    background-color: #dcdcdc55;
-}
-
-tbody>tr:hover {
-    background-color: var(--item-hover-color);
-    cursor: pointer;
-}
-
-thead>tr {
-    background: white;
-    position: sticky;
-    top: 0;
-}
 
 /* scrollbar styles */
 ::-webkit-scrollbar-thumb {

@@ -21,7 +21,7 @@ export default class SituationService extends BaseService {
   }
 
   public async getSituations(
-    limit: number | "ALL" = 200,
+    limit: number | "ALL" = "ALL",
     situation_type: "any" | "driver" | "car" = "any"
   ): Promise<any> {
     return new Promise<any>((resolve, reject) => {
@@ -88,7 +88,7 @@ export default class SituationService extends BaseService {
   }
 
   //car situations
-  public async getCarSituations(limit: number | "ALL" = 200): Promise<any> {
+  public async getCarSituations(limit: number | "ALL" = "ALL"): Promise<any> {
     const queryParams = this.makeParams({ limit });
 
     return new Promise<any>((resolve, reject) => {
@@ -131,7 +131,7 @@ export default class SituationService extends BaseService {
     });
   }
   //driver situations
-  public async getDriverSituations(limit: number | "ALL" = 200): Promise<any> {
+  public async getDriverSituations(limit: number | "ALL" = "ALL"): Promise<any> {
     const queryParams = this.makeParams({ limit });
 
     return new Promise<any>((resolve, reject) => {

@@ -6,8 +6,9 @@
 
 <style>
   #navbar-container {
-    height: 40px;
+    height: 50px;
+    width: 99%;
     background-color: white;
-    display: none;
+    border-radius: 8px;
   }
 </style>

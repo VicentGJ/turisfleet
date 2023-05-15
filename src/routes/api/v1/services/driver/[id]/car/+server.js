@@ -81,6 +81,5 @@ export async function PUT({ params, request }) {
             }
         )
     })
-    console.log(result)
     return json(result[0]);
 }

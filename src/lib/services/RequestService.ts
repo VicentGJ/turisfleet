@@ -1,6 +1,5 @@
-import BaseService from "./BaseService";
-import type { GroupCreate, GroupUpdate } from "../types/GroupTypes";
 import type { RequestCreate, RequestUpdate } from "../types/RequestTypes";
+import BaseService from "./BaseService";
 export default class RequestService extends BaseService {
   protected static instance: RequestService;
 
@@ -14,7 +13,7 @@ export default class RequestService extends BaseService {
     return RequestService.instance;
   }
 
-  public async getRequests(limit: number | "ALL" = 200): Promise<any> {
+  public async getRequests(limit: number | "ALL" = "ALL"): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {

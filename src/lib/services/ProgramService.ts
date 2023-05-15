@@ -18,7 +18,7 @@ export default class ProgramService extends BaseService {
     return ProgramService.instance;
   }
 
-  public async getPrograms(limit: number | "ALL" = 200): Promise<any> {
+  public async getPrograms(limit: number | "ALL" = "ALL"): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {
@@ -83,7 +83,7 @@ export default class ProgramService extends BaseService {
   }
 
   //specific programs
-  public async getSpecificPrograms(limit: number | "ALL" = 200): Promise<any> {
+  public async getSpecificPrograms(limit: number | "ALL" = "ALL"): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url("specific" + queryParams), {

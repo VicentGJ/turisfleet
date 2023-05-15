@@ -1,13 +1,10 @@
-import { env } from "$env/dynamic/public";
-
 export default abstract class BaseService {
   protected static instance: BaseService;
-  protected service: string;
-  protected constructor() {
-    this.service = "";
-  }
+  protected service: string = "";
 
-  public static getInstance(): BaseService {
+  protected constructor() {}
+
+  protected static getInstance(): BaseService {
     throw Error("cant get instance of abstract class");
   }
 

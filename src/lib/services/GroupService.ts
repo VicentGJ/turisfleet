@@ -13,7 +13,7 @@ export default class GroupService extends BaseService {
     return GroupService.instance;
   }
 
-  public async getGroups(limit: number | "ALL" = 200): Promise<any> {
+  public async getGroups(limit: number | "ALL" = "ALL"): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {

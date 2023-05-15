@@ -46,7 +46,7 @@ export async function PUT({ params, request }) {
     const body = await request.json();//new attribute values for driver
     const result = await sequelize.transaction(async (t) => {
         await sequelize.query(
-            `UPDATE ${table} SET id_number = :id_number, name = :name, address = :address, category = :category 
+            `UPDATE ${table} SET id_number = :id_number, name = :name, address = :address, category = :category, idcar = :id_car 
             WHERE id_number = :identifier`,
             {
                 type: sequelize.QueryTypes.UPDATE,

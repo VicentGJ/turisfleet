@@ -1,19 +1,19 @@
 <script>
-  import { loading } from "./../lib/stores/basic_stores.ts";
+  import Loading from "$/components/Shared/Loading.svelte";
+  import Navbar from "$/components/layout/Navbar.svelte";
+  import "$/css/animations.css";
   import "$/css/app.css";
   import "$/css/variables.css";
-  import "$/css/animations.css";
-  import Panel from "$components/layout/Panel/Panel.svelte";
-  import Navbar from "$/components/layout/Navbar.svelte";
-  import { goto } from "$app/navigation";
   import { view } from "$/lib/stores/basic_stores";
   import { browser } from "$app/environment";
-  import Loading from "$/components/Shared/Loading.svelte";
+  import { goto } from "$app/navigation";
+  import Panel from "$components/layout/Panel/Panel.svelte";
+  import { loading } from "./../lib/stores/basic_stores.ts";
   $: $view && browser && goto($view);
 </script>
 
 <div id="main-layout-container">
-  <div id="nav-container">
+  <div id="nav-wrapper">
     <Navbar />
   </div>
   <div id="main-content-container">
@@ -39,14 +39,19 @@
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    gap: 10px;
+    gap: 6px;
     height: 100%;
+    margin-top: 5px;
   }
   #slot-container {
     background-color: white;
     border-radius: 8px;
-    margin: 4px 10px 4px 0;
+    margin-right: 5px;
     width: 100%;
-    /* overflow-y: scroll; */
+  }
+  #nav-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 5px;
   }
 </style>
