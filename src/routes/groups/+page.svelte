@@ -1,25 +1,26 @@
-<script>
+<script lang="ts">
   import Table from "$/components/Table/Table.svelte";
   import { groupService } from "$/lib/services/services";
   import { loading } from "$/lib/stores/basic_stores";
   import CreateGroup from "$components/Forms/Group/CreateGroup.svelte";
   import UpdateGroup from "$/components/Forms/Group/UpdateGroup.svelte";
   import { onMount } from "svelte";
-  let items = [];
+  import type { Group } from "$/lib/types/GroupTypes";
+  let items: Group[];
   let showCreate = false;
   let showUpdate = false;
-  let itemToUpdate = false;
+  let itemToUpdate: Group;
   onMount(() => {
     refreshItems();
   });
-  const handleRowClick = ({ detail }) => {
+  const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
     showUpdate = true;
   };
   const handleCreateClicked = () => {
     showCreate = true;
   };
-  const handleDeleteClicked = ({ detail }) => {
+  const handleDeleteClicked = ({ detail }: any) => {
     $loading = true;
     groupService.deleteGroup(detail.id_group).then(() => refreshItems());
   };

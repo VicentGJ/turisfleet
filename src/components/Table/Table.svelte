@@ -1,10 +1,10 @@
 <script>
-  import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
+  import { idColumn } from "$stores/basic_stores";
   import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Shared/Button.svelte";
+  import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
   export let items = [];
   export let createButtonText = "";
-  export let showIDcolumn = false;
   let headers = [];
   const dispatch = createEventDispatcher();
   let itemToDelete = null;
@@ -88,23 +88,26 @@
   </div>
   <div class="table-wrapper">
     {#if items.length}
-      <table class:hide-id={!showIDcolumn} class="table">
+      <table class="table">
         <thead>
           <tr class:got-headers={headers.length > 0}>
             {#each headers as header}
-              {@const h = header.split("_").join(" ")}
-              <th>
-                <div class="header-name-filter-wrapper">
-                  <p class="header-name">{h}</p>
-                  <div class="input-container header-filter">
-                    <input
-                      type="text"
-                      bind:value={filters[header]}
-                      placeholder="{h.toLowerCase().split(' ')[0]} filter"
-                    />
+              {#if header != $idColumn}
+                <!-- content here -->
+                {@const h = header.split("_").join(" ")}
+                <th>
+                  <div class="header-name-filter-wrapper">
+                    <p class="header-name">{h}</p>
+                    <div class="input-container header-filter">
+                      <input
+                        type="text"
+                        bind:value={filters[header]}
+                        placeholder="{h.toLowerCase().split(' ')[0]} filter"
+                      />
+                    </div>
                   </div>
-                </div>
-              </th>
+                </th>
+              {/if}
             {/each}
             <th>
               <div class="header-name-filter-wrapper actions">
@@ -117,9 +120,11 @@
           {#each filteredItems as item}
             <tr on:click={() => rowClicked(item)}>
               {#each Object.entries(item) as [key, value]}
-                <td class:small-td={!value || value.length < 5}>
-                  {value === null ? "-" : value}
-                </td>
+                {#if key != $idColumn}
+                  <td class:small-td={!value || value.length < 5}>
+                    {value === null ? "-" : value}
+                  </td>
+                {/if}
               {/each}
               <td class="action-cell">
                 <!-- svelte-ignore a11y-click-events-have-key-events -->
@@ -179,11 +184,6 @@
     ); /*height of: navbar, gaps in containers, height of table header, general margin bottom*/
     width: calc(100vw - 192px - 10px - 5px);
     overflow-y: auto;
-  }
-
-  .table.hide-id th:first-child,
-  td:first-child {
-    display: none;
   }
 
   .header-name-filter-wrapper {

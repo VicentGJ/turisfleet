@@ -1,25 +1,26 @@
-<script>
+<script lang="ts">
   import CreateDriver from "$/components/Forms/Driver/CreateDriver.svelte";
   import UpdateDriver from "$/components/Forms/Driver/UpdateDriver.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { driverService } from "$/lib/services/services";
   import { loading } from "$/lib/stores/basic_stores";
+  import type { Driver } from "$/lib/types/DriverTypes";
   import { onMount } from "svelte";
-  let items = [];
+  let items: Driver[];
   let showCreate = false;
   let showUpdate = false;
-  let itemToUpdate;
+  let itemToUpdate: Driver;
   onMount(() => {
     refreshItems();
   });
-  const handleRowClick = ({ detail }) => {
+  const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
     showUpdate = true;
   };
   const handleCreateClicked = () => {
     showCreate = true;
   };
-  const handleDeleteClicked = ({ detail }) => {
+  const handleDeleteClicked = ({ detail }: any) => {
     $loading = true;
     driverService.deleteDriver(detail.id_number).then(() => refreshItems());
   };

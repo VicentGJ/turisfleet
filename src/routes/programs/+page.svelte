@@ -1,23 +1,23 @@
 <script lang="ts">
-  import UpdateSpecificProgram from "./../../components/Forms/Program/UpdateSpecificProgram.svelte";
-  import { durationObjToStr } from "$lib/utils";
-  import Tabs from "$/components/Shared/Tabs.svelte";
-  import Table from "$/components/Table/Table.svelte";
-  import { loading, programView } from "$/lib/stores/basic_stores";
-  import { browser } from "$app/environment";
-  import Loading from "$components/Shared/Loading.svelte";
-  import { programService } from "$services";
   import CreateProgram from "$/components/Forms/Program/CreateProgram.svelte";
   import CreateSpecificProgram from "$/components/Forms/Program/CreateSpecificProgram.svelte";
   import UpdateProgram from "$/components/Forms/Program/UpdateProgram.svelte";
+  import Tabs from "$/components/Shared/Tabs.svelte";
+  import Table from "$/components/Table/Table.svelte";
+  import { loading, programView } from "$/lib/stores/basic_stores";
+  import type { Program, SpecificProgram } from "$/lib/types/ProgramTypes";
+  import { browser } from "$app/environment";
+  import { durationObjToStr } from "$lib/utils";
+  import { programService } from "$services";
+  import UpdateSpecificProgram from "./../../components/Forms/Program/UpdateSpecificProgram.svelte";
   let showCreateProgram = false;
   let showCreateSpecificProgram = false;
 
   let showUpdateProgram = false;
   let showUpdateSpecificProgram = false;
 
-  let itemToUpdate: any;
-  let items: [] = [];
+  let itemToUpdate: Program | SpecificProgram;
+  let items: Array<Program | SpecificProgram>;
   let createButtonText = "";
 
   $: tabs = [

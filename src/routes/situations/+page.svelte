@@ -1,17 +1,23 @@
 <script lang="ts">
-  import CreateCarSituation from "./../../components/Forms/Situation/CreateCarSituation.svelte";
-  import { loading } from "$stores/basic_stores";
+  import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
+  import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
   import Tabs from "$/components/Shared/Tabs.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { situationView } from "$/lib/stores/basic_stores";
+  import type {
+    CarSituation,
+    DriverSituation,
+    Situation,
+  } from "$/lib/types/SituationTypes";
   import { browser } from "$app/environment";
   import { situationService } from "$services";
-  import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
-  import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
+  import { loading } from "$stores/basic_stores";
+  import CreateCarSituation from "./../../components/Forms/Situation/CreateCarSituation.svelte";
   let showCreateSituation = false;
   let showCreateCarSituation = false;
   let showCreateDriverSituation = false;
-  let items: [] = [];
+  let items: Array<CarSituation | DriverSituation | Situation>;
+  //TODO: Update any
   let createButtonText = "";
   $: tabs = [
     {

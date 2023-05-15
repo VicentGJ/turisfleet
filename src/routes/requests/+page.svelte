@@ -1,25 +1,26 @@
-<script>
+<script lang="ts">
   import UpdateRequest from "$components/Forms/Request/UpdateRequest.svelte";
   import CreateRequest from "$/components/Forms/Request/CreateRequest.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { loading } from "$/lib/stores/basic_stores";
   import { requestService } from "$services";
   import { onMount } from "svelte";
-  let items = [];
+  import type { Request } from "$/lib/types/RequestTypes";
+  let items: Request[];
   let showCreate = false;
   let showUpdate = false;
-  let itemToUpdate;
+  let itemToUpdate: Request;
   onMount(() => {
     refreshItems();
   });
-  const handleRowClick = ({ detail }) => {
+  const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
     showUpdate = true;
   };
   const handleCreateClicked = () => {
     showCreate = true;
   };
-  const handleDeleteClicked = ({ detail }) => {
+  const handleDeleteClicked = ({ detail }: any) => {
     $loading = true;
     requestService.deleteRequest(detail.id_request).then(() => refreshItems());
   };

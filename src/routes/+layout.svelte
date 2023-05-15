@@ -4,12 +4,45 @@
   import "$/css/animations.css";
   import "$/css/app.css";
   import "$/css/variables.css";
-  import { view } from "$/lib/stores/basic_stores";
+  import {
+    view,
+    situationView,
+    programView,
+    idColumn,
+  } from "$/lib/stores/basic_stores";
   import { browser } from "$app/environment";
   import { goto } from "$app/navigation";
   import Panel from "$components/layout/Panel/Panel.svelte";
   import { loading } from "./../lib/stores/basic_stores.ts";
   $: $view && browser && goto($view);
+
+  $: if ($view || $situationView || $programView) {
+    switch ($view) {
+      case "cars":
+        $idColumn = "id_car";
+        break;
+      case "drivers":
+        $idColumn = "id_driver";
+        break;
+      case "groups":
+        $idColumn = "id_group";
+        break;
+      case "requests":
+        $idColumn = "id_request";
+        break;
+      case "situations":
+        $idColumn = $situationView == "situations" ? "id_situation" : undefined;
+        break;
+      case "programs":
+        $idColumn =
+          $programView == "programs" ? "id_program" : "id_specific_program";
+        break;
+      default:
+        $idColumn = undefined;
+        break;
+    }
+  }
+  $: console.log($idColumn);
 </script>
 
 <div id="main-layout-container">

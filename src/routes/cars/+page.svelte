@@ -1,25 +1,26 @@
-<script>
+<script lang="ts">
+  import type { Car } from "$lib/types/CarTypes";
   import Table from "$/components/Table/Table.svelte";
   import { carService } from "$/lib/services/services";
   import { loading } from "$/lib/stores/basic_stores";
   import CreateCar from "$/components/Forms/Car/CreateCar.svelte";
   import { onMount } from "svelte";
   import UpdateCar from "$/components/Forms/Car/UpdateCar.svelte";
-  let items = [];
+  let items: Car[];
   let showCreate = false;
   let showUpdate = false;
-  let itemToUpdate;
+  let itemToUpdate: Car;
   onMount(() => {
     refreshItems();
   });
-  const handleRowClick = ({ detail }) => {
+  const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
     showUpdate = true;
   };
   const handleCreateClicked = () => {
     showCreate = true;
   };
-  const handleDeleteClicked = ({ detail }) => {
+  const handleDeleteClicked = ({ detail }: any) => {
     $loading = true;
     carService.deleteCar(detail.plate_number).then(() => refreshItems());
   };
