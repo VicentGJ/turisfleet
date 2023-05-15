@@ -1,3 +1,12 @@
+export interface Driver {
+  id_driver: number;
+  id_number: string;
+  name: string;
+  address: string;
+  category: LicenceCategory;
+  idcar: number;
+}
+
 export interface DriverCreate {
   id_number: string;
   name: string;

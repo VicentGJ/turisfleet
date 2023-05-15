@@ -1,9 +1,12 @@
 import BaseService from "./BaseService";
 import type {
+  CarSituation,
   CarSituationCreate,
   CarSituationID,
+  DriverSituation,
   DriverSituationCreate,
   DriverSituationID,
+  Situation,
   SituationCreate,
   SituationUpdate,
 } from "../types/SituationTypes";
@@ -23,7 +26,7 @@ export default class SituationService extends BaseService {
   public async getSituations(
     limit: number | "ALL" = "ALL",
     situation_type: "any" | "driver" | "car" = "any"
-  ): Promise<any> {
+  ): Promise<Situation[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit, situation_type });
       fetch(this.url(queryParams), {
@@ -35,7 +38,7 @@ export default class SituationService extends BaseService {
     });
   }
 
-  public async createSituation(situation: SituationCreate): Promise<any> {
+  public async createSituation(situation: SituationCreate): Promise<Situation> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(), {
         method: "POST",
@@ -50,7 +53,7 @@ export default class SituationService extends BaseService {
     });
   }
 
-  public async getSituation(situation_id: string | number): Promise<any> {
+  public async getSituation(situation_id: string | number): Promise<Situation> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(situation_id.toString()), {
         method: "GET",
@@ -75,7 +78,7 @@ export default class SituationService extends BaseService {
   public async updateSituation(
     id_situation: string | number,
     situation: SituationUpdate
-  ): Promise<any> {
+  ): Promise<Situation> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id_situation.toString()), {
         method: "PUT",
@@ -88,7 +91,9 @@ export default class SituationService extends BaseService {
   }
 
   //car situations
-  public async getCarSituations(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getCarSituations(
+    limit: number | "ALL" = "ALL"
+  ): Promise<CarSituation[]> {
     const queryParams = this.makeParams({ limit });
 
     return new Promise<any>((resolve, reject) => {
@@ -101,7 +106,9 @@ export default class SituationService extends BaseService {
     });
   }
 
-  public async createCarSituation(situation: CarSituationCreate): Promise<any> {
+  public async createCarSituation(
+    situation: CarSituationCreate
+  ): Promise<CarSituation> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url("cars"), {
         method: "POST",
@@ -131,7 +138,9 @@ export default class SituationService extends BaseService {
     });
   }
   //driver situations
-  public async getDriverSituations(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getDriverSituations(
+    limit: number | "ALL" = "ALL"
+  ): Promise<DriverSituation[]> {
     const queryParams = this.makeParams({ limit });
 
     return new Promise<any>((resolve, reject) => {
@@ -145,7 +154,7 @@ export default class SituationService extends BaseService {
   }
   public async createDriverSituation(
     situation: DriverSituationCreate
-  ): Promise<any> {
+  ): Promise<DriverSituation> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url("drivers"), {
         method: "POST",

@@ -1,7 +1,9 @@
 import BaseService from "./BaseService";
 import type {
+  Program,
   ProgramCreate,
   ProgramUpdate,
+  SpecificProgram,
   SpecificProgramCreate,
   SpecificProgramUpdate,
 } from "../types/ProgramTypes";
@@ -18,7 +20,7 @@ export default class ProgramService extends BaseService {
     return ProgramService.instance;
   }
 
-  public async getPrograms(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getPrograms(limit: number | "ALL" = "ALL"): Promise<Program[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {
@@ -30,7 +32,7 @@ export default class ProgramService extends BaseService {
     });
   }
 
-  public async createProgram(program: ProgramCreate): Promise<any> {
+  public async createProgram(program: ProgramCreate): Promise<Program> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(), {
         method: "POST",
@@ -45,7 +47,7 @@ export default class ProgramService extends BaseService {
     });
   }
 
-  public async getProgram(id: string | number): Promise<any> {
+  public async getProgram(id: string | number): Promise<Program> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id.toString()), {
         method: "GET",
@@ -70,7 +72,7 @@ export default class ProgramService extends BaseService {
   public async updateProgram(
     id: string | number,
     program: ProgramUpdate
-  ): Promise<any> {
+  ): Promise<Program> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id.toString()), {
         method: "PUT",
@@ -83,7 +85,9 @@ export default class ProgramService extends BaseService {
   }
 
   //specific programs
-  public async getSpecificPrograms(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getSpecificPrograms(
+    limit: number | "ALL" = "ALL"
+  ): Promise<SpecificProgram[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url("specific" + queryParams), {
@@ -97,7 +101,7 @@ export default class ProgramService extends BaseService {
 
   public async createSpecificProgram(
     program: SpecificProgramCreate
-  ): Promise<any> {
+  ): Promise<SpecificProgram> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url("specific"), {
         method: "POST",
@@ -111,7 +115,9 @@ export default class ProgramService extends BaseService {
         .catch((error) => reject(error));
     });
   }
-  public async getSpecificProgram(id: string | number): Promise<any> {
+  public async getSpecificProgram(
+    id: string | number
+  ): Promise<SpecificProgram> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url("specific/" + id.toString()), {
         method: "GET",
@@ -134,7 +140,7 @@ export default class ProgramService extends BaseService {
   public async updateSpecificProgram(
     id: string | number,
     program: SpecificProgramUpdate
-  ): Promise<any> {
+  ): Promise<SpecificProgram> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url("specific/" + id.toString()), {
         method: "PUT",

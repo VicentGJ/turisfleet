@@ -1,5 +1,5 @@
 import BaseService from "./BaseService";
-import type { GroupCreate, GroupUpdate } from "../types/GroupTypes";
+import type { Group, GroupCreate, GroupUpdate } from "../types/GroupTypes";
 export default class GroupService extends BaseService {
   protected static instance: GroupService;
 
@@ -13,7 +13,7 @@ export default class GroupService extends BaseService {
     return GroupService.instance;
   }
 
-  public async getGroups(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getGroups(limit: number | "ALL" = "ALL"): Promise<Group[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {
@@ -25,7 +25,7 @@ export default class GroupService extends BaseService {
     });
   }
 
-  public async createGroup(group: GroupCreate): Promise<any> {
+  public async createGroup(group: GroupCreate): Promise<Group> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(), {
         method: "POST",
@@ -40,7 +40,7 @@ export default class GroupService extends BaseService {
     });
   }
 
-  public async getGroup(id: string | number): Promise<any> {
+  public async getGroup(id: string | number): Promise<Group> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id.toString()), {
         method: "GET",
@@ -66,7 +66,7 @@ export default class GroupService extends BaseService {
     id: string | number,
     group: GroupUpdate
   ): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
+    return new Promise<Group>((resolve, reject) => {
       fetch(this.url(id.toString()), {
         method: "PUT",
         body: JSON.stringify(group),

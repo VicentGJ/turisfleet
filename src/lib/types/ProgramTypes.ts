@@ -1,3 +1,16 @@
+export interface Program {
+  id_program: number;
+  program_name: string;
+}
+export interface SpecificProgram {
+  id_specific_program: number;
+  id_program: number;
+  description: string;
+  start: Date;
+  duration: Object | string;
+  km: number;
+}
+
 export interface ProgramCreate {
   name: string;
 }

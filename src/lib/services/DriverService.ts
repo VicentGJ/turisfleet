@@ -1,5 +1,6 @@
 import BaseService from "./BaseService";
-import type { DriverCreate, DriverUpdate } from "../types/DriverTypes";
+import type { DriverCreate, DriverUpdate, Driver } from "../types/DriverTypes";
+import type { Car } from "../types/CarTypes";
 export default class DriverService extends BaseService {
   protected static instance: DriverService;
 
@@ -13,7 +14,7 @@ export default class DriverService extends BaseService {
     return DriverService.instance;
   }
 
-  public async getDrivers(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getDrivers(limit: number | "ALL" = "ALL"): Promise<Driver[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {
@@ -25,7 +26,7 @@ export default class DriverService extends BaseService {
     });
   }
 
-  public async createDriver(driver: DriverCreate): Promise<any> {
+  public async createDriver(driver: DriverCreate): Promise<Driver> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(), {
         method: "POST",
@@ -40,7 +41,7 @@ export default class DriverService extends BaseService {
     });
   }
 
-  public async getDriver(id_number: string): Promise<any> {
+  public async getDriver(id_number: string): Promise<Driver> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id_number), {
         method: "GET",
@@ -65,7 +66,7 @@ export default class DriverService extends BaseService {
   public async updateDriver(
     driverID: string,
     driver: DriverUpdate
-  ): Promise<any> {
+  ): Promise<Driver> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(driverID), {
         method: "PUT",
@@ -77,7 +78,7 @@ export default class DriverService extends BaseService {
     });
   }
 
-  public async getDriverCar(driverID: string): Promise<any> {
+  public async getDriverCar(driverID: string): Promise<Car> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(driverID + "/car"), {
         method: "GET",
@@ -91,7 +92,7 @@ export default class DriverService extends BaseService {
   public async updateDriverCar(
     id_driver: string,
     id_car: string | null
-  ): Promise<any> {
+  ): Promise<Driver> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id_driver + "/car"), {
         method: "PUT",
@@ -103,7 +104,7 @@ export default class DriverService extends BaseService {
     });
   }
 
-  public async removeDriverCar(id_driver: string): Promise<any> {
+  public async removeDriverCar(id_driver: string): Promise<Driver> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id_driver + "/car"), {
         method: "DELETE",

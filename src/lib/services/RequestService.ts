@@ -1,4 +1,8 @@
-import type { RequestCreate, RequestUpdate } from "../types/RequestTypes";
+import type {
+  Request,
+  RequestCreate,
+  RequestUpdate,
+} from "../types/RequestTypes";
 import BaseService from "./BaseService";
 export default class RequestService extends BaseService {
   protected static instance: RequestService;
@@ -13,7 +17,7 @@ export default class RequestService extends BaseService {
     return RequestService.instance;
   }
 
-  public async getRequests(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getRequests(limit: number | "ALL" = "ALL"): Promise<Request[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {
@@ -25,7 +29,7 @@ export default class RequestService extends BaseService {
     });
   }
 
-  public async createRequest(request: RequestCreate): Promise<any> {
+  public async createRequest(request: RequestCreate): Promise<Request> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(), {
         method: "POST",
@@ -40,7 +44,7 @@ export default class RequestService extends BaseService {
     });
   }
 
-  public async getRequest(id: string | number): Promise<any> {
+  public async getRequest(id: string | number): Promise<Request> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id.toString()), {
         method: "GET",
@@ -65,7 +69,7 @@ export default class RequestService extends BaseService {
   public async updateRequest(
     id: string | number,
     request: RequestUpdate
-  ): Promise<any> {
+  ): Promise<Request> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(id.toString()), {
         method: "PUT",

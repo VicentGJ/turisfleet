@@ -1,3 +1,22 @@
+export interface Situation {
+  id_situation: number;
+  situation_name: string;
+  situation_type: string;
+}
+export interface CarSituation {
+  car_id_car: number;
+  situation_id_situation: number;
+  date: Date;
+  return_date: Date;
+}
+
+export interface DriverSituation {
+  driver_id_driver: number;
+  situation_id_situation: number;
+  date: Date;
+  return_date: Date;
+}
+
 export interface SituationCreate {
   situation_name: string;
   situation_type: string;

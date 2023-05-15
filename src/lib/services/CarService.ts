@@ -1,5 +1,5 @@
 import BaseService from "./BaseService";
-import type { CarCreate, CarUpdate } from "../types/CarTypes";
+import type { CarCreate, CarUpdate, Car } from "../types/CarTypes";
 export default class CarService extends BaseService {
   protected static instance: CarService;
 
@@ -13,7 +13,7 @@ export default class CarService extends BaseService {
     return CarService.instance;
   }
 
-  public async getCars(limit: number | "ALL" = "ALL"): Promise<any> {
+  public async getCars(limit: number | "ALL" = "ALL"): Promise<Car[]> {
     return new Promise<any>((resolve, reject) => {
       const queryParams = this.makeParams({ limit });
       fetch(this.url(queryParams), {
@@ -25,7 +25,7 @@ export default class CarService extends BaseService {
     });
   }
 
-  public async createCar(car: CarCreate): Promise<any> {
+  public async createCar(car: CarCreate): Promise<Car> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(), {
         method: "POST",
@@ -40,7 +40,7 @@ export default class CarService extends BaseService {
     });
   }
 
-  public async getCar(plate: string): Promise<any> {
+  public async getCar(plate: string): Promise<Car> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(plate), {
         method: "GET",
@@ -62,7 +62,7 @@ export default class CarService extends BaseService {
     });
   }
 
-  public async updateCar(plate: string, car: CarUpdate): Promise<any> {
+  public async updateCar(plate: string, car: CarUpdate): Promise<Car> {
     return new Promise<any>((resolve, reject) => {
       fetch(this.url(plate), {
         method: "PUT",
