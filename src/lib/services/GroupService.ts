@@ -14,66 +14,26 @@ export default class GroupService extends BaseService {
   }
 
   public async getGroups(limit: number | "ALL" = "ALL"): Promise<Group[]> {
-    return new Promise<any>((resolve, reject) => {
-      const queryParams = this.makeParams({ limit });
-      fetch(this.url(queryParams), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    const queryParams = this.makeParams({ limit });
+    return await this.handleReq(undefined, queryParams, "GET");
   }
 
   public async createGroup(group: GroupCreate): Promise<Group> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(), {
-        method: "POST",
-        body: JSON.stringify(group),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(undefined, undefined, "POST", group);
   }
 
   public async getGroup(id: string | number): Promise<Group> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id.toString()), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "GET");
   }
 
   public async deleteGroup(id: string | number): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id.toString()), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "DELETE");
   }
 
   public async updateGroup(
     id: string | number,
     group: GroupUpdate
   ): Promise<any> {
-    return new Promise<Group>((resolve, reject) => {
-      fetch(this.url(id.toString()), {
-        method: "PUT",
-        body: JSON.stringify(group),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "PUT", group);
   }
 }

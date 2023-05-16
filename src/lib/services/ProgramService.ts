@@ -21,134 +21,74 @@ export default class ProgramService extends BaseService {
   }
 
   public async getPrograms(limit: number | "ALL" = "ALL"): Promise<Program[]> {
-    return new Promise<any>((resolve, reject) => {
-      const queryParams = this.makeParams({ limit });
-      fetch(this.url(queryParams), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    const queryParams = this.makeParams({ limit });
+    return await this.handleReq(undefined, queryParams, "GET");
   }
 
   public async createProgram(program: ProgramCreate): Promise<Program> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(), {
-        method: "POST",
-        body: JSON.stringify(program),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(undefined, undefined, "POST", program);
   }
 
   public async getProgram(id: string | number): Promise<Program> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id.toString()), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "GET");
   }
 
   public async deleteProgram(id: string | number): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id.toString()), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "DELETE");
   }
 
   public async updateProgram(
     id: string | number,
     program: ProgramUpdate
   ): Promise<Program> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id.toString()), {
-        method: "PUT",
-        body: JSON.stringify(program),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(
+      this.url(id.toString()),
+      undefined,
+      "PUT",
+      program
+    );
   }
 
   //specific programs
   public async getSpecificPrograms(
     limit: number | "ALL" = "ALL"
   ): Promise<SpecificProgram[]> {
-    return new Promise<any>((resolve, reject) => {
-      const queryParams = this.makeParams({ limit });
-      fetch(this.url("specific" + queryParams), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    const queryParams = this.makeParams({ limit });
+    return await this.handleReq(
+      this.url("specific" + queryParams),
+      undefined,
+      "GET"
+    );
   }
 
   public async createSpecificProgram(
     program: SpecificProgramCreate
   ): Promise<SpecificProgram> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url("specific"), {
-        method: "POST",
-        body: JSON.stringify(program),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(
+      this.url("specific"),
+      undefined,
+      "POST",
+      program
+    );
   }
   public async getSpecificProgram(
     id: string | number
   ): Promise<SpecificProgram> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url("specific/" + id.toString()), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "GET");
   }
+
   public async deleteSpecificProgram(id: string | number): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url("specific/" + id.toString()), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id.toString()), undefined, "DELETE");
   }
   public async updateSpecificProgram(
     id: string | number,
     program: SpecificProgramUpdate
   ): Promise<SpecificProgram> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url("specific/" + id.toString()), {
-        method: "PUT",
-        body: JSON.stringify(program),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(
+      this.url("specifi/" + id.toString()),
+      undefined,
+      "PUT",
+      program
+    );
   }
 }

@@ -15,67 +15,27 @@ export default class DriverService extends BaseService {
   }
 
   public async getDrivers(limit: number | "ALL" = "ALL"): Promise<Driver[]> {
-    return new Promise<any>((resolve, reject) => {
-      const queryParams = this.makeParams({ limit });
-      fetch(this.url(queryParams), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    const queryParams = this.makeParams({ limit });
+    return await this.handleReq(undefined, queryParams, "GET");
   }
 
   public async createDriver(driver: DriverCreate): Promise<Driver> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(), {
-        method: "POST",
-        body: JSON.stringify(driver),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(undefined, undefined, "POST", driver);
   }
 
   public async getDriver(id_number: string): Promise<Driver> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id_number), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id_number), undefined, "GET");
   }
 
   public async deleteDriver(driverID: string): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(driverID), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(driverID), undefined, "DELETE");
   }
 
   public async updateDriver(
     driverID: string,
     driver: DriverUpdate
   ): Promise<Driver> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(driverID), {
-        method: "PUT",
-        body: JSON.stringify(driver),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(driverID), undefined, "PUT", driver);
   }
 
   public async getDriverCar(driverID: string): Promise<Car> {
@@ -93,25 +53,10 @@ export default class DriverService extends BaseService {
     id_driver: string,
     id_car: string | null
   ): Promise<Driver> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id_driver + "/car"), {
-        method: "PUT",
-        body: JSON.stringify({ id_car }),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id_driver + "/car"), undefined, "PUT", { id_car });
   }
 
   public async removeDriverCar(id_driver: string): Promise<Driver> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(id_driver + "/car"), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(id_driver + "/car"), undefined, "DELETE");
   }
 }

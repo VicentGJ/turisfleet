@@ -1,6 +1,10 @@
 <script lang="ts">
+  import CreateCarSituation from "$/components/Forms/Situation/CreateCarSituation.svelte";
   import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
   import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
+  import UpdateCarSituation from "$/components/Forms/Situation/UpdateCarSituation.svelte";
+  import UpdateDriverSituation from "$/components/Forms/Situation/UpdateDriverSituation.svelte";
+  import UpdateSituation from "$/components/Forms/Situation/UpdateSituation.svelte";
   import Tabs from "$/components/Shared/Tabs.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { situationView } from "$/lib/stores/basic_stores";
@@ -12,12 +16,15 @@
   import { browser } from "$app/environment";
   import { situationService } from "$services";
   import { loading } from "$stores/basic_stores";
-  import CreateCarSituation from "./../../components/Forms/Situation/CreateCarSituation.svelte";
   let showCreateSituation = false;
   let showCreateCarSituation = false;
   let showCreateDriverSituation = false;
+  let showUpdateSituation = false;
+  let showUpdateCarSituation = false;
+  let showUpdateDriverSituation = false;
+  let itemToUpdate: CarSituation | DriverSituation | Situation;
   let items: Array<CarSituation | DriverSituation | Situation>;
-  //TODO: Update any
+
   let createButtonText = "";
   $: tabs = [
     {
@@ -54,7 +61,20 @@
     }
   }
 
-  const handleRowClick = ({ detail }: any) => {};
+  const handleRowClick = ({ detail }: any) => {
+    itemToUpdate = detail;
+    switch ($situationView) {
+      case "situations":
+        showUpdateSituation = true;
+        break;
+      case "car-situations":
+        showUpdateCarSituation = true;
+        break;
+      case "driver-situations":
+        showUpdateDriverSituation = true;
+        break;
+    }
+  };
   const handleCreateClicked = () => {
     switch ($situationView) {
       case "situations":
@@ -157,5 +177,26 @@
   <CreateDriverSituation
     bind:showCreate={showCreateDriverSituation}
     on:created={refreshItems}
+  />
+{/if}
+{#if showUpdateSituation}
+  <UpdateSituation
+    bind:itemToUpdate
+    bind:showUpdate={showUpdateSituation}
+    on:updated={refreshItems}
+  />
+{/if}
+{#if showUpdateCarSituation}
+  <UpdateCarSituation
+    bind:itemToUpdate
+    bind:showUpdate={showUpdateCarSituation}
+    on:updated={refreshItems}
+  />
+{/if}
+{#if showUpdateDriverSituation}
+  <UpdateDriverSituation
+    bind:itemToUpdate
+    bind:showUpdate={showUpdateDriverSituation}
+    on:updated={refreshItems}
   />
 {/if}

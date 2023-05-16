@@ -25,6 +25,7 @@
     id_car: itemToUpdate.id_car,
     id_driver: itemToUpdate.id_driver,
     id_copilot: itemToUpdate.id_copilot,
+    //TODO: what other values area updateable
   };
 
   const cancel = () => {
@@ -33,7 +34,10 @@
   };
   const update = async () => {
     $loading = true;
-    await requestService.updateRequest(itemToUpdate.id_request, values);
+    await requestService.updateRequest(itemToUpdate.id_request, {
+      ...values,
+      // return_date: return_date ? null : return_date,
+    });
     $loading = false;
     dispatch("updated");
     itemToUpdate = undefined;
@@ -56,7 +60,12 @@
       <label for="">Driver *</label>
       <select name="" id="" bind:value={values.id_driver}>
         {#each drivers as driver}
-          <option value={driver.id_driver}>{driver.name}</option>
+          <option
+            value={driver.id_driver}
+            selected={driver.id_driver == values.id_driver}
+          >
+            {driver.name}
+          </option>
         {/each}
       </select>
     </div>
@@ -64,7 +73,12 @@
       <label for="">Copilot</label>
       <select name="" id="" bind:value={values.id_copilot}>
         {#each copilots as copilot}
-          <option value={copilot.id_driver}>{copilot.name}</option>
+          <option
+            value={copilot.id_driver}
+            selected={copilot.id_driver == values.id_copilot}
+          >
+            {copilot.name}
+          </option>
         {/each}
       </select>
     </div>
@@ -72,37 +86,12 @@
       <label for="">Car *</label>
       <select name="" id="" bind:value={values.id_car}>
         {#each cars as car}
-          <option value={car.id_car}>{[car.plate_number]} {car.brand}</option>
+          <option value={car.id_car} selected={car.id_car == values.id_car}
+            >{[car.plate_number]} {car.brand}</option
+          >
         {/each}
       </select>
     </div>
-    <!-- <div class="input-container">
-      <label for="">Program *</label>
-      <select name="" id="" bind:value={values.id_program}>
-        {#each programs as program, index}
-          <option value={program.id_program}>{program.program_name}</option>
-        {/each}
-      </select>
-    </div> -->
-    <!-- <div class="input-container">
-      <label for="">Group *</label>
-      <select name="" id="" bind:value={values.id_group}>
-        {#each groups as group, index}
-          <option value={group.id_group}>
-            {`${group.country} (${group.tourist_amount})`}
-          </option>
-        {/each}
-      </select>
-    </div> -->
-    <!-- <div class="input-container">
-      <label for="">Start Date *</label>
-      <input
-        required
-        type="date"
-        bind:value={values.start_date}
-        min={dayjs().format("YYYY-MM-DD")}
-      />
-    </div> -->
   </div>
 </BaseForm>
 
@@ -116,9 +105,9 @@
     justify-content: center;
     align-items: center;
   }
-  /* input {
+  select {
     width: 100%;
-  } */
+  }
   .input-container {
     width: 90%;
   }

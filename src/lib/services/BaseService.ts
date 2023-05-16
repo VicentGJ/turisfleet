@@ -1,7 +1,8 @@
+import { env } from "$env/dynamic/public";
 export default abstract class BaseService {
   protected static instance: BaseService;
-  protected service: string = "";
 
+  protected service: string = "";
   protected constructor() {}
 
   protected static getInstance(): BaseService {
@@ -24,5 +25,33 @@ export default abstract class BaseService {
     });
     queryParams += queryBuilder.toString();
     return queryParams;
+  }
+
+  protected async handleReq(
+    route: string = this.url(),
+    queryparams: string = "",
+    method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+    body: any = undefined,
+    headers: Headers = new Headers()
+  ): Promise<any> {
+    let r: RequestInit = {};
+    headers.append("x-token", env.SV_TOKEN);
+    if ((method === "PUT" || method === "POST") && body) {
+      headers.append("Content-Type", "application/json");
+      r.body = JSON.stringify(body);
+    }
+
+    r.headers = headers;
+    r.method = method;
+
+    return await new Promise<any>((resolve, reject) => {
+      fetch(route + queryparams, r)
+        .then((response) => response.json())
+        .then((responseData) => resolve(responseData))
+        .catch((error) => {
+          console.error(error);
+          reject(error);
+        });
+    });
   }
 }

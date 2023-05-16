@@ -7,7 +7,7 @@ export async function GET({ url }) {
     const limit = params.get("limit")
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
-            `SELECT * FROM ${table} LIMIT ${limit}`,
+            `SELECT * FROM ${table} ORDER BY date DESC LIMIT ${limit}`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
@@ -62,4 +62,44 @@ export async function DELETE({ url }) {
         return result;
     });
     return json(result);
+}
+
+export async function PUT({ params, request, url }) {
+    const { searchParams: identifier } = url
+    const body = await request.json();
+    const result = await sequelize.transaction(async (t) => {
+        await sequelize.query(
+            `
+            UPDATE ${table}
+            SET car_id_car = :car_id_car, situation_id_situation = :situation_id_situation, date = :date, return_date = :return_date
+            WHERE car_id_car = :car_id AND date = :date_id
+            `,
+            {
+                type: sequelize.QueryTypes.UPDATE,
+                transaction: t,
+                replacements: {
+                    ...body,
+                    car_id: identifier.get('car_id_car'),
+                    date_id: identifier.get('date')
+                }
+            }
+        )
+        return await sequelize.query(
+            `
+            SELECT * FROM ${table}
+            WHERE car_id_car = :car_id AND date = :date_id
+            `,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                transaction: t,
+                replacements: {
+                    car_id: body.car_id_car,
+                    date_id: body.date
+                }
+            }
+        )
+
+    })
+    if (result.length === 0) throw new error(404, { message: `Situation with id ${identifier} not found` })
+    return json(result[0]);
 }

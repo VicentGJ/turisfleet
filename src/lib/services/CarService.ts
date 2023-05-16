@@ -14,63 +14,27 @@ export default class CarService extends BaseService {
   }
 
   public async getCars(limit: number | "ALL" = "ALL"): Promise<Car[]> {
-    return new Promise<any>((resolve, reject) => {
-      const queryParams = this.makeParams({ limit });
-      fetch(this.url(queryParams), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    const queryParams = this.makeParams({ limit });
+    return await this.handleReq(undefined, queryParams, "GET");
   }
 
   public async createCar(car: CarCreate): Promise<Car> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(), {
-        method: "POST",
-        body: JSON.stringify(car),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(undefined, undefined, "POST", car);
   }
 
-  public async getCar(plate: string): Promise<Car> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(plate), {
-        method: "GET",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+  public async getCar(plate: string | number): Promise<Car> {
+    return await this.handleReq(this.url(plate.toString()), undefined, "GET");
   }
 
   public async deleteCar(plate: string | number): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(plate.toString()), {
-        method: "DELETE",
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(
+      this.url(plate.toString()),
+      undefined,
+      "DELETE"
+    );
   }
 
   public async updateCar(plate: string, car: CarUpdate): Promise<Car> {
-    return new Promise<any>((resolve, reject) => {
-      fetch(this.url(plate), {
-        method: "PUT",
-        body: JSON.stringify(car),
-      })
-        .then((response) => response.json())
-        .then((data) => resolve(data))
-        .catch((error) => reject(error));
-    });
+    return await this.handleReq(this.url(plate), undefined, "PUT", car);
   }
 }

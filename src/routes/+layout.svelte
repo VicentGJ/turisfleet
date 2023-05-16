@@ -14,7 +14,7 @@
   import { goto } from "$app/navigation";
   import Panel from "$components/layout/Panel/Panel.svelte";
   import { loading } from "./../lib/stores/basic_stores.ts";
-  $: $view && browser && goto($view);
+  $: browser && $view && goto($view);
 
   $: if ($view || $situationView || $programView) {
     switch ($view) {
@@ -42,7 +42,6 @@
         break;
     }
   }
-  $: console.log($idColumn);
 </script>
 
 <div id="main-layout-container">

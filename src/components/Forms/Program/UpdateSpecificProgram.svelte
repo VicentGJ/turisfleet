@@ -1,17 +1,12 @@
 <script lang="ts">
+  import { loading } from "$/lib/stores/basic_stores";
   import { durationObjToStr, durationStrToObj } from "$lib/utils";
-  import { LicenceCategory } from "$lib/types/DriverTypes";
+  import { programService } from "$services";
   import { createEventDispatcher, onMount } from "svelte";
   import BaseForm from "../BaseForm.svelte";
-  import { programService } from "$services";
-  import { loading } from "$/lib/stores/basic_stores";
   export let showUpdate = false;
   export let itemToUpdate: any;
 
-  $: {
-    console.log(itemToUpdate.duration);
-    console.log(values.duration);
-  }
   let programs: any = [];
   onMount(async () => {
     $loading = true;

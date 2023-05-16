@@ -41,6 +41,7 @@
     border-width: 0 0 1px 0;
     border-radius: 4px 4px 0px 0px;
     color: #009fa3;
+    cursor: pointer;
   }
   .active {
     color: #495057;

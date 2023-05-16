@@ -1,13 +1,13 @@
 import sequelize from "$lib/db";
-import { json, error } from "@sveltejs/kit";
 import { driverSituationsTable as table } from "$lib/tables";
+import { error, json } from "@sveltejs/kit";
 
 export async function GET({ url }) {
     const { searchParams: params } = url //query parameters
     const limit = params.get("limit")
     const result = await sequelize.transaction(async (t) => {
         const result = await sequelize.query(
-            `SELECT * FROM ${table} LIMIT ${limit}`,
+            `SELECT * FROM ${table} ORDER BY date DESC LIMIT ${limit}`,
             {
                 type: sequelize.QueryTypes.SELECT,
                 transaction: t,
@@ -62,4 +62,45 @@ export async function DELETE({ url }) {
         return result;
     });
     return json(result);
+}
+
+
+export async function PUT({ params, request, url }) {
+    const { searchParams: identifier } = url
+    const body = await request.json();
+    const result = await sequelize.transaction(async (t) => {
+        await sequelize.query(
+            `
+            UPDATE ${table}
+            SET driver_id_driver = :driver_id_driver, situation_id_situation = :situation_id_situation, date = :date, return_date = :return_date
+            WHERE driver_id_driver = :car_id AND date = :date_id
+            `,
+            {
+                type: sequelize.QueryTypes.UPDATE,
+                transaction: t,
+                replacements: {
+                    ...body,
+                    car_id: identifier.get('driver_id_driver'),
+                    date_id: identifier.get('date')
+                }
+            }
+        )
+        return await sequelize.query(
+            `
+            SELECT * FROM ${table}
+            WHERE driver_id_driver = :car_id AND date = :date_id
+            `,
+            {
+                type: sequelize.QueryTypes.SELECT,
+                transaction: t,
+                replacements: {
+                    car_id: body.driver_id_driver,
+                    date_id: body.date
+                }
+            }
+        )
+
+    })
+    if (result.length === 0) throw new error(404, { message: `Situation with id ${identifier} not found` })
+    return json(result[0]);
 }
