@@ -20,7 +20,7 @@
   };
 
   onMount(async () => {
-    $loading = true;
+   
     await Promise.all([
       programService.getPrograms().then((p) => {
         programs = p;
@@ -31,16 +31,16 @@
         values.id_group = groups[0].id_group;
       }),
     ]);
-    $loading = false;
+    
   });
 
   const cancel = () => {
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await requestService.createRequest(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

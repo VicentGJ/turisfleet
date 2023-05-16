@@ -18,9 +18,9 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await situationService.updateSituation(itemToUpdate.id_situation, values);
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

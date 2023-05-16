@@ -18,9 +18,9 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await carService.updateCar(itemToUpdate.plate_number, values);
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

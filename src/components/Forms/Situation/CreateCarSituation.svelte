@@ -15,7 +15,7 @@
     return_date: null,
   };
   onMount(async () => {
-    $loading = true;
+   
     await Promise.all([
       situationService.getSituations(200, "car").then((s) => {
         situations = s;
@@ -26,16 +26,16 @@
         values.car_id_car = cars[0].id_car;
       }),
     ]);
-    $loading = false;
+    
   });
 
   const cancel = () => {
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await situationService.createCarSituation(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

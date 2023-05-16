@@ -21,14 +21,14 @@
     showCreate = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-    $loading = true;
+   
     driverService.deleteDriver(detail.id_number).then(() => refreshItems());
   };
 
   const refreshItems = () => {
-    $loading = true;
+   
     driverService.getDrivers().then((i) => {
-      $loading = false;
+      
       items = i;
     });
   };

@@ -18,9 +18,9 @@
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await situationService.createSituation(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

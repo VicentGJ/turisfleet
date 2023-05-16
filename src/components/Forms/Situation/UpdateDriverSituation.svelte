@@ -11,7 +11,7 @@
   let situations: Situation[] = [];
   let drivers: Driver[] = [];
   onMount(async () => {
-    $loading = true;
+   
     await Promise.all([
       situationService.getSituations("ALL", "driver").then((s) => {
         situations = s;
@@ -20,7 +20,7 @@
         drivers = d;
       }),
     ]);
-    $loading = false;
+    
   });
   const dispatch = createEventDispatcher();
   let values = {
@@ -35,7 +35,7 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await situationService.updateDriverSituation(
       {
         driver_id_driver: itemToUpdate.driver_id_driver,
@@ -46,7 +46,7 @@
         return_date: values.return_date ? values.return_date : null,
       }
     );
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

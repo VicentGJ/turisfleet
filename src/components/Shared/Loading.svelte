@@ -9,6 +9,7 @@
   </div>
 </div>
 
+<!-- TODO: if the load is too fast this looks just like a flash and looks kinda bad -->
 <style>
   .loading-container {
     position: fixed;

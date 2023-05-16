@@ -1,9 +1,14 @@
 <script lang="ts">
+  import { loading } from "$/lib/stores/basic_stores";
+  import { goto } from "$app/navigation";
   import { view } from "$stores/basic_stores";
   import PanelItem from "./PanelItem.svelte";
 
-  function click(this: any) {
+  async function click(this: any) {
     $view = this.route;
+   
+    await goto($view);
+    
   }
   const panelItems = [
     {

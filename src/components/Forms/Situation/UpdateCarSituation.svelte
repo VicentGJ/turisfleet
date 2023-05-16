@@ -11,7 +11,7 @@
   let situations: Situation[] = [];
   let cars: Car[] = [];
   onMount(async () => {
-    $loading = true;
+   
     await Promise.all([
       situationService.getSituations("ALL", "car").then((s) => {
         situations = s;
@@ -20,7 +20,7 @@
         cars = c;
       }),
     ]);
-    $loading = false;
+    
   });
   const dispatch = createEventDispatcher();
   let values = {
@@ -35,12 +35,12 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await situationService.updateCarSituation(
       { car_id_car: itemToUpdate.car_id_car, date: itemToUpdate.date },
       values
     );
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

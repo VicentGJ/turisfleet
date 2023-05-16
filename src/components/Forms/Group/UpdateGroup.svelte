@@ -18,9 +18,9 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await groupService.updateGroup(itemToUpdate.id_group, values);
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

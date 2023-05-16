@@ -21,13 +21,13 @@
     showCreate = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-    $loading = true;
+   
     carService.deleteCar(detail.plate_number).then(() => refreshItems());
   };
   const refreshItems = () => {
-    $loading = true;
+   
     carService.getCars().then((i) => {
-      $loading = false;
+      
       items = i;
     });
   };

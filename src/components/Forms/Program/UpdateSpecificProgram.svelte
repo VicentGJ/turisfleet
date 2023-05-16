@@ -9,9 +9,9 @@
 
   let programs: any = [];
   onMount(async () => {
-    $loading = true;
+   
     await programService.getPrograms().then((p) => (programs = p));
-    $loading = false;
+    
   });
   const dispatch = createEventDispatcher();
   let values = {
@@ -27,7 +27,7 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await programService.updateSpecificProgram(
       itemToUpdate.id_specific_program,
       {
@@ -35,7 +35,7 @@
         duration: durationObjToStr(values.duration),
       }
     );
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

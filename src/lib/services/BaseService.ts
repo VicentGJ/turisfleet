@@ -1,4 +1,5 @@
 import { env } from "$env/dynamic/public";
+import { loading } from "$stores/basic_stores";
 export default abstract class BaseService {
   protected static instance: BaseService;
 
@@ -45,10 +46,16 @@ export default abstract class BaseService {
     r.method = method;
 
     return await new Promise<any>((resolve, reject) => {
+      loading.update(() => true);
       fetch(route + queryparams, r)
         .then((response) => response.json())
-        .then((responseData) => resolve(responseData))
+        .then((responseData) => {
+          loading.update(() => false);
+          resolve(responseData);
+        })
         .catch((error) => {
+          loading.update(() => true);
+
           console.error(error);
           reject(error);
         });

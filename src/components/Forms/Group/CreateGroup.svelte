@@ -14,9 +14,9 @@
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await groupService.createGroup(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

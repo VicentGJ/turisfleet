@@ -1,11 +1,12 @@
 <script>
-  import { idColumn } from "$stores/basic_stores";
+  import { programView, situationView, view } from "$stores/basic_stores";
   import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Shared/Button.svelte";
   import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
   export let items = [];
   export let createButtonText = "";
   let headers = [];
+  let idColumn = undefined;
   const dispatch = createEventDispatcher();
   let itemToDelete = null;
   let showConfirmation = false;
@@ -18,6 +19,33 @@
 
   onMount(() => {
     filteredItems = items;
+    if ($view || $situationView || $programView) {
+      switch ($view) {
+        case "cars":
+          idColumn = "id_car";
+          break;
+        case "drivers":
+          idColumn = "id_driver";
+          break;
+        case "groups":
+          idColumn = "id_group";
+          break;
+        case "requests":
+          idColumn = "id_request";
+          break;
+        case "situations":
+          idColumn =
+            $situationView == "situations" ? "id_situation" : undefined;
+          break;
+        case "programs":
+          idColumn =
+            $programView == "programs" ? "id_program" : "id_specific_program";
+          break;
+        default:
+          idColumn = undefined;
+          break;
+      }
+    }
   });
 
   $: {
@@ -79,78 +107,92 @@
   };
 </script>
 
-<div class="table-container">
-  <div class="table-header-container">
-    <div class="input-container table-filter">
-      <input type="text" bind:value={filters["*"]} placeholder="table filter" />
+<div class="wrapper">
+  <div class="table-container">
+    <div class="table-header-container">
+      <div class="input-container table-filter">
+        <input
+          type="text"
+          bind:value={filters["*"]}
+          placeholder="table filter"
+        />
+      </div>
+      <Button on:click={createClicked} bind:text={createButtonText} />
     </div>
-    <Button on:click={createClicked} bind:text={createButtonText} />
-  </div>
-  <div class="table-wrapper">
-    {#if items.length}
-      <table class="table">
-        <thead>
-          <tr class:got-headers={headers.length > 0}>
-            {#each headers as header}
-              {#if header != $idColumn}
-                <!-- content here -->
-                {@const h = header.split("_").join(" ")}
-                <th>
-                  <div class="header-name-filter-wrapper">
-                    <p class="header-name">{h}</p>
-                    <div class="input-container header-filter">
-                      <input
-                        type="text"
-                        bind:value={filters[header]}
-                        placeholder="{h.toLowerCase().split(' ')[0]} filter"
-                      />
+    <div class="table-wrapper">
+      {#if items.length}
+        <table class="table">
+          <thead>
+            <tr class:got-headers={headers.length > 0}>
+              {#each headers as header}
+                {#if header != idColumn}
+                  <!-- content here -->
+                  {@const h = header.split("_").join(" ")}
+                  <th>
+                    <div class="header-name-filter-wrapper">
+                      <p class="header-name">{h}</p>
+                      <div class="input-container header-filter">
+                        <input
+                          type="text"
+                          bind:value={filters[header]}
+                          placeholder="{h.toLowerCase().split(' ')[0]} filter"
+                        />
+                      </div>
                     </div>
-                  </div>
-                </th>
-              {/if}
-            {/each}
-            <th>
-              <div class="header-name-filter-wrapper actions">
-                <p class="header-name">Actions</p>
-              </div>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {#each filteredItems as item}
-            <tr on:click={() => rowClicked(item)}>
-              {#each Object.entries(item) as [key, value]}
-                {#if key != $idColumn}
-                  <td class:small-td={!value || value.length < 5}>
-                    {value === null ? "-" : value}
-                  </td>
+                  </th>
                 {/if}
               {/each}
-              <td class="action-cell">
-                <!-- svelte-ignore a11y-click-events-have-key-events -->
-                <img
-                  src="trash.svg"
-                  alt=""
-                  on:click|capture|preventDefault|stopPropagation={() =>
-                    deleteClicked(item)}
-                  class="clickable-icon"
-                />
-              </td>
+              <th>
+                <div class="header-name-filter-wrapper actions">
+                  <p class="header-name">Actions</p>
+                </div>
+              </th>
             </tr>
-          {/each}
-        </tbody>
-      </table>
-    {/if}
+          </thead>
+          <tbody>
+            {#each filteredItems as item}
+              <tr on:click={() => rowClicked(item)}>
+                {#each Object.entries(item) as [key, value]}
+                  {#if key != idColumn}
+                    <td class:small-td={!value || value.length < 5}>
+                      {value === null ? "-" : value}
+                    </td>
+                  {/if}
+                {/each}
+                <td class="action-cell">
+                  <!-- svelte-ignore a11y-click-events-have-key-events -->
+                  <img
+                    src="trash.svg"
+                    alt=""
+                    on:click|capture|preventDefault|stopPropagation={() =>
+                      deleteClicked(item)}
+                    class="clickable-icon"
+                  />
+                </td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      {/if}
+    </div>
   </div>
 </div>
+
 {#if showConfirmation}
   <DeleteConfirmation bind:showConfirmation on:confirm={deleteConfirmed} />
 {/if}
 
 <style>
+  .wrapper {
+    position: absolute;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
   .table-container {
-    width: 100%;
-    height: 100%;
+    position: relative;
   }
   .table {
     height: 50px;
@@ -169,6 +211,7 @@
     justify-content: space-between;
     margin: 5px 5px 5px 0;
     padding: 5px 15px;
+    position: relative;
   }
   th {
     text-transform: capitalize;

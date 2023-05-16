@@ -13,9 +13,9 @@
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await programService.createProgram(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

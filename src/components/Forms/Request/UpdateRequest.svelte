@@ -13,12 +13,12 @@
     ...drivers.filter((d: any) => d.id_driver !== values.id_driver),
   ];
   onMount(async () => {
-    $loading = true;
+   
     await Promise.all([
       carService.getCars().then((c) => (cars = c)),
       driverService.getDrivers().then((d) => (drivers = d)),
     ]);
-    $loading = false;
+    
   });
   const dispatch = createEventDispatcher();
   let values = {
@@ -33,12 +33,12 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await requestService.updateRequest(itemToUpdate.id_request, {
       ...values,
       // return_date: return_date ? null : return_date,
     });
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

@@ -17,9 +17,9 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await programService.updateProgram(itemToUpdate.id_program, values);
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

@@ -17,9 +17,9 @@
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await driverService.createDriver(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

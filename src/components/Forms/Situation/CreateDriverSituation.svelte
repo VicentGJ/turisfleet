@@ -15,7 +15,7 @@
     return_date: null,
   };
   onMount(async () => {
-    $loading = true;
+   
     await Promise.all([
       situationService.getSituations(200, "driver").then((s) => {
         situations = s;
@@ -26,16 +26,16 @@
         values.driver_id_driver = drivers[0].id_driver;
       }),
     ]);
-    $loading = false;
+    
   });
 
   const cancel = () => {
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await situationService.createDriverSituation(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

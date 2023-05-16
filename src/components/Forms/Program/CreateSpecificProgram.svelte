@@ -9,11 +9,11 @@
 
   const dispatch = createEventDispatcher();
   onMount(() => {
-    $loading = true;
+   
     programService.getPrograms().then((p) => {
       programs = p;
       values.id_program = programs[0].id_program;
-      $loading = false;
+      
     });
   });
   $: values = {
@@ -35,9 +35,9 @@
       ...values,
       duration: durationObjToStr(values.duration),
     };
-    $loading = true;
+   
     await programService.createSpecificProgram(parsedValues);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

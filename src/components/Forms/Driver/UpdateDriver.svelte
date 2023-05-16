@@ -10,9 +10,9 @@
   const dispatch = createEventDispatcher();
   onMount(async () => {
     cars = [{ id_car: -1 }];
-    $loading = true;
+   
     await carService.getCars().then((c) => (cars = [...cars, ...c]));
-    $loading = false;
+    
   });
   let values = {
     name: itemToUpdate.name,
@@ -26,9 +26,9 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-    $loading = true;
+   
     await driverService.updateDriver(itemToUpdate.id_number, values);
-    $loading = false;
+    
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;

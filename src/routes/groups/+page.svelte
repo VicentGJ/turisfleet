@@ -21,13 +21,13 @@
     showCreate = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-    $loading = true;
+   
     groupService.deleteGroup(detail.id_group).then(() => refreshItems());
   };
   const refreshItems = () => {
-    $loading = true;
+   
     groupService.getGroups().then((i) => {
-      $loading = false;
+      
       items = i;
     });
   };

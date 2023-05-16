@@ -16,9 +16,9 @@
     showCreate = false;
   };
   const create = async () => {
-    $loading = true;
+   
     await carService.createCar(values);
-    $loading = false;
+    
     dispatch("created");
     showCreate = false;
   };

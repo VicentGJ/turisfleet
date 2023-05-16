@@ -46,7 +46,7 @@
 
   $: if (browser && $situationView) {
     items = [];
-    $loading = true;
+   
     refreshItems();
     switch ($situationView) {
       case "car-situations":
@@ -89,7 +89,7 @@
     }
   };
   const handleDeleteClicked = ({ detail }: any) => {
-    $loading = true;
+   
     switch ($situationView) {
       case "car-situations":
         situationService
@@ -129,23 +129,23 @@
   };
 
   const refreshItems = () => {
-    $loading = true;
+   
     switch ($situationView) {
       case "situations":
         situationService.getSituations().then((i) => {
-          $loading = false;
+          
           items = i;
         });
         break;
       case "car-situations":
         situationService.getCarSituations().then((i) => {
-          $loading = false;
+          
           items = i;
         });
         break;
       case "driver-situations":
         situationService.getDriverSituations().then((i) => {
-          $loading = false;
+          
           items = i;
         });
         break;

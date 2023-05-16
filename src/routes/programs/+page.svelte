@@ -35,7 +35,7 @@
 
   $: if (browser && $programView) {
     items = [];
-    $loading = true;
+   
     refreshItems();
     switch ($programView) {
       case "specific-programs":
@@ -69,7 +69,7 @@
     }
   };
   const handleDeleteClicked = ({ detail }: any) => {
-    $loading = true;
+   
     switch ($programView) {
       case "specific-programs":
         programService
@@ -98,17 +98,17 @@
   };
 
   const refreshItems = () => {
-    $loading = true;
+   
     switch ($programView) {
       case "programs":
         programService.getPrograms().then((i) => {
-          $loading = false;
+          
           items = i;
         });
         break;
       case "specific-programs":
         programService.getSpecificPrograms().then((i) => {
-          $loading = false;
+          
           i.map((i: any) => {
             i["duration"] = durationObjToStr(i.duration);
             return i;
