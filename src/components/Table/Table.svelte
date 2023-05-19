@@ -204,7 +204,7 @@
     table-layout: auto;
   }
   .got-headers {
-    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--default-shadow);
   }
   .table-header-container {
     display: flex;

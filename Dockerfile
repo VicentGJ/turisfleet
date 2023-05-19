@@ -1,8 +1,7 @@
 FROM node:16.15.1-alpine
 
 WORKDIR /app
-ENV PORT=5173
-EXPOSE 5173
+EXPOSE 3000
 
 COPY package.json ./
 COPY package-lock.json ./

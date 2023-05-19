@@ -53,7 +53,7 @@
     padding: 15px;
     cursor: pointer;
     border-radius: 4px;
-    box-shadow: 0px 1px 4px 0px #5a5a5a94;
+    box-shadow: var(--default-shadow);
   }
   .panel-item:hover {
     transition: all;

@@ -53,7 +53,7 @@
     background-color: white;
     padding: 15px;
     border-radius: 4px;
-    box-shadow: 0px 1px 4px 0px #5a5a5a94;
+    box-shadow: var(--default-shadow);
   }
   h2 {
     color: rgba(0, 0, 0, 0.827);

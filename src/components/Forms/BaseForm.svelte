@@ -86,7 +86,7 @@
     flex-direction: column;
     justify-content: space-between;
     border-radius: 4px;
-    box-shadow: 0px 1px 4px 0px #5a5a5a94;
+    box-shadow: var(--default-shadow);
     padding: 15px;
     position: relative;
   }

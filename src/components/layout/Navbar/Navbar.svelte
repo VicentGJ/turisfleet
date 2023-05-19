@@ -1,10 +1,15 @@
 <script>
   // your script goes here
+
+  import ReportDropdown from "./ReportDropdown.svelte";
 </script>
 
 <div id="navbar-container">
   <div class="app-name-container noselect">
     <h2>TurisFleet</h2>
+  </div>
+  <div class="nav-main-elements-wrapper">
+    <ReportDropdown />
   </div>
 </div>
 
@@ -20,5 +25,11 @@
   }
   .app-name-container {
     margin-left: 15px;
+  }
+  .nav-main-elements-wrapper {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 0 20px;
   }
 </style>
