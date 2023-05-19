@@ -13,7 +13,9 @@
     <Navbar />
   </div>
   <div id="main-content-container">
-    <Panel />
+    <div id="panel-container">
+      <Panel />
+    </div>
     <div id="slot-container">
       <slot />
     </div>
@@ -40,9 +42,10 @@
     margin-top: 5px;
     position: relative;
   }
+
   #slot-container {
     position: relative;
-    width: 100%;
+    width: calc(100vw - 237px);
     height: 100%;
     background-color: white;
     border-radius: 8px;

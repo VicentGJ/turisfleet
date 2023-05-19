@@ -1,17 +1,18 @@
-<script>
+<script lang="ts">
   import { view } from "$stores/basic_stores";
   import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Shared/Button.svelte";
   import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
-  export let items = [];
+  export let items: any[] = [];
   export let createButtonText = "";
-  let headers = [];
-  let idColumn = undefined;
+  let tablename = "";
+  let headers: string[] = [];
+  let idColumn: string = "";
   const dispatch = createEventDispatcher();
-  let itemToDelete = null;
+  let itemToDelete: any = null;
   let showConfirmation = false;
-  let filters = {};
-  let filteredItems = [];
+  let filters: any = {};
+  let filteredItems: any[] = [];
   let confirmation = {
     identifier: "",
     item: {},
@@ -19,41 +20,47 @@
 
   onMount(() => {
     filteredItems = items;
-    if ($view) {
-      switch ($view) {
-        case "cars":
-          idColumn = "id_car";
-          break;
-        case "drivers":
-          idColumn = "id_driver";
-          break;
-        case "groups":
-          idColumn = "id_group";
-          break;
-        case "requests":
-          idColumn = "id_request";
-          break;
-        case "situations":
-          idColumn = "id_situation";
-          break;
-        case "programs":
-          idColumn = "id_program";
-          break;
-        case "programs/specific":
-          idColumn = "id_specific_program";
-          break;
-        default:
-          idColumn = undefined;
-          break;
-      }
-    }
   });
+  $: switch ($view) {
+    case "cars":
+      idColumn = "id_car";
+      tablename = "Cars";
+      break;
+    case "drivers":
+      idColumn = "id_driver";
+      tablename = "Drivers";
+      break;
+    case "groups":
+      idColumn = "id_group";
+      tablename = "Groups";
+      break;
+    case "requests":
+      idColumn = "id_request";
+      tablename = "Requests";
+      break;
+    case "situations":
+      idColumn = "id_situation";
+      tablename = "Situations";
+      break;
+    case "programs":
+      tablename = "Programs";
+      idColumn = "id_program";
+      break;
+    case "programs/specific":
+      tablename = "Specific programs";
+      idColumn = "id_specific_program";
+      break;
+    default:
+      idColumn = "";
+      break;
+  }
 
   $: {
     filteredItems = items;
     for (const [filterkey, filtervalue] of Object.entries(filters)) {
-      const toCompare = filtervalue.trim().toLowerCase();
-      if (filtervalue.trim()) {
+      const value = filtervalue as string;
+      const toCompare = value.trim().toLowerCase();
+      if (value.trim()) {
         if (filterkey == "*") {
           filteredItems = filteredItems.filter((i) => compareRow(i, toCompare));
         } else {
@@ -66,7 +73,7 @@
       }
     }
   }
-  const compareRow = (row, value, key = undefined) => {
+  const compareRow = (row: any, value: string, key: string = "") => {
     if (value == "-") {
       if (!key) {
         return Object.values(row).some((v) => v == null);
@@ -75,13 +82,14 @@
       }
     } else {
       const conditions = [
-        (v) => typeof v == "string" && v.toLowerCase().includes(value),
-        (v) => typeof v == "number" && v.toString().includes(value.toString()),
+        (v: string) => typeof v == "string" && v.toLowerCase().includes(value),
+        (v: string | number) =>
+          typeof v == "number" && v.toString().includes(value.toString()),
       ];
 
       if (!key) {
         return Object.values(row).some((v) =>
-          conditions.some((condition) => condition(v))
+          conditions.some((condition) => condition(v as string))
         );
       } else {
         return conditions.some((condition) => condition(row[key]));
@@ -92,13 +100,13 @@
   $: if (items && items.length > 0) {
     headers = Object.keys(items[0]);
   }
-  const rowClicked = (item) => {
+  const rowClicked = (item: any) => {
     dispatch("row-clicked", item);
   };
   const createClicked = () => {
     dispatch("create-clicked");
   };
-  const deleteClicked = (item) => {
+  const deleteClicked = (item: any) => {
     showConfirmation = true;
     itemToDelete = item;
   };
@@ -118,6 +126,7 @@
         disabled={items.length === 0}
       />
     </div>
+    <h2 class="tablename-header">{tablename}</h2>
     <Button on:click={createClicked} bind:text={createButtonText} />
   </div>
   <div class="table-wrapper">
@@ -143,7 +152,7 @@
                 </th>
               {/if}
             {/each}
-            <th>
+            <th class="actions-header">
               <div class="header-name-filter-wrapper actions">
                 <p class="header-name">Actions</p>
               </div>
@@ -183,6 +192,15 @@
 {/if}
 
 <style>
+  .actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+  .actions-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+  }
   .table-container {
     position: relative;
   }
@@ -190,6 +208,7 @@
     width: 100%;
     text-align: left;
     border-collapse: collapse;
+    table-layout: auto;
   }
   .got-headers {
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
@@ -204,6 +223,7 @@
   }
   th {
     text-transform: capitalize;
+    height: 0;
   }
   .action-cell {
     text-align: end;
@@ -255,5 +275,8 @@
 
   .input-container.header-filter > input {
     width: 110px;
+  }
+  .tablename-header {
+    margin: 0;
   }
 </style>

@@ -53,7 +53,7 @@
   ];
 </script>
 
-<div id="panel-container">
+<div class="panel-wrapper">
   <div class="items-container">
     {#each panelItems as item}
       <div class="item">
@@ -64,7 +64,7 @@
 </div>
 
 <style>
-  #panel-container {
+  .panel-wrapper {
     background-color: #ffffffed;
     width: 220px;
     height: 100%;
