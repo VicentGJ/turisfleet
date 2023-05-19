@@ -9,6 +9,7 @@
   let showCreate = false;
   let showUpdate = false;
   let itemToUpdate: Driver;
+  let tablename = "Drivers"
   onMount(() => {
     refreshItems();
   });
@@ -35,6 +36,7 @@
 
 <Table
   bind:items
+  bind:tablename
   createButtonText="Insert Driver"
   on:row-clicked={handleRowClick}
   on:create-clicked={handleCreateClicked}

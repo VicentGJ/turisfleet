@@ -21,3 +21,5 @@ export const durationStrToObj = (duration: string): object => {
 
   return result;
 };
+
+const pdfmakereport = () => {};

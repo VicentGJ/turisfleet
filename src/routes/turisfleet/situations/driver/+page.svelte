@@ -1,16 +1,8 @@
 <script lang="ts">
-  import CreateCarSituation from "$/components/Forms/Situation/CreateCarSituation.svelte";
   import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
-  import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
-  import UpdateCarSituation from "$/components/Forms/Situation/UpdateCarSituation.svelte";
   import UpdateDriverSituation from "$/components/Forms/Situation/UpdateDriverSituation.svelte";
-  import UpdateSituation from "$/components/Forms/Situation/UpdateSituation.svelte";
   import Table from "$/components/Table/Table.svelte";
-  import type {
-    CarSituation,
-    DriverSituation,
-    Situation,
-  } from "$/lib/types/SituationTypes";
+  import type { DriverSituation } from "$/lib/types/SituationTypes";
   import { browser } from "$app/environment";
   import { situationService } from "$services";
   import { view } from "$stores/basic_stores";
@@ -19,6 +11,7 @@
   let itemToUpdate: DriverSituation;
   let items: DriverSituation[];
   let createButtonText = "Insert Driver Situation";
+  let tablename = "Driver Situations";
 
   $: if (browser && $view) {
     items = [];
@@ -49,6 +42,7 @@
 </script>
 
 <Table
+  bind:tablename
   bind:items
   bind:createButtonText
   on:row-clicked={handleRowClick}

@@ -5,7 +5,7 @@
   import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
   export let items: any[] = [];
   export let createButtonText = "";
-  let tablename = "";
+  export let tablename = "";
   let headers: string[] = [];
   let idColumn: string = "";
   const dispatch = createEventDispatcher();
@@ -24,37 +24,30 @@
   $: switch ($view) {
     case "cars":
       idColumn = "id_car";
-      tablename = "Cars";
       break;
     case "drivers":
       idColumn = "id_driver";
-      tablename = "Drivers";
       break;
     case "groups":
       idColumn = "id_group";
-      tablename = "Groups";
       break;
     case "requests":
       idColumn = "id_request";
-      tablename = "Requests";
       break;
     case "situations":
       idColumn = "id_situation";
-      tablename = "Situations";
       break;
     case "programs":
-      tablename = "Programs";
       idColumn = "id_program";
       break;
     case "programs/specific":
-      tablename = "Specific programs";
       idColumn = "id_specific_program";
       break;
     default:
       idColumn = "";
       break;
   }
-
+  $: console.log(tablename);
   $: {
     filteredItems = items;
     for (const [filterkey, filtervalue] of Object.entries(filters)) {
@@ -126,7 +119,7 @@
         disabled={items.length === 0}
       />
     </div>
-    <h2 class="tablename-header">{tablename}</h2>
+    <h2 class="table-name-header">{tablename}</h2>
     <Button on:click={createClicked} bind:text={createButtonText} />
   </div>
   <div class="table-wrapper">
@@ -276,7 +269,7 @@
   .input-container.header-filter > input {
     width: 110px;
   }
-  .tablename-header {
+  .table-name-header {
     margin: 0;
   }
 </style>

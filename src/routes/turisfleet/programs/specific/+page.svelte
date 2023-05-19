@@ -14,7 +14,7 @@
   let itemToUpdate: SpecificProgram;
   let items: Array<SpecificProgram>;
   let createButtonText = "Insert Specific Program";
-
+  let tablename = "Specific Programs";
   $: if (browser && $view) {
     items = [];
     refreshItems();
@@ -46,6 +46,7 @@
 </script>
 
 <Table
+  bind:tablename
   bind:items
   bind:createButtonText
   on:row-clicked={handleRowClick}

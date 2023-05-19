@@ -9,6 +9,7 @@
   let showCreate = false;
   let showUpdate = false;
   let itemToUpdate: Request;
+  let tablename = "Requests";
   onMount(() => {
     refreshItems();
   });
@@ -20,19 +21,17 @@
     showCreate = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-   
     requestService.deleteRequest(detail.id_request).then(() => refreshItems());
   };
   const refreshItems = () => {
-   
     requestService.getRequests().then((i) => {
-      
       items = i;
     });
   };
 </script>
 
 <Table
+  bind:tablename
   bind:items
   createButtonText="Insert Request"
   on:row-clicked={handleRowClick}

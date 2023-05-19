@@ -11,9 +11,8 @@
   import UpdateSpecificProgram from "$components/Forms/Program/UpdateSpecificProgram.svelte";
   let showCreateProgram = false;
   let createButtonText = "Insert Program";
-
   let showUpdateProgram = false;
-
+  let tablename = "Programs";
   let itemToUpdate: Program | SpecificProgram;
   let items: Array<Program | SpecificProgram>;
 
@@ -40,6 +39,7 @@
 </script>
 
 <Table
+  bind:tablename
   bind:items
   bind:createButtonText
   on:row-clicked={handleRowClick}

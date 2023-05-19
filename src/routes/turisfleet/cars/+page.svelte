@@ -9,6 +9,7 @@
   let showCreate = false;
   let showUpdate = false;
   let itemToUpdate: Car;
+  let tablename = "Cars";
   onMount(() => {
     refreshItems();
   });
@@ -20,7 +21,6 @@
     showCreate = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-   
     carService.deleteCar(detail.plate_number).then(() => refreshItems());
   };
   const refreshItems = () => {
@@ -31,6 +31,7 @@
 </script>
 
 <Table
+  bind:tablename
   bind:items
   createButtonText="Insert Car"
   on:row-clicked={handleRowClick}

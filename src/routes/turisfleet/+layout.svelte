@@ -1,6 +1,6 @@
 <script>
   import Loading from "$/components/Shared/Loading.svelte";
-  import Navbar from "$/components/layout/Navbar.svelte";
+  import Navbar from "$/components/layout/Panel/Navbar/Navbar.svelte";
   import "$/css/animations.css";
   import "$/css/app.css";
   import "$/css/variables.css";

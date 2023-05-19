@@ -15,7 +15,7 @@
   let itemToUpdate: Situation;
   let items: Situation[];
   let createButtonText = "Insert Situation";
-
+  let tablename = "Situations";
   $: if (browser && $view) {
     items = [];
     refreshItems();
@@ -42,6 +42,7 @@
 </script>
 
 <Table
+  bind:tablename
   bind:items
   bind:createButtonText
   on:row-clicked={handleRowClick}

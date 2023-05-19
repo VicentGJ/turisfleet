@@ -9,6 +9,7 @@
   let showCreate = false;
   let showUpdate = false;
   let itemToUpdate: Group;
+  let tablename = "Groups";
   onMount(() => {
     refreshItems();
   });
@@ -20,19 +21,17 @@
     showCreate = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-   
     groupService.deleteGroup(detail.id_group).then(() => refreshItems());
   };
   const refreshItems = () => {
-   
     groupService.getGroups().then((i) => {
-      
       items = i;
     });
   };
 </script>
 
 <Table
+  bind:tablename
   bind:items
   createButtonText="Insert Group"
   on:row-clicked={handleRowClick}
