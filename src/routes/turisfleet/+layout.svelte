@@ -5,7 +5,7 @@
   import "$/css/app.css";
   import "$/css/variables.css";
   import Panel from "$components/layout/Panel/Panel.svelte";
-  import { loading } from "./../lib/stores/basic_stores.ts";
+  import { loading } from "$stores/basic_stores";
 </script>
 
 <div id="main-layout-container">

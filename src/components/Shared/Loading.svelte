@@ -11,7 +11,7 @@
 
 <!-- TODO: if the load is too fast this looks just like a flash and looks kinda bad -->
 <style>
-  .loading-container {
+  /* .loading-container {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -34,12 +34,11 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    /* transform: translate(-50%, -50%); */
     background-color: rgba(76, 78, 79, 0.808);
     border-radius: 999px;
     height: 50%;
     width: 50%;
-  }
+  } */
   @keyframes rotate {
     from {
       transform: rotate(0deg);

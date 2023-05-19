@@ -4,47 +4,47 @@
 
   const panelItems: PanelItemType[] = [
     {
-      route: "drivers",
+      route: "turisfleet/drivers",
       name: "Drivers",
       subItems: [],
     },
     {
-      route: "cars",
+      route: "turisfleet/cars",
       name: "Cars",
       subItems: [],
     },
     {
-      route: "groups",
+      route: "turisfleet/groups",
       name: "Groups",
       subItems: [],
     },
     {
-      route: "requests",
+      route: "turisfleet/requests",
       name: "Requests",
       subItems: [],
     },
     {
-      route: "programs",
+      route: "turisfleet/programs",
       name: "Programs",
       subItems: [
         {
-          route: "programs/specific",
+          route: "turisfleet/programs/specific",
           name: "Specific Programs",
           subItems: [],
         },
       ],
     },
     {
-      route: "situations",
+      route: "turisfleet/situations",
       name: "Situations",
       subItems: [
         {
-          route: "situations/car",
+          route: "turisfleet/situations/car",
           name: "Car Situations",
           subItems: [],
         },
         {
-          route: "situations/driver",
+          route: "turisfleet/situations/driver",
           name: "Driver Situations",
           subItems: [],
         },

@@ -30,11 +30,11 @@
     </div>
     {#if item.subItems.length}
       <div
-        on:click={handleArrowClick}
+        on:click|capture|stopPropagation|preventDefault={handleArrowClick}
         class:open={showSubItems}
         class="arrow-wrapper"
       >
-        <img src="arrow-down.svg" alt="" />
+        <img src="/arrow-down.svg" alt="" />
       </div>
     {/if}
   </div>

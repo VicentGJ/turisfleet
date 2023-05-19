@@ -8,7 +8,7 @@
   import { browser } from "$app/environment";
   import { durationObjToStr } from "$lib/utils";
   import { programService } from "$services";
-  import UpdateSpecificProgram from "./../../components/Forms/Program/UpdateSpecificProgram.svelte";
+  import UpdateSpecificProgram from "$components/Forms/Program/UpdateSpecificProgram.svelte";
   let showCreateProgram = false;
   let createButtonText = "Insert Program";
 
