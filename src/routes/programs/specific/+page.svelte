@@ -4,36 +4,42 @@
   import UpdateProgram from "$/components/Forms/Program/UpdateProgram.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { view } from "$/lib/stores/basic_stores";
-  import type { Program, SpecificProgram } from "$/lib/types/ProgramTypes";
+  import type { SpecificProgram } from "$/lib/types/ProgramTypes";
   import { browser } from "$app/environment";
+  import UpdateSpecificProgram from "$components/Forms/Program/UpdateSpecificProgram.svelte";
   import { durationObjToStr } from "$lib/utils";
   import { programService } from "$services";
-  import UpdateSpecificProgram from "./../../components/Forms/Program/UpdateSpecificProgram.svelte";
-  let showCreateProgram = false;
-  let createButtonText = "Insert Program";
-
-  let showUpdateProgram = false;
-
-  let itemToUpdate: Program | SpecificProgram;
-  let items: Array<Program | SpecificProgram>;
+  let showCreateSpecificProgram = false;
+  let showUpdateSpecificProgram = false;
+  let itemToUpdate: SpecificProgram;
+  let items: Array<SpecificProgram>;
+  let createButtonText = "Insert Specific Program";
 
   $: if (browser && $view) {
+    items = [];
     refreshItems();
   }
 
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
-    showUpdateProgram = true;
+    showUpdateSpecificProgram = true;
   };
   const handleCreateClicked = () => {
-    showCreateProgram = true;
+    showCreateSpecificProgram = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
-    programService.deleteProgram(detail.id_program).then(() => refreshItems());
+    console.log("Delete Specific Program");
+    programService
+      .deleteSpecificProgram(detail.id_specific_program)
+      .then(() => refreshItems());
   };
 
   const refreshItems = () => {
-    programService.getPrograms().then((i) => {
+    programService.getSpecificPrograms().then((i) => {
+      i.map((i: any) => {
+        i["duration"] = durationObjToStr(i.duration);
+        return i;
+      });
       items = i;
     });
   };
@@ -46,15 +52,15 @@
   on:create-clicked={handleCreateClicked}
   on:delete-clicked={handleDeleteClicked}
 />
-{#if showCreateProgram}
-  <CreateProgram
-    bind:showCreate={showCreateProgram}
+{#if showCreateSpecificProgram}
+  <CreateSpecificProgram
+    bind:showCreate={showCreateSpecificProgram}
     on:created={refreshItems}
   />
 {/if}
-{#if showUpdateProgram}
-  <UpdateProgram
-    bind:showUpdate={showUpdateProgram}
+{#if showUpdateSpecificProgram}
+  <UpdateSpecificProgram
+    bind:showUpdate={showUpdateSpecificProgram}
     on:updated={refreshItems}
     bind:itemToUpdate
   />

@@ -36,15 +36,17 @@
     flex-direction: row;
     justify-content: flex-start;
     gap: 6px;
-    height: 100%;
+    height: calc(100vh - 50px - 5px - 5px);
     margin-top: 5px;
+    position: relative;
   }
   #slot-container {
     position: relative;
+    width: 100%;
+    height: 100%;
     background-color: white;
     border-radius: 8px;
     margin-right: 5px;
-    width: 100%;
   }
   #nav-wrapper {
     display: flex;

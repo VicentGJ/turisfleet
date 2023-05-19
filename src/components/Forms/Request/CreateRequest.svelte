@@ -7,7 +7,6 @@
     groupService,
   } from "$/lib/services/services";
   import BaseForm from "../BaseForm.svelte";
-  import { loading } from "$/lib/stores/basic_stores";
   export let showCreate = false;
   let programs: any = [];
   let groups: any = [];

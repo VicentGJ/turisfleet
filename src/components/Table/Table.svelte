@@ -1,5 +1,5 @@
 <script>
-  import { programView, situationView, view } from "$stores/basic_stores";
+  import { view } from "$stores/basic_stores";
   import { createEventDispatcher, onMount } from "svelte";
   import Button from "../Shared/Button.svelte";
   import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
@@ -19,7 +19,7 @@
 
   onMount(() => {
     filteredItems = items;
-    if ($view || $situationView || $programView) {
+    if ($view) {
       switch ($view) {
         case "cars":
           idColumn = "id_car";
@@ -34,12 +34,13 @@
           idColumn = "id_request";
           break;
         case "situations":
-          idColumn =
-            $situationView == "situations" ? "id_situation" : undefined;
+          idColumn = "id_situation";
           break;
         case "programs":
-          idColumn =
-            $programView == "programs" ? "id_program" : "id_specific_program";
+          idColumn = "id_program";
+          break;
+        case "programs/specific":
+          idColumn = "id_specific_program";
           break;
         default:
           idColumn = undefined;
@@ -107,74 +108,73 @@
   };
 </script>
 
-<div class="wrapper">
-  <div class="table-container">
-    <div class="table-header-container">
-      <div class="input-container table-filter">
-        <input
-          type="text"
-          bind:value={filters["*"]}
-          placeholder="table filter"
-        />
-      </div>
-      <Button on:click={createClicked} bind:text={createButtonText} />
+<div class="table-container">
+  <div class="table-header-container">
+    <div class="input-container table-filter">
+      <input
+        type="text"
+        bind:value={filters["*"]}
+        placeholder="table filter"
+        disabled={items.length === 0}
+      />
     </div>
-    <div class="table-wrapper">
-      {#if items.length}
-        <table class="table">
-          <thead>
-            <tr class:got-headers={headers.length > 0}>
-              {#each headers as header}
-                {#if header != idColumn}
-                  <!-- content here -->
-                  {@const h = header.split("_").join(" ")}
-                  <th>
-                    <div class="header-name-filter-wrapper">
-                      <p class="header-name">{h}</p>
-                      <div class="input-container header-filter">
-                        <input
-                          type="text"
-                          bind:value={filters[header]}
-                          placeholder="{h.toLowerCase().split(' ')[0]} filter"
-                        />
-                      </div>
+    <Button on:click={createClicked} bind:text={createButtonText} />
+  </div>
+  <div class="table-wrapper">
+    {#if items.length}
+      <table class="table">
+        <thead>
+          <tr class:got-headers={headers.length > 0}>
+            {#each headers as header}
+              {#if header != idColumn}
+                <!-- content here -->
+                {@const h = header.split("_").join(" ")}
+                <th>
+                  <div class="header-name-filter-wrapper">
+                    <p class="header-name">{h}</p>
+                    <div class="input-container header-filter">
+                      <input
+                        type="text"
+                        bind:value={filters[header]}
+                        placeholder="{h.toLowerCase().split(' ')[0]} filter"
+                      />
                     </div>
-                  </th>
+                  </div>
+                </th>
+              {/if}
+            {/each}
+            <th>
+              <div class="header-name-filter-wrapper actions">
+                <p class="header-name">Actions</p>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {#each filteredItems as item}
+            <tr on:click={() => rowClicked(item)}>
+              {#each Object.entries(item) as [key, value]}
+                {#if key != idColumn}
+                  <td>
+                    {value === null ? "-" : value}
+                  </td>
                 {/if}
               {/each}
-              <th>
-                <div class="header-name-filter-wrapper actions">
-                  <p class="header-name">Actions</p>
-                </div>
-              </th>
+              <td class="action-cell">
+                <!-- svelte-ignore a11y-click-events-have-key-events -->
+                <img
+                  src="/trash.svg"
+                  alt=""
+                  on:click|capture|preventDefault|stopPropagation={() =>
+                    deleteClicked(item)}
+                  class="clickable-icon"
+                />
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            {#each filteredItems as item}
-              <tr on:click={() => rowClicked(item)}>
-                {#each Object.entries(item) as [key, value]}
-                  {#if key != idColumn}
-                    <td class:small-td={!value || value.length < 5}>
-                      {value === null ? "-" : value}
-                    </td>
-                  {/if}
-                {/each}
-                <td class="action-cell">
-                  <!-- svelte-ignore a11y-click-events-have-key-events -->
-                  <img
-                    src="trash.svg"
-                    alt=""
-                    on:click|capture|preventDefault|stopPropagation={() =>
-                      deleteClicked(item)}
-                    class="clickable-icon"
-                  />
-                </td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      {/if}
-    </div>
+          {/each}
+        </tbody>
+      </table>
+    {/if}
   </div>
 </div>
 
@@ -183,24 +183,13 @@
 {/if}
 
 <style>
-  .wrapper {
-    position: absolute;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-  }
   .table-container {
     position: relative;
   }
   .table {
-    height: 50px;
     width: 100%;
     text-align: left;
-    position: relative;
     border-collapse: collapse;
-    table-layout: fixed;
   }
   .got-headers {
     box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.2);
@@ -217,18 +206,15 @@
     text-transform: capitalize;
   }
   .action-cell {
-    display: flex;
-    justify-content: flex-end;
-    text-align: right;
+    text-align: end;
   }
   .table-wrapper {
     height: calc(
       100vh - 50px - 5px - 5px - 41px - 10px
     ); /*height of: navbar, gaps in containers, height of table header, general margin bottom*/
-    width: calc(100vw - 192px - 10px - 5px);
+    width: 100%;
     overflow-y: auto;
   }
-
   .header-name-filter-wrapper {
     display: flex;
     flex-direction: column;

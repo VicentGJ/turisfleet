@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { loading } from "$/lib/stores/basic_stores";
   import { carService, situationService } from "$services";
   import { createEventDispatcher, onMount } from "svelte";
   import BaseForm from "../BaseForm.svelte";
@@ -11,7 +10,6 @@
   let situations: Situation[] = [];
   let cars: Car[] = [];
   onMount(async () => {
-   
     await Promise.all([
       situationService.getSituations("ALL", "car").then((s) => {
         situations = s;
@@ -20,7 +18,6 @@
         cars = c;
       }),
     ]);
-    
   });
   const dispatch = createEventDispatcher();
   let values = {
@@ -35,12 +32,11 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-   
     await situationService.updateCarSituation(
       { car_id_car: itemToUpdate.car_id_car, date: itemToUpdate.date },
       values
     );
-    
+
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;
@@ -89,6 +85,9 @@
         required
         placeholder="date"
         min={dayjs().format("YYYY-MM-DD")}
+        max={values.return_date
+          ? dayjs(values.return_date).format("YYYY-MM-DD")
+          : undefined}
       />
     </div>
     <div class="input-container">
@@ -98,7 +97,9 @@
         type="date"
         bind:value={values.return_date}
         placeholder="return date"
-        min={dayjs().format("YYYY-MM-DD")}
+        min={values.date
+          ? dayjs(values.date).format("YYYY-MM-DD")
+          : dayjs().format("YYYY-MM-DD")}
       />
     </div>
   </div>

@@ -3,7 +3,6 @@
   import { driverService } from "$/lib/services/services";
   import { LicenceCategory } from "$lib/types/DriverTypes";
   import BaseForm from "../BaseForm.svelte";
-  import { loading } from "$/lib/stores/basic_stores";
   export let showCreate = false;
   const dispatch = createEventDispatcher();
   $: values = {

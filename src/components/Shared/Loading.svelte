@@ -3,11 +3,11 @@
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div class="loading-container" on:click|capture|preventDefault>
+<!-- <div class="loading-container" on:click|capture|preventDefault>
   <div class="outer" in:scale>
     <div class="inner" />
   </div>
-</div>
+</div> -->
 
 <!-- TODO: if the load is too fast this looks just like a flash and looks kinda bad -->
 <style>

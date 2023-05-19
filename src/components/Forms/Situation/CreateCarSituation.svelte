@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-  import { situationService, carService } from "$/lib/services/services";
-  import BaseForm from "../BaseForm.svelte";
-  import { loading } from "$/lib/stores/basic_stores";
+  import { carService, situationService } from "$/lib/services/services";
+  import type { Situation } from "$/lib/types/SituationTypes";
   import dayjs from "dayjs";
+  import { createEventDispatcher, onMount } from "svelte";
+  import BaseForm from "../BaseForm.svelte";
   export let showCreate = false;
   let situations: any = [];
   let cars: any = [];
@@ -15,7 +15,6 @@
     return_date: null,
   };
   onMount(async () => {
-   
     await Promise.all([
       situationService.getSituations(200, "car").then((s) => {
         situations = s;
@@ -26,27 +25,31 @@
         values.car_id_car = cars[0].id_car;
       }),
     ]);
-    
   });
 
   const cancel = () => {
     showCreate = false;
   };
   const create = async () => {
-   
     await situationService.createCarSituation(values);
-    
+
     dispatch("created");
     showCreate = false;
   };
   const close = () => {
     showCreate = false;
   };
+  $: req = situations.some(
+    (s: Situation) =>
+      (s.situation_name == "inside the country" ||
+        s.situation_name == "vacations") &&
+      s.id_situation.toString() == values.situation_id_situation
+  );
 </script>
 
 <BaseForm
-  title="Insert Driver Situation"
-  primaryBtnTxt="Insert Driver Situation"
+  title="Insert Car Situation"
+  primaryBtnTxt="Insert Car Situation"
   on:close-clicked={close}
   on:primary-clicked={create}
   on:secondary-clicked={cancel}
@@ -64,9 +67,9 @@
       <label for="">Situation *</label>
       <select name="" id="" bind:value={values.situation_id_situation}>
         {#each situations as situation}
-          <option value={situation.id_situation}
-            >{situation.situation_name}</option
-          >
+          <option value={situation.id_situation}>
+            {situation.situation_name}
+          </option>
         {/each}
       </select>
     </div>
@@ -78,15 +81,21 @@
         required
         placeholder="date"
         min={dayjs().format("YYYY-MM-DD")}
+        max={values.return_date
+          ? dayjs(values.return_date).format("YYYY-MM-DD")
+          : undefined}
       />
     </div>
     <div class="input-container">
-      <label for="">Return date</label>
+      <label for="">Return date {req ? "*" : ""}</label>
       <input
+        required={req}
         type="date"
         bind:value={values.return_date}
         placeholder="date"
-        min={dayjs().format("YYYY-MM-DD")}
+        min={values.date
+          ? dayjs(values.date).format("YYYY-MM-DD")
+          : dayjs().format("YYYY-MM-DD")}
       />
     </div>
   </div>

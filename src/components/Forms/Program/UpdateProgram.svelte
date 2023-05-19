@@ -3,7 +3,6 @@
   import { createEventDispatcher } from "svelte";
   import BaseForm from "../BaseForm.svelte";
   import { programService } from "$services";
-  import { loading } from "$/lib/stores/basic_stores";
   export let showUpdate = false;
   export let itemToUpdate: any;
 

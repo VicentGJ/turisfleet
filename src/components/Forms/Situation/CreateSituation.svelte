@@ -2,7 +2,6 @@
   import { createEventDispatcher } from "svelte";
   import { situationService } from "$/lib/services/services";
   import BaseForm from "../BaseForm.svelte";
-  import { loading } from "$/lib/stores/basic_stores";
   export let showCreate = false;
   const dispatch = createEventDispatcher();
   $: values = {

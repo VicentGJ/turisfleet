@@ -74,18 +74,26 @@ export default class ProgramService extends BaseService {
   public async getSpecificProgram(
     id: string | number
   ): Promise<SpecificProgram> {
-    return await this.handleReq(this.url(id.toString()), undefined, "GET");
+    return await this.handleReq(
+      "specific/" + this.url(id.toString()),
+      undefined,
+      "GET"
+    );
   }
 
   public async deleteSpecificProgram(id: string | number): Promise<any> {
-    return await this.handleReq(this.url(id.toString()), undefined, "DELETE");
+    return await this.handleReq(
+      this.url("specific/" + id.toString()),
+      undefined,
+      "DELETE"
+    );
   }
   public async updateSpecificProgram(
     id: string | number,
     program: SpecificProgramUpdate
   ): Promise<SpecificProgram> {
     return await this.handleReq(
-      this.url("specifi/" + id.toString()),
+      this.url("specific/" + id.toString()),
       undefined,
       "PUT",
       program

@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { loading } from "$/lib/stores/basic_stores";
   import { durationObjToStr, durationStrToObj } from "$lib/utils";
   import { programService } from "$services";
   import { createEventDispatcher, onMount } from "svelte";

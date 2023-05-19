@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
   import Button from "./Button.svelte";
   export let showConfirmation = false;
@@ -10,8 +10,15 @@
     dispatch("confirm");
     showConfirmation = false;
   };
+  const handlekeydown = (ev: KeyboardEvent) => {
+    if (ev.key === "Enter") confirm();
+    else if (ev.key === "Escape") close();
+  };
 </script>
 
+<svelte:window
+  on:keydown|capture|preventDefault|stopPropagation={handlekeydown}
+/>
 <div class="confirmation-container-base">
   <div class="confirmation">
     <div class="wrapper">
@@ -31,7 +38,7 @@
 
 <style>
   .confirmation-container-base {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

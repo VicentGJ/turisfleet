@@ -15,8 +15,14 @@
   const closeClicked = () => {
     dispatch("close-clicked");
   };
+
+  const handlekeydown = (ev: KeyboardEvent) => {
+    if (ev.key === "Enter") primaryClicked();
+    else if (ev.key === "Escape") closeClicked();
+  };
 </script>
 
+<svelte:window on:keydown|stopPropagation={handlekeydown} />
 <!-- svelte-ignore a11y-click-events-have-key-events -->
 <div
   class="form-base-container"
@@ -31,7 +37,7 @@
         <div>
           <!-- svelte-ignore a11y-click-events-have-key-events -->
           <img
-            src="close-square.svg"
+            src="/close-square.svg"
             alt=""
             class="clickable-icon"
             on:click={closeClicked}
@@ -59,7 +65,7 @@
 
 <style>
   .form-base-container {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;

@@ -3,7 +3,6 @@
   import { createEventDispatcher, onMount } from "svelte";
   import BaseForm from "../BaseForm.svelte";
   import { requestService, carService, driverService } from "$services";
-  import { loading } from "$/lib/stores/basic_stores";
   export let showUpdate = false;
   export let itemToUpdate: any;
   let drivers: any = [];

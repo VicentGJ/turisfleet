@@ -3,7 +3,6 @@
   import UpdateDriver from "$/components/Forms/Driver/UpdateDriver.svelte";
   import Table from "$/components/Table/Table.svelte";
   import { driverService } from "$/lib/services/services";
-  import { loading } from "$/lib/stores/basic_stores";
   import type { Driver } from "$/lib/types/DriverTypes";
   import { onMount } from "svelte";
   let items: Driver[];

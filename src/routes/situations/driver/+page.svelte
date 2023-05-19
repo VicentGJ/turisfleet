@@ -6,15 +6,19 @@
   import UpdateDriverSituation from "$/components/Forms/Situation/UpdateDriverSituation.svelte";
   import UpdateSituation from "$/components/Forms/Situation/UpdateSituation.svelte";
   import Table from "$/components/Table/Table.svelte";
-  import type { Situation } from "$/lib/types/SituationTypes";
+  import type {
+    CarSituation,
+    DriverSituation,
+    Situation,
+  } from "$/lib/types/SituationTypes";
   import { browser } from "$app/environment";
   import { situationService } from "$services";
   import { view } from "$stores/basic_stores";
-  let showCreateSituation = false;
-  let showUpdateSituation = false;
-  let itemToUpdate: Situation;
-  let items: Situation[];
-  let createButtonText = "Insert Situation";
+  let showCreateDriverSituation = false;
+  let showUpdateDriverSituation = false;
+  let itemToUpdate: DriverSituation;
+  let items: DriverSituation[];
+  let createButtonText = "Insert Driver Situation";
 
   $: if (browser && $view) {
     items = [];
@@ -23,19 +27,22 @@
 
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
-    showUpdateSituation = true;
+    showUpdateDriverSituation = true;
   };
   const handleCreateClicked = () => {
-    showCreateSituation = true;
+    showCreateDriverSituation = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
     situationService
-      .deleteSituation(detail.id_situation)
+      .deleteDriverSituation({
+        driver_id_driver: detail.driver_id_driver,
+        date: detail.date,
+      })
       .then(() => refreshItems());
   };
 
   const refreshItems = () => {
-    situationService.getSituations().then((i) => {
+    situationService.getDriverSituations().then((i) => {
       items = i;
     });
   };
@@ -48,16 +55,16 @@
   on:create-clicked={handleCreateClicked}
   on:delete-clicked={handleDeleteClicked}
 />
-{#if showCreateSituation}
-  <CreateSituation
-    bind:showCreate={showCreateSituation}
+{#if showCreateDriverSituation}
+  <CreateDriverSituation
+    bind:showCreate={showCreateDriverSituation}
     on:created={refreshItems}
   />
 {/if}
-{#if showUpdateSituation}
-  <UpdateSituation
+{#if showUpdateDriverSituation}
+  <UpdateDriverSituation
     bind:itemToUpdate
-    bind:showUpdate={showUpdateSituation}
+    bind:showUpdate={showUpdateDriverSituation}
     on:updated={refreshItems}
   />
 {/if}

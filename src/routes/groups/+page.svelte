@@ -1,7 +1,6 @@
 <script lang="ts">
   import Table from "$/components/Table/Table.svelte";
   import { groupService } from "$/lib/services/services";
-  import { loading } from "$/lib/stores/basic_stores";
   import CreateGroup from "$components/Forms/Group/CreateGroup.svelte";
   import UpdateGroup from "$/components/Forms/Group/UpdateGroup.svelte";
   import { onMount } from "svelte";

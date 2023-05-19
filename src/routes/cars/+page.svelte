@@ -2,7 +2,6 @@
   import type { Car } from "$lib/types/CarTypes";
   import Table from "$/components/Table/Table.svelte";
   import { carService } from "$/lib/services/services";
-  import { loading } from "$/lib/stores/basic_stores";
   import CreateCar from "$/components/Forms/Car/CreateCar.svelte";
   import { onMount } from "svelte";
   import UpdateCar from "$/components/Forms/Car/UpdateCar.svelte";
@@ -25,9 +24,7 @@
     carService.deleteCar(detail.plate_number).then(() => refreshItems());
   };
   const refreshItems = () => {
-   
     carService.getCars().then((i) => {
-      
       items = i;
     });
   };

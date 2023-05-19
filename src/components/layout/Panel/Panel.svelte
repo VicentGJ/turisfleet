@@ -1,70 +1,83 @@
 <script lang="ts">
-  import { loading } from "$/lib/stores/basic_stores";
-  import { goto } from "$app/navigation";
-  import { view } from "$stores/basic_stores";
+  import type { PanelItemType } from "$lib/types/PanelTypes";
   import PanelItem from "./PanelItem.svelte";
 
-  async function click(this: any) {
-    $view = this.route;
-   
-    await goto($view);
-    
-  }
-  const panelItems = [
+  const panelItems: PanelItemType[] = [
     {
       route: "drivers",
       name: "Drivers",
-      click: click,
+      subItems: [],
     },
     {
       route: "cars",
       name: "Cars",
-      click: click,
+      subItems: [],
     },
     {
       route: "groups",
       name: "Groups",
-      click: click,
+      subItems: [],
     },
     {
       route: "requests",
       name: "Requests",
-      click: click,
+      subItems: [],
     },
     {
       route: "programs",
       name: "Programs",
-      click: click,
+      subItems: [
+        {
+          route: "programs/specific",
+          name: "Specific Programs",
+          subItems: [],
+        },
+      ],
     },
     {
       route: "situations",
       name: "Situations",
-      click: click,
+      subItems: [
+        {
+          route: "situations/car",
+          name: "Car Situations",
+          subItems: [],
+        },
+        {
+          route: "situations/driver",
+          name: "Driver Situations",
+          subItems: [],
+        },
+      ],
     },
   ];
 </script>
 
 <div id="panel-container">
-  <h1>Turis Fleet</h1>
-  {#each panelItems as item}
-    <PanelItem bind:item />
-  {/each}
+  <div class="items-container">
+    {#each panelItems as item}
+      <div class="item">
+        <PanelItem bind:item />
+      </div>
+    {/each}
+  </div>
 </div>
 
 <style>
   #panel-container {
     background-color: #ffffffed;
-    min-width: fit-content;
+    width: 220px;
     height: 100%;
-    padding: 30px 15px 0 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    position: relative;
     margin-left: 4px;
     border-radius: 8px;
   }
-  h1 {
-    margin: 0;
+  .items-container {
+    height: calc(100% - 20px);
+    position: relative;
+    flex-direction: column;
+    overflow-y: scroll;
+    padding: 10px;
+    display: flex;
+    gap: 20px;
   }
 </style>

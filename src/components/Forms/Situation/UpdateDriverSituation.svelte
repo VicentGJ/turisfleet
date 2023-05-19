@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { loading } from "$/lib/stores/basic_stores";
   import type { Driver } from "$/lib/types/DriverTypes";
   import type { Situation } from "$/lib/types/SituationTypes";
   import { carService, driverService, situationService } from "$services";
@@ -11,7 +10,6 @@
   let situations: Situation[] = [];
   let drivers: Driver[] = [];
   onMount(async () => {
-   
     await Promise.all([
       situationService.getSituations("ALL", "driver").then((s) => {
         situations = s;
@@ -20,7 +18,6 @@
         drivers = d;
       }),
     ]);
-    
   });
   const dispatch = createEventDispatcher();
   let values = {
@@ -35,7 +32,6 @@
     itemToUpdate = undefined;
   };
   const update = async () => {
-   
     await situationService.updateDriverSituation(
       {
         driver_id_driver: itemToUpdate.driver_id_driver,
@@ -46,7 +42,7 @@
         return_date: values.return_date ? values.return_date : null,
       }
     );
-    
+
     dispatch("updated");
     itemToUpdate = undefined;
     showUpdate = false;
@@ -108,6 +104,9 @@
         required
         placeholder="date"
         min={dayjs().format("YYYY-MM-DD")}
+        max={values.return_date
+          ? dayjs(values.return_date).format("YYYY-MM-DD")
+          : undefined}
       />
     </div>
     <div class="input-container">
@@ -117,7 +116,9 @@
         type="date"
         bind:value={values.return_date}
         placeholder="return date"
-        min={dayjs().format("YYYY-MM-DD")}
+        min={values.date
+          ? dayjs(values.date).format("YYYY-MM-DD")
+          : dayjs().format("YYYY-MM-DD")}
       />
     </div>
   </div>

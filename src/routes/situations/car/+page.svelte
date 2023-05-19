@@ -1,20 +1,16 @@
 <script lang="ts">
   import CreateCarSituation from "$/components/Forms/Situation/CreateCarSituation.svelte";
-  import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
-  import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
   import UpdateCarSituation from "$/components/Forms/Situation/UpdateCarSituation.svelte";
-  import UpdateDriverSituation from "$/components/Forms/Situation/UpdateDriverSituation.svelte";
-  import UpdateSituation from "$/components/Forms/Situation/UpdateSituation.svelte";
   import Table from "$/components/Table/Table.svelte";
-  import type { Situation } from "$/lib/types/SituationTypes";
+  import type { CarSituation } from "$/lib/types/SituationTypes";
   import { browser } from "$app/environment";
   import { situationService } from "$services";
   import { view } from "$stores/basic_stores";
-  let showCreateSituation = false;
-  let showUpdateSituation = false;
-  let itemToUpdate: Situation;
-  let items: Situation[];
-  let createButtonText = "Insert Situation";
+  let showCreateCarSituation = false;
+  let showUpdateCarSituation = false;
+  let itemToUpdate: CarSituation;
+  let items: CarSituation[];
+  let createButtonText = "Insert Car Situation";
 
   $: if (browser && $view) {
     items = [];
@@ -23,19 +19,22 @@
 
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail;
-    showUpdateSituation = true;
+    showUpdateCarSituation = true;
   };
   const handleCreateClicked = () => {
-    showCreateSituation = true;
+    showCreateCarSituation = true;
   };
   const handleDeleteClicked = ({ detail }: any) => {
     situationService
-      .deleteSituation(detail.id_situation)
+      .deleteCarSituation({
+        car_id_car: detail.car_id_car,
+        date: detail.date,
+      })
       .then(() => refreshItems());
   };
 
   const refreshItems = () => {
-    situationService.getSituations().then((i) => {
+    situationService.getCarSituations().then((i) => {
       items = i;
     });
   };
@@ -48,16 +47,16 @@
   on:create-clicked={handleCreateClicked}
   on:delete-clicked={handleDeleteClicked}
 />
-{#if showCreateSituation}
-  <CreateSituation
-    bind:showCreate={showCreateSituation}
+{#if showCreateCarSituation}
+  <CreateCarSituation
+    bind:showCreate={showCreateCarSituation}
     on:created={refreshItems}
   />
 {/if}
-{#if showUpdateSituation}
-  <UpdateSituation
+{#if showUpdateCarSituation}
+  <UpdateCarSituation
     bind:itemToUpdate
-    bind:showUpdate={showUpdateSituation}
+    bind:showUpdate={showUpdateCarSituation}
     on:updated={refreshItems}
   />
 {/if}

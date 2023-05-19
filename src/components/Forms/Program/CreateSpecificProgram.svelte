@@ -2,7 +2,6 @@
   import { createEventDispatcher, onMount } from "svelte";
   import { programService } from "$/lib/services/services";
   import BaseForm from "../BaseForm.svelte";
-  import { loading } from "$/lib/stores/basic_stores";
   import { durationObjToStr } from "$/lib/utils";
   export let showCreate = false;
   let programs: any = [];
