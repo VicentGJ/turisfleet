@@ -7,3 +7,4 @@ export const driverSituationsTable = "public.driver_situations";
 export const programTable = "public.programs";
 export const specificProgramTable = "public.specific_programs";
 export const requestTable = "public.requests";
+export const driverCategoriesTable = "public.drivers_licence_category";

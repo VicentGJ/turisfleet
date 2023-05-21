@@ -22,32 +22,31 @@
     filteredItems = items;
   });
   $: switch ($view) {
-    case "cars":
+    case "turisfleet/cars":
       idColumn = "id_car";
       break;
-    case "drivers":
+    case "turisfleet/drivers":
       idColumn = "id_driver";
       break;
-    case "groups":
+    case "turisfleet/groups":
       idColumn = "id_group";
       break;
-    case "requests":
+    case "turisfleet/requests":
       idColumn = "id_request";
       break;
-    case "situations":
+    case "turisfleet/situations":
       idColumn = "id_situation";
       break;
-    case "programs":
+    case "turisfleet/programs":
       idColumn = "id_program";
       break;
-    case "programs/specific":
+    case "turisfleet/programs/specific":
       idColumn = "id_specific_program";
       break;
     default:
       idColumn = "";
       break;
   }
-  $: console.log(tablename);
   $: {
     filteredItems = items;
     for (const [filterkey, filtervalue] of Object.entries(filters)) {
