@@ -1,31 +1,30 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import { situationService } from "$/lib/services/services";
-  import BaseForm from "../BaseForm.svelte";
-  export let showCreate = false;
-  const dispatch = createEventDispatcher();
-  $: values = {
-    situation_name: "",
-    situation_type: "car",
-  };
+  import { createEventDispatcher } from 'svelte'
+  import { situationService } from '$/lib/services/services'
+  import BaseForm from '../BaseForm.svelte'
+  export let showCreate = false
+  const dispatch = createEventDispatcher()
+  let values = {
+    situation_name: '',
+    situation_type: 'car',
+  }
 
   enum situation_types {
-    car = "car",
-    driver = "driver",
+    car = 'car',
+    driver = 'driver',
   }
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
-   
-    await situationService.createSituation(values);
-    
-    dispatch("created");
-    showCreate = false;
-  };
+    await situationService.createSituation(values)
+
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
 </script>
 
 <BaseForm

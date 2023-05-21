@@ -1,27 +1,26 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import { groupService } from "$/lib/services/services";
-  import BaseForm from "../BaseForm.svelte";
-  export let showCreate = false;
-  const dispatch = createEventDispatcher();
-  $: values = {
-    country: "",
+  import { createEventDispatcher } from 'svelte'
+  import { groupService } from '$/lib/services/services'
+  import BaseForm from '../BaseForm.svelte'
+  export let showCreate = false
+  const dispatch = createEventDispatcher()
+  let values = {
+    country: '',
     tourist_amount: 1,
-  };
+  }
 
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
-   
-    await groupService.createGroup(values);
-    
-    dispatch("created");
-    showCreate = false;
-  };
+    await groupService.createGroup(values)
+
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
 </script>
 
 <BaseForm

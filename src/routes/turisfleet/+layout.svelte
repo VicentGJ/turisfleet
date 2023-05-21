@@ -1,11 +1,12 @@
 <script>
-  import Loading from "$/components/Shared/Loading.svelte";
-  import Navbar from "$/components/layout/Navbar/Navbar.svelte";
-  import "$/css/animations.css";
-  import "$/css/app.css";
-  import "$/css/variables.css";
-  import Panel from "$components/layout/Panel/Panel.svelte";
-  import { loading } from "$stores/basic_stores";
+  import ErrorMessage from '$/components/Shared/ErrorMessage.svelte'
+  import Loading from '$/components/Shared/Loading.svelte'
+  import Navbar from '$/components/layout/Navbar/Navbar.svelte'
+  import '$/css/animations.css'
+  import '$/css/app.css'
+  import '$/css/variables.css'
+  import Panel from '$components/layout/Panel/Panel.svelte'
+  import { loading, errorMessage } from '$stores/basic_stores'
 </script>
 
 <div id="main-layout-container">
@@ -22,6 +23,9 @@
   </div>
   {#if $loading}
     <Loading />
+  {/if}
+  {#if $errorMessage.message}
+    <ErrorMessage />
   {/if}
 </div>
 

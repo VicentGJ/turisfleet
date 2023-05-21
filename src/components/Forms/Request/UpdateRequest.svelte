@@ -1,50 +1,67 @@
 <script lang="ts">
-  import { LicenceCategory } from "$lib/types/DriverTypes";
-  import { createEventDispatcher, onMount } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  import { requestService, carService, driverService } from "$services";
-  export let showUpdate = false;
-  export let itemToUpdate: any;
-  let drivers: any = [];
-  let cars: any = [];
-  $: copilots = [
-    { id_driver: null, name: "None" },
-    ...drivers.filter((d: any) => d.id_driver !== values.id_driver),
-  ];
+  import type { Car } from '$/lib/types/CarTypes'
+  import type { Driver, DriverWithCategory } from '$/lib/types/DriverTypes'
+  import type { SpecificProgram } from '$/lib/types/ProgramTypes'
+  import type { Request } from '$/lib/types/RequestTypes'
+  import {
+    carService,
+    driverService,
+    programService,
+    requestService,
+  } from '$services'
+  import dayjs from 'dayjs'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showUpdate = false
+  export let itemToUpdate: Request
+  let driver: Driver
+  let drivers: DriverWithCategory[] = []
+  let programs: SpecificProgram[] = []
+  let cars: Car[] = []
+  let copilots: DriverWithCategory[] = []
+  $: if (driver)
+    copilots = [
+      {
+        address: '',
+        categories: [],
+        id_driver: -1,
+        id_number: '',
+        name: 'None',
+      },
+      ...drivers.filter((d) => d.id_driver !== driver.id_driver),
+    ]
   onMount(async () => {
-   
     await Promise.all([
       carService.getCars().then((c) => (cars = c)),
-      driverService.getDrivers().then((d) => (drivers = d)),
-    ]);
-    
-  });
-  const dispatch = createEventDispatcher();
+      carService.getCarDriver(itemToUpdate.id_car).then((d) => (driver = d)),
+      driverService.getDriversWithCategories().then((d) => (drivers = d)),
+      programService.getSpecificPrograms().then((p) => (programs = p)),
+    ])
+  })
+  const dispatch = createEventDispatcher()
   let values = {
     id_car: itemToUpdate.id_car,
-    id_driver: itemToUpdate.id_driver,
-    id_copilot: itemToUpdate.id_copilot,
-    //TODO: what other values area updateable
-  };
+    id_copilot: itemToUpdate.id_copilot || -1,
+    date: itemToUpdate.date,
+    id_specific_program: itemToUpdate.id_specific_program,
+    //TODO: what other values are updateable?
+  }
 
   const cancel = () => {
-    showUpdate = false;
-    itemToUpdate = undefined;
-  };
+    showUpdate = false
+  }
   const update = async () => {
-   
     await requestService.updateRequest(itemToUpdate.id_request, {
       ...values,
       // return_date: return_date ? null : return_date,
-    });
-    
-    dispatch("updated");
-    itemToUpdate = undefined;
-    showUpdate = false;
-  };
+    })
+
+    dispatch('updated')
+    showUpdate = false
+  }
   const close = () => {
-    cancel();
-  };
+    cancel()
+  }
 </script>
 
 <BaseForm
@@ -55,19 +72,6 @@
   on:secondary-clicked={cancel}
 >
   <div class="form-body">
-    <div class="input-container">
-      <label for="">Driver *</label>
-      <select name="" id="" bind:value={values.id_driver}>
-        {#each drivers as driver}
-          <option
-            value={driver.id_driver}
-            selected={driver.id_driver == values.id_driver}
-          >
-            {driver.name}
-          </option>
-        {/each}
-      </select>
-    </div>
     <div class="input-container">
       <label for="">Copilot</label>
       <select name="" id="" bind:value={values.id_copilot}>
@@ -83,11 +87,33 @@
     </div>
     <div class="input-container">
       <label for="">Car *</label>
-      <select name="" id="" bind:value={values.id_car}>
+      <select name="" id="" bind:value={values.id_car} required>
         {#each cars as car}
-          <option value={car.id_car} selected={car.id_car == values.id_car}
-            >{[car.plate_number]} {car.brand}</option
+          <option value={car.id_car} selected={car.id_car == values.id_car}>
+            [{car.plate_number}]
+            {car.brand}
+            {#await carService.getCarDriver(car.id_car) then driver}
+              ({driver.name})
+            {/await}
+          </option>
+        {/each}
+      </select>
+    </div>
+    <div class="input-container">
+      <label for="">Date *</label>
+      <input type="date" name="" id="" min={dayjs().format('YYYY-MM-DD')} />
+    </div>
+    <div class="input-container">
+      <label for="">Specific Program *</label>
+      <select name="" id="" bind:value={values.id_specific_program} required>
+        {#each programs as program}
+          <option
+            value={program.id_specific_program}
+            selected={program.id_specific_program ===
+              values.id_specific_program}
           >
+            ({program.start}){program.description}
+          </option>
         {/each}
       </select>
     </div>

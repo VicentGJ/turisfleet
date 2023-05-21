@@ -1,60 +1,137 @@
 <script lang="ts">
-  import DropdownItem from "$components/Shared/DropdownItem.svelte";
-  import Dropdown from "$components/Shared/Dropdown.svelte";
-  import DropdownToggler from "$components/Shared/DropdownToggler.svelte";
-  import type { ReportType } from "$lib/types/ReportTypes";
-  let open = false;
+  import { reportService } from '$/lib/services/services'
+  import { generatePDF } from '$/lib/utils'
+  import Dropdown from '$components/Shared/Dropdown.svelte'
+  import DropdownItem from '$components/Shared/DropdownItem.svelte'
+  import DropdownToggler from '$components/Shared/DropdownToggler.svelte'
+  import type { ReportItemType } from '$lib/types/ReportTypes'
+  import DatePickerModal from '$/components/Shared/DatePickerModal.svelte'
+  import dayjs from 'dayjs'
+  import { onMount } from 'svelte'
+  let open = false
+  let showDatemodal = false
+  let report3date: Date | undefined
+  const reportList: ReportItemType[] = [
+    { id: 'report-1', name: 'Drivers List', click: report1 },
+    { id: 'report-2', name: 'Cars List', click: report2 },
+    {
+      id: 'report-3',
+      name: 'Request on date',
+      click: report3,
+    },
+    { id: 'report-4', name: 'Car situations', click: report4 },
+    {
+      id: 'report-5',
+      name: 'Driver situations',
+      click: report5,
+    },
+    {
+      id: 'report-6',
+      name: 'Car-Driver relation list',
+      click: report6,
+    },
+    { id: 'report-7', name: 'Drags list', click: report7 },
+    { id: 'report-8', name: 'Routing Sheets', click: report8 },
+    {
+      id: 'report-9',
+      name: 'Request modifications',
+      click: report9,
+    },
+  ]
+  async function report1(this: ReportItemType) {
+    let drivers = await reportService.report1()
+    generatePDF(
+      drivers,
+      `[Report #1][${dayjs().format('YYYY-MMM-DD')}] All Drivers`,
+      false,
+      true
+    )
+  }
+  async function report2(this: ReportItemType) {
+    let cars = await reportService.report2()
+    generatePDF(
+      cars,
+      `[Report #2][${dayjs().format('YYYY-MMM-DD')}] All Cars`,
+      false,
+      true
+    )
+  }
+  async function report3(this: ReportItemType) {
+    if (!report3date) showDatemodal = true
+    else {
+      let requests = await reportService.report3(report3date)
+      console.log(requests)
+      report3date = undefined
+    }
+  } //TODO
 
-  const reportList: ReportType[] = [
-    { id: "report-1", name: "Drivers List", click: report1 },
-    { id: "report-2", name: "Cars List", click: report2 },
-    { id: "report-3", name: "Request on date", click: report3 },
-    { id: "report-4", name: "Car situations", click: report4 },
-    { id: "report-5", name: "Driver situations", click: report5 },
-    { id: "report-6", name: "Car-Driver relation list", click: report6 },
-    { id: "report-7", name: "Drags list", click: report7 },
-    { id: "report-8", name: "Routing Sheets", click: report8 },
-    { id: "report-9", name: "Request modifications", click: report9 },
-  ];
-  function report1(this: ReportType) {
-    console.log(this.id);
+  async function report4(this: ReportItemType) {
+    const cs = await reportService.report4()
+    generatePDF(
+      cs,
+      `[Report #4][${dayjs().format('YYYY-MMM-DD')}] Car Situations`,
+      false,
+      true
+    )
   }
-  function report2(this: ReportType) {
-    console.log(this.id);
+  async function report5(this: ReportItemType) {
+    const ds = await reportService.report5()
+    generatePDF(
+      ds,
+      `[Report #5][${dayjs().format('YYYY-MMM-DD')}] Driver Situations`,
+      false,
+      true
+    )
   }
-  function report3(this: ReportType) {
-    console.log(this.id);
+  async function report6(this: ReportItemType) {
+    const cd = await reportService.report6()
+    generatePDF(
+      cd,
+      `[Report #6][${dayjs().format('YYYY-MMM-DD')}] Car-Driver relation`,
+      false,
+      true
+    )
   }
-  function report4(this: ReportType) {
-    console.log(this.id);
+  async function report7(this: ReportItemType) {}
+  async function report8(this: ReportItemType) {}
+  async function report9(this: ReportItemType) {}
+
+  let container: HTMLDivElement
+  const toggle = (ev: MouseEvent): void => {
+    if (outside(ev) && open) open = false
   }
-  function report5(this: ReportType) {
-    console.log(this.id);
+
+  const outside = (ev: MouseEvent): boolean => {
+    const target = ev.target as HTMLElement
+    if (container) return !container.contains(target)
+    return false
   }
-  function report6(this: ReportType) {
-    console.log(this.id);
-  }
-  function report7(this: ReportType) {
-    console.log(this.id);
-  }
-  function report8(this: ReportType) {
-    console.log(this.id);
-  }
-  function report9(this: ReportType) {
-    console.log(this.id);
-  }
+  onMount(() => {
+    document.addEventListener('click', toggle)
+  })
 </script>
 
-<div class="report-dropdown-container">
+<div class="report-dropdown-container" bind:this={container}>
   <DropdownToggler bind:open>Reports</DropdownToggler>
   {#if open}
     <Dropdown>
       {#each reportList as { name, id, click }}
-        <DropdownItem {id} on:click={click}>{name}</DropdownItem>
+        <DropdownItem {id} on:click={click} bind:open>{name}</DropdownItem>
       {/each}
     </Dropdown>
   {/if}
 </div>
+
+{#if showDatemodal}
+  <DatePickerModal
+    required={true}
+    bind:value={report3date}
+    on:cancel={() => {
+      showDatemodal = false
+    }}
+    on:selected={report3}
+  />
+{/if}
 
 <style>
   .report-dropdown-container {

@@ -1,48 +1,46 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-  import { programService } from "$/lib/services/services";
-  import BaseForm from "../BaseForm.svelte";
-  import { durationObjToStr } from "$/lib/utils";
-  export let showCreate = false;
-  let programs: any = [];
+  import { createEventDispatcher, onMount } from 'svelte'
+  import { programService } from '$/lib/services/services'
+  import BaseForm from '../BaseForm.svelte'
+  import { durationObjToStr } from '$/lib/utils'
+  export let showCreate = false
+  let programs: any = []
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
   onMount(() => {
-   
     programService.getPrograms().then((p) => {
-      programs = p;
-      values.id_program = programs[0].id_program;
-      
-    });
-  });
-  $: values = {
-    description: "",
+      programs = p
+      values.id_program = programs[0].id_program
+    })
+  })
+  let values = {
+    description: '',
     duration: {
-      days: "",
-      hours: "",
-      minutes: "",
+      days: '',
+      hours: '',
+      minutes: '',
     },
     id_program: 0,
     km: 0,
-    start: "",
-  };
+    start: '',
+  }
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
     let parsedValues = {
       ...values,
       duration: durationObjToStr(values.duration),
-    };
-   
-    await programService.createSpecificProgram(parsedValues);
-    
-    dispatch("created");
-    showCreate = false;
-  };
+    }
+
+    await programService.createSpecificProgram(parsedValues)
+
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
 </script>
 
 <BaseForm

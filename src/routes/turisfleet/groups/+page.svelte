@@ -1,33 +1,33 @@
 <script lang="ts">
-  import Table from "$/components/Table/Table.svelte";
-  import { groupService } from "$/lib/services/services";
-  import CreateGroup from "$components/Forms/Group/CreateGroup.svelte";
-  import UpdateGroup from "$/components/Forms/Group/UpdateGroup.svelte";
-  import { onMount } from "svelte";
-  import type { Group } from "$/lib/types/GroupTypes";
-  let items: Group[];
-  let showCreate = false;
-  let showUpdate = false;
-  let itemToUpdate: Group;
-  let tablename = "Groups";
+  import Table from '$/components/Table/Table.svelte'
+  import { groupService } from '$/lib/services/services'
+  import CreateGroup from '$components/Forms/Group/CreateGroup.svelte'
+  import UpdateGroup from '$/components/Forms/Group/UpdateGroup.svelte'
+  import { onMount } from 'svelte'
+  import type { Group } from '$/lib/types/GroupTypes'
+  let items: Group[]
+  let showCreate = false
+  let showUpdate = false
+  let itemToUpdate: Group
+  let tablename = 'Groups'
   onMount(() => {
-    refreshItems();
-  });
+    refreshItems()
+  })
   const handleRowClick = ({ detail }: any) => {
-    itemToUpdate = detail;
-    showUpdate = true;
-  };
+    itemToUpdate = detail
+    showUpdate = true
+  }
   const handleCreateClicked = () => {
-    showCreate = true;
-  };
+    showCreate = true
+  }
   const handleDeleteClicked = ({ detail }: any) => {
-    groupService.deleteGroup(detail.id_group).then(() => refreshItems());
-  };
+    groupService.deleteGroup(detail.id_group).then(() => refreshItems())
+  }
   const refreshItems = () => {
     groupService.getGroups().then((i) => {
-      items = i;
-    });
-  };
+      items = i
+    })
+  }
 </script>
 
 <Table

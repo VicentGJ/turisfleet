@@ -1,17 +1,17 @@
 <script>
-  import { scale } from "svelte/transition";
+  import { scale } from 'svelte/transition'
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- <div class="loading-container" on:click|capture|preventDefault>
+<div class="loading-container" on:click|capture|preventDefault>
   <div class="outer" in:scale>
     <div class="inner" />
   </div>
-</div> -->
+</div>
 
 <!-- TODO: if the load is too fast this looks just like a flash and looks kinda bad -->
 <style>
-  /* .loading-container {
+  .loading-container {
     position: fixed;
     width: 100%;
     height: 100%;
@@ -38,7 +38,7 @@
     border-radius: 999px;
     height: 50%;
     width: 50%;
-  } */
+  }
   @keyframes rotate {
     from {
       transform: rotate(0deg);

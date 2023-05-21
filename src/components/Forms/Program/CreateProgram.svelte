@@ -1,26 +1,25 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import { programService } from "$/lib/services/services";
-  import BaseForm from "../BaseForm.svelte";
-  export let showCreate = false;
-  const dispatch = createEventDispatcher();
-  $: values = {
-    name: "",
-  };
+  import { createEventDispatcher } from 'svelte'
+  import { programService } from '$/lib/services/services'
+  import BaseForm from '../BaseForm.svelte'
+  export let showCreate = false
+  const dispatch = createEventDispatcher()
+  let values = {
+    name: '',
+  }
 
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
-   
-    await programService.createProgram(values);
-    
-    dispatch("created");
-    showCreate = false;
-  };
+    await programService.createProgram(values)
+
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
 </script>
 
 <BaseForm

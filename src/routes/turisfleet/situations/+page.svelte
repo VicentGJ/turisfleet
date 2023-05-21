@@ -1,44 +1,44 @@
 <script lang="ts">
-  import CreateCarSituation from "$/components/Forms/Situation/CreateCarSituation.svelte";
-  import CreateDriverSituation from "$/components/Forms/Situation/CreateDriverSituation.svelte";
-  import CreateSituation from "$/components/Forms/Situation/CreateSituation.svelte";
-  import UpdateCarSituation from "$/components/Forms/Situation/UpdateCarSituation.svelte";
-  import UpdateDriverSituation from "$/components/Forms/Situation/UpdateDriverSituation.svelte";
-  import UpdateSituation from "$/components/Forms/Situation/UpdateSituation.svelte";
-  import Table from "$/components/Table/Table.svelte";
-  import type { Situation } from "$/lib/types/SituationTypes";
-  import { browser } from "$app/environment";
-  import { situationService } from "$services";
-  import { view } from "$stores/basic_stores";
-  let showCreateSituation = false;
-  let showUpdateSituation = false;
-  let itemToUpdate: Situation;
-  let items: Situation[];
-  let createButtonText = "Insert Situation";
-  let tablename = "Situations";
+  import CreateCarSituation from '$/components/Forms/Situation/CreateCarSituation.svelte'
+  import CreateDriverSituation from '$/components/Forms/Situation/CreateDriverSituation.svelte'
+  import CreateSituation from '$/components/Forms/Situation/CreateSituation.svelte'
+  import UpdateCarSituation from '$/components/Forms/Situation/UpdateCarSituation.svelte'
+  import UpdateDriverSituation from '$/components/Forms/Situation/UpdateDriverSituation.svelte'
+  import UpdateSituation from '$/components/Forms/Situation/UpdateSituation.svelte'
+  import Table from '$/components/Table/Table.svelte'
+  import type { Situation } from '$/lib/types/SituationTypes'
+  import { browser } from '$app/environment'
+  import { situationService } from '$services'
+  import { view } from '$stores/basic_stores'
+  let showCreateSituation = false
+  let showUpdateSituation = false
+  let itemToUpdate: Situation
+  let items: Situation[]
+  let createButtonText = 'Insert Situation'
+  let tablename = 'Situations'
   $: if (browser && $view) {
-    items = [];
-    refreshItems();
+    items = []
+    refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {
-    itemToUpdate = detail;
-    showUpdateSituation = true;
-  };
+    itemToUpdate = detail
+    showUpdateSituation = true
+  }
   const handleCreateClicked = () => {
-    showCreateSituation = true;
-  };
+    showCreateSituation = true
+  }
   const handleDeleteClicked = ({ detail }: any) => {
     situationService
       .deleteSituation(detail.id_situation)
-      .then(() => refreshItems());
-  };
+      .then(() => refreshItems())
+  }
 
   const refreshItems = () => {
     situationService.getSituations().then((i) => {
-      items = i;
-    });
-  };
+      items = i
+    })
+  }
 </script>
 
 <Table

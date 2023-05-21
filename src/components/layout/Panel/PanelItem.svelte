@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { view } from "$/lib/stores/basic_stores";
-  import type { PanelItemType } from "$/lib/types/PanelTypes";
-  import { goto } from "$app/navigation";
-  import { fly } from "svelte/transition";
-  export let item: PanelItemType;
-  export let isSubItem = false;
-  let showSubItems = false;
+  import { view } from '$/lib/stores/basic_stores'
+  import type { PanelItemType } from '$/lib/types/PanelTypes'
+  import { goto } from '$app/navigation'
+  import { fly } from 'svelte/transition'
+  export let item: PanelItemType
+  export let isSubItem = false
+  let showSubItems = false
   const handleItemClick = () => {
     if ($view != item.route) {
-      $view = item.route;
-      goto("/" + $view);
+      $view = item.route
+      goto('/' + $view)
     }
-  };
+  }
   const handleArrowClick = () => {
-    showSubItems = !showSubItems;
-  };
+    showSubItems = !showSubItems
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

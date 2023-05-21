@@ -1,36 +1,36 @@
 <script lang="ts">
-  import type { Driver } from "$/lib/types/DriverTypes";
-  import type { Situation } from "$/lib/types/SituationTypes";
-  import { carService, driverService, situationService } from "$services";
-  import dayjs from "dayjs";
-  import { createEventDispatcher, onMount } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  export let showUpdate = false;
-  export let itemToUpdate: any;
-  let situations: Situation[] = [];
-  let drivers: Driver[] = [];
+  import type { Driver } from '$/lib/types/DriverTypes'
+  import type { Situation } from '$/lib/types/SituationTypes'
+  import { carService, driverService, situationService } from '$services'
+  import dayjs from 'dayjs'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showUpdate = false
+  export let itemToUpdate: any
+  let situations: Situation[] = []
+  let drivers: Driver[] = []
   onMount(async () => {
     await Promise.all([
-      situationService.getSituations("ALL", "driver").then((s) => {
-        situations = s;
+      situationService.getSituations('ALL', 'driver').then((s) => {
+        situations = s
       }),
       driverService.getDrivers().then((d) => {
-        drivers = d;
+        drivers = d
       }),
-    ]);
-  });
-  const dispatch = createEventDispatcher();
+    ])
+  })
+  const dispatch = createEventDispatcher()
   let values = {
     driver_id_driver: itemToUpdate.driver_id_driver,
     situation_id_situation: itemToUpdate.situation_id_situation,
     date: itemToUpdate.date,
     return_date: itemToUpdate.return_date,
-  };
+  }
 
   const cancel = () => {
-    showUpdate = false;
-    itemToUpdate = undefined;
-  };
+    showUpdate = false
+    itemToUpdate = undefined
+  }
   const update = async () => {
     await situationService.updateDriverSituation(
       {
@@ -41,21 +41,21 @@
         ...values,
         return_date: values.return_date ? values.return_date : null,
       }
-    );
+    )
 
-    dispatch("updated");
-    itemToUpdate = undefined;
-    showUpdate = false;
-  };
+    dispatch('updated')
+    itemToUpdate = undefined
+    showUpdate = false
+  }
   const close = () => {
-    cancel();
-  };
+    cancel()
+  }
   $: r = situations.some(
     (s) =>
-      (s.situation_name == "vacations" ||
-        s.situation_name == "inside the country") &&
+      (s.situation_name == 'vacations' ||
+        s.situation_name == 'inside the country') &&
       s.id_situation == values.situation_id_situation
-  );
+  )
 </script>
 
 <BaseForm
@@ -103,22 +103,22 @@
         bind:value={values.date}
         required
         placeholder="date"
-        min={dayjs().format("YYYY-MM-DD")}
+        min={dayjs().format('YYYY-MM-DD')}
         max={values.return_date
-          ? dayjs(values.return_date).format("YYYY-MM-DD")
+          ? dayjs(values.return_date).format('YYYY-MM-DD')
           : undefined}
       />
     </div>
     <div class="input-container">
-      <label for="">Return date {r ? "*" : ""}</label>
+      <label for="">Return date {r ? '*' : ''}</label>
       <input
         required={r}
         type="date"
         bind:value={values.return_date}
         placeholder="return date"
         min={values.date
-          ? dayjs(values.date).format("YYYY-MM-DD")
-          : dayjs().format("YYYY-MM-DD")}
+          ? dayjs(values.date).format('YYYY-MM-DD')
+          : dayjs().format('YYYY-MM-DD')}
       />
     </div>
   </div>

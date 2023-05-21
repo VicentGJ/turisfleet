@@ -1,50 +1,50 @@
 <script lang="ts">
-  import { carService, situationService } from "$/lib/services/services";
-  import type { Situation } from "$/lib/types/SituationTypes";
-  import dayjs from "dayjs";
-  import { createEventDispatcher, onMount } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  export let showCreate = false;
-  let situations: any = [];
-  let cars: any = [];
-  const dispatch = createEventDispatcher();
-  $: values = {
-    date: dayjs().format("YYYY-MM-DD"),
-    car_id_car: "",
-    situation_id_situation: "",
+  import { carService, situationService } from '$/lib/services/services'
+  import type { Situation } from '$/lib/types/SituationTypes'
+  import dayjs from 'dayjs'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showCreate = false
+  let situations: any = []
+  let cars: any = []
+  const dispatch = createEventDispatcher()
+  let values = {
+    date: dayjs().format('YYYY-MM-DD'),
+    car_id_car: '',
+    situation_id_situation: '',
     return_date: null,
-  };
+  }
   onMount(async () => {
     await Promise.all([
-      situationService.getSituations(200, "car").then((s) => {
-        situations = s;
-        values.situation_id_situation = situations[0].id_situation;
+      situationService.getSituations(200, 'car').then((s) => {
+        situations = s
+        values.situation_id_situation = situations[0].id_situation
       }),
       carService.getCars().then((c) => {
-        cars = c;
-        values.car_id_car = cars[0].id_car;
+        cars = c
+        values.car_id_car = cars[0].id_car
       }),
-    ]);
-  });
+    ])
+  })
 
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
-    await situationService.createCarSituation(values);
+    await situationService.createCarSituation(values)
 
-    dispatch("created");
-    showCreate = false;
-  };
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   $: req = situations.some(
     (s: Situation) =>
-      (s.situation_name == "inside the country" ||
-        s.situation_name == "vacations") &&
+      (s.situation_name == 'inside the country' ||
+        s.situation_name == 'vacations') &&
       s.id_situation.toString() == values.situation_id_situation
-  );
+  )
 </script>
 
 <BaseForm
@@ -80,22 +80,22 @@
         bind:value={values.date}
         required
         placeholder="date"
-        min={dayjs().format("YYYY-MM-DD")}
+        min={dayjs().format('YYYY-MM-DD')}
         max={values.return_date
-          ? dayjs(values.return_date).format("YYYY-MM-DD")
+          ? dayjs(values.return_date).format('YYYY-MM-DD')
           : undefined}
       />
     </div>
     <div class="input-container">
-      <label for="">Return date {req ? "*" : ""}</label>
+      <label for="">Return date {req ? '*' : ''}</label>
       <input
         required={req}
         type="date"
         bind:value={values.return_date}
         placeholder="date"
         min={values.date
-          ? dayjs(values.date).format("YYYY-MM-DD")
-          : dayjs().format("YYYY-MM-DD")}
+          ? dayjs(values.date).format('YYYY-MM-DD')
+          : dayjs().format('YYYY-MM-DD')}
       />
     </div>
   </div>

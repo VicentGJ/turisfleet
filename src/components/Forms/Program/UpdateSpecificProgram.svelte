@@ -1,47 +1,44 @@
 <script lang="ts">
-  import { durationObjToStr, durationStrToObj } from "$lib/utils";
-  import { programService } from "$services";
-  import { createEventDispatcher, onMount } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  export let showUpdate = false;
-  export let itemToUpdate: any;
+  import { durationObjToStr, durationStrToObj } from '$lib/utils'
+  import { programService } from '$services'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showUpdate = false
+  export let itemToUpdate: any
 
-  let programs: any = [];
+  let programs: any = []
   onMount(async () => {
-   
-    await programService.getPrograms().then((p) => (programs = p));
-    
-  });
-  const dispatch = createEventDispatcher();
+    await programService.getPrograms().then((p) => (programs = p))
+  })
+  const dispatch = createEventDispatcher()
   let values = {
     description: itemToUpdate.description,
     duration: durationStrToObj(itemToUpdate.duration) as any,
     id_program: itemToUpdate.id_program,
     km: itemToUpdate.km,
     start: itemToUpdate.start,
-  };
+  }
 
   const cancel = () => {
-    showUpdate = false;
-    itemToUpdate = undefined;
-  };
+    showUpdate = false
+    itemToUpdate = undefined
+  }
   const update = async () => {
-   
     await programService.updateSpecificProgram(
       itemToUpdate.id_specific_program,
       {
         ...values,
         duration: durationObjToStr(values.duration),
       }
-    );
-    
-    dispatch("updated");
-    itemToUpdate = undefined;
-    showUpdate = false;
-  };
+    )
+
+    dispatch('updated')
+    itemToUpdate = undefined
+    showUpdate = false
+  }
   const close = () => {
-    cancel();
-  };
+    cancel()
+  }
 </script>
 
 <BaseForm

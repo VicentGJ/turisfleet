@@ -1,56 +1,56 @@
 <script lang="ts">
-  import type { PanelItemType } from "$lib/types/PanelTypes";
-  import PanelItem from "./PanelItem.svelte";
+  import type { PanelItemType } from '$lib/types/PanelTypes'
+  import PanelItem from './PanelItem.svelte'
 
   const panelItems: PanelItemType[] = [
     {
-      route: "turisfleet/drivers",
-      name: "Drivers",
+      route: 'turisfleet/drivers',
+      name: 'Drivers',
       subItems: [],
     },
     {
-      route: "turisfleet/cars",
-      name: "Cars",
+      route: 'turisfleet/cars',
+      name: 'Cars',
       subItems: [],
     },
     {
-      route: "turisfleet/groups",
-      name: "Groups",
+      route: 'turisfleet/groups',
+      name: 'Groups',
       subItems: [],
     },
     {
-      route: "turisfleet/requests",
-      name: "Requests",
+      route: 'turisfleet/requests',
+      name: 'Requests',
       subItems: [],
     },
     {
-      route: "turisfleet/programs",
-      name: "Programs",
+      route: 'turisfleet/programs',
+      name: 'Programs',
       subItems: [
         {
-          route: "turisfleet/programs/specific",
-          name: "Specific Programs",
+          route: 'turisfleet/programs/specific',
+          name: 'Specific Programs',
           subItems: [],
         },
       ],
     },
     {
-      route: "turisfleet/situations",
-      name: "Situations",
+      route: 'turisfleet/situations',
+      name: 'Situations',
       subItems: [
         {
-          route: "turisfleet/situations/car",
-          name: "Car Situations",
+          route: 'turisfleet/situations/car',
+          name: 'Car Situations',
           subItems: [],
         },
         {
-          route: "turisfleet/situations/driver",
-          name: "Driver Situations",
+          route: 'turisfleet/situations/driver',
+          name: 'Driver Situations',
           subItems: [],
         },
       ],
     },
-  ];
+  ]
 </script>
 
 <div class="panel-wrapper">

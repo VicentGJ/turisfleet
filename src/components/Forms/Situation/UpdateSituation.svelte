@@ -1,32 +1,31 @@
 <script lang="ts">
-  import { situationService } from "$services";
-  import { createEventDispatcher, onMount } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  export let showUpdate = false;
-  export let itemToUpdate: any;
-  let situation_types = ["car", "driver"];
-  onMount(async () => {});
-  const dispatch = createEventDispatcher();
+  import { situationService } from '$services'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showUpdate = false
+  export let itemToUpdate: any
+  let situation_types = ['car', 'driver']
+  onMount(async () => {})
+  const dispatch = createEventDispatcher()
   let values = {
     situation_name: itemToUpdate.situation_name,
     situation_type: itemToUpdate.situation_type,
-  };
+  }
 
   const cancel = () => {
-    showUpdate = false;
-    itemToUpdate = undefined;
-  };
+    showUpdate = false
+    itemToUpdate = undefined
+  }
   const update = async () => {
-   
-    await situationService.updateSituation(itemToUpdate.id_situation, values);
-    
-    dispatch("updated");
-    itemToUpdate = undefined;
-    showUpdate = false;
-  };
+    await situationService.updateSituation(itemToUpdate.id_situation, values)
+
+    dispatch('updated')
+    itemToUpdate = undefined
+    showUpdate = false
+  }
   const close = () => {
-    cancel();
-  };
+    cancel()
+  }
 </script>
 
 <BaseForm

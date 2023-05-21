@@ -1,25 +1,25 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import Button from "../Shared/Button.svelte";
-  const dispatch = createEventDispatcher();
-  export let title = "";
-  export let primaryBtnTxt = "";
-  export let secondaryBtnTxt = "Cancel";
-  let form: HTMLFormElement;
+  import { createEventDispatcher } from 'svelte'
+  import Button from '../Shared/Button.svelte'
+  const dispatch = createEventDispatcher()
+  export let title = ''
+  export let primaryBtnTxt = ''
+  export let secondaryBtnTxt = 'Cancel'
+  let form: HTMLFormElement
   const primaryClicked = () => {
-    form.reportValidity() && dispatch("primary-clicked");
-  };
+    form.reportValidity() && dispatch('primary-clicked')
+  }
   const secondaryClicked = () => {
-    dispatch("secondary-clicked");
-  };
+    dispatch('secondary-clicked')
+  }
   const closeClicked = () => {
-    dispatch("close-clicked");
-  };
+    dispatch('close-clicked')
+  }
 
   const handlekeydown = (ev: KeyboardEvent) => {
-    if (ev.key === "Enter") primaryClicked();
-    else if (ev.key === "Escape") closeClicked();
-  };
+    if (ev.key === 'Enter') primaryClicked()
+    else if (ev.key === 'Escape') closeClicked()
+  }
 </script>
 
 <svelte:window on:keydown|stopPropagation={handlekeydown} />

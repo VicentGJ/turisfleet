@@ -1,8 +1,8 @@
 <script lang="ts">
-  export let open = false;
-  export let toggle: () => void = () => {
-    open = !open;
-  };
+  export let open = false
+  let toggle: (ev: MouseEvent) => void = () => {
+    open = !open
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->

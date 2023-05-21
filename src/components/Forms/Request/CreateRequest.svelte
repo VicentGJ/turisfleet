@@ -1,51 +1,50 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
-  import dayjs from "dayjs";
   import {
-    requestService,
-    programService,
     groupService,
-  } from "$/lib/services/services";
-  import BaseForm from "../BaseForm.svelte";
-  export let showCreate = false;
-  let programs: any = [];
-  let groups: any = [];
+    programService,
+    requestService,
+  } from '$/lib/services/services'
+  import type { Group } from '$/lib/types/GroupTypes'
+  import type { SpecificProgram } from '$/lib/types/ProgramTypes'
+  import dayjs from 'dayjs'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showCreate = false
+  let programs: SpecificProgram[] = []
+  let groups: Group[] = []
 
-  const dispatch = createEventDispatcher();
-  $: values = {
-    id_group: "",
-    id_program: "",
-    start_date: dayjs().format("YYYY-MM-DD"),
-  };
+  const dispatch = createEventDispatcher()
+  let values = {
+    id_group: -1,
+    id_specific_program: -1,
+    start_date: dayjs().format('YYYY-MM-DD'),
+  }
 
   onMount(async () => {
-   
     await Promise.all([
-      programService.getPrograms().then((p) => {
-        programs = p;
-        values.id_program = programs[0].id_program;
+      programService.getSpecificPrograms().then((p) => {
+        programs = p
+        values.id_specific_program = programs[0].id_specific_program
       }),
       groupService.getGroups().then((g) => {
-        groups = g;
-        values.id_group = groups[0].id_group;
+        groups = g
+        values.id_group = groups[0].id_group
       }),
-    ]);
-    
-  });
+    ])
+  })
 
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
-   
-    await requestService.createRequest(values);
-    
-    dispatch("created");
-    showCreate = false;
-  };
+    await requestService.createRequest(values)
+
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
 </script>
 
 <BaseForm
@@ -57,16 +56,18 @@
 >
   <div class="form-body">
     <div class="input-container">
-      <label for="">Program *</label>
-      <select name="" id="" bind:value={values.id_program}>
+      <label for="">Specific Program *</label>
+      <select name="" id="" bind:value={values.id_specific_program} required>
         {#each programs as program, index}
-          <option value={program.id_program}>{program.program_name}</option>
+          <option value={program.id_specific_program}
+            >{program.description}</option
+          >
         {/each}
       </select>
     </div>
     <div class="input-container">
       <label for="">Group *</label>
-      <select name="" id="" bind:value={values.id_group}>
+      <select name="" id="" bind:value={values.id_group} required>
         {#each groups as group, index}
           <option value={group.id_group}>
             {`${group.country} (${group.tourist_amount})`}
@@ -80,7 +81,7 @@
         required
         type="date"
         bind:value={values.start_date}
-        min={dayjs().format("YYYY-MM-DD")}
+        min={dayjs().format('YYYY-MM-DD')}
       />
     </div>
   </div>

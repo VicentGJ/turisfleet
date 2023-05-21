@@ -1,22 +1,22 @@
 <script lang="ts">
-  import Button from "$/components/Shared/Button.svelte";
-  import type { Login } from "$/lib/types/AuthTypes";
-  let form: HTMLFormElement;
+  import Button from '$/components/Shared/Button.svelte'
+  import type { Login } from '$/lib/types/AuthTypes'
+  let form: HTMLFormElement
   let login: Login = {
-    username: "",
-    password: "",
-  };
+    username: '',
+    password: '',
+  }
   const handleLogin = () => {
-    form.reportValidity();
-    console.log(login);
-  };
+    form.reportValidity()
+    //TODO
+  }
 
   const handlekeydown = (ev: KeyboardEvent) => {
-    if (ev.key === "Enter") {
-      ev.preventDefault();
-      handleLogin();
+    if (ev.key === 'Enter') {
+      ev.preventDefault()
+      handleLogin()
     }
-  };
+  }
 </script>
 
 <svelte:window on:keydown={handlekeydown} />

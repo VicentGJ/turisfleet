@@ -1,30 +1,35 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import { driverService } from "$/lib/services/services";
-  import { LicenceCategory } from "$lib/types/DriverTypes";
-  import BaseForm from "../BaseForm.svelte";
-  export let showCreate = false;
-  const dispatch = createEventDispatcher();
-  $: values = {
-    address: "",
-    category: LicenceCategory.A,
-    name: "",
-    id_number: "",
-  };
+  import { createEventDispatcher } from 'svelte'
+  import { driverService } from '$/lib/services/services'
+  import { LicenseCategory } from '$lib/types/CategoryTypes'
+  import BaseForm from '../BaseForm.svelte'
+  export let showCreate = false
+  let form: HTMLFormElement
+  const dispatch = createEventDispatcher()
+  let values = {
+    address: '',
+    name: '',
+    id_number: '',
+  }
+  let categories: LicenseCategory[] = []
 
   const cancel = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
   const create = async () => {
-   
-    await driverService.createDriver(values);
-    
-    dispatch("created");
-    showCreate = false;
-  };
+    driverService
+      .createDriver(values)
+      .then(async (driver) => {
+        await driverService.setDriverCategories(driver.id_driver, categories)
+      })
+      .catch((err) => {})
+
+    dispatch('created')
+    showCreate = false
+  }
   const close = () => {
-    showCreate = false;
-  };
+    showCreate = false
+  }
 </script>
 
 <BaseForm
@@ -46,15 +51,10 @@
         type="text"
         bind:value={values.id_number}
         placeholder="id number"
+        maxlength="11"
+        minlength="11"
+        pattern="\d*"
       />
-    </div>
-    <div class="input-container">
-      <label for="">Licence Category *</label>
-      <select name="" id="" bind:value={values.category}>
-        {#each Object.values(LicenceCategory) as option}
-          <option value={option}>{option}</option>
-        {/each}
-      </select>
     </div>
     <div class="input-container">
       <label for="">Address *</label>
@@ -64,6 +64,14 @@
         bind:value={values.address}
         placeholder="address"
       />
+    </div>
+    <div class="input-container">
+      <label for="">License Category *</label>
+      <select multiple name="" id="" bind:value={categories} required>
+        {#each Object.values(LicenseCategory) as option}
+          <option value={option}>{option}</option>
+        {/each}
+      </select>
     </div>
   </div>
 </BaseForm>
@@ -80,6 +88,10 @@
   }
   input {
     width: 100%;
+  }
+  select {
+    width: 100%;
+    height: 150px;
   }
   .input-container {
     width: 90%;

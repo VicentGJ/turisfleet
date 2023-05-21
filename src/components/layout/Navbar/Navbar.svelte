@@ -1,7 +1,7 @@
 <script>
   // your script goes here
 
-  import ReportDropdown from "./ReportDropdown.svelte";
+  import ReportDropdown from './ReportDropdown.svelte'
 </script>
 
 <div id="navbar-container">

@@ -1,38 +1,80 @@
 <script lang="ts">
-  import UpdateRequest from "$components/Forms/Request/UpdateRequest.svelte";
-  import CreateRequest from "$/components/Forms/Request/CreateRequest.svelte";
-  import Table from "$/components/Table/Table.svelte";
-  import { requestService } from "$services";
-  import { onMount } from "svelte";
-  import type { Request } from "$/lib/types/RequestTypes";
-  let items: Request[];
-  let showCreate = false;
-  let showUpdate = false;
-  let itemToUpdate: Request;
-  let tablename = "Requests";
+  import CreateRequest from '$/components/Forms/Request/CreateRequest.svelte'
+  import Table from '$/components/Table/Table.svelte'
+  import type { Request } from '$/lib/types/RequestTypes'
+  import UpdateRequest from '$components/Forms/Request/UpdateRequest.svelte'
+  import {
+    carService,
+    driverService,
+    groupService,
+    requestService,
+  } from '$services'
+  import dayjs from 'dayjs'
+  import { onMount } from 'svelte'
+  let items: Request[]
+  let showCreate = false
+  let showUpdate = false
+  let itemToUpdate: Request
+  let createButtonDisabled = true
+  let createButtonDisabledReason = ''
+  let tablename = 'Requests'
   onMount(() => {
-    refreshItems();
-  });
+    refreshItems()
+    let disabled = false
+    Promise.all([
+      carService.getCars(1).then((c) => {
+        if (c.length == 0) {
+          createButtonDisabled = true
+          createButtonDisabledReason = 'There are no cars in the Cars table'
+        }
+      }),
+      driverService.getDrivers(1).then((d) => {
+        if (d.length == 0) {
+          createButtonDisabled = true
+          createButtonDisabledReason =
+            'There are no drivers in the Drivers table'
+        }
+      }),
+      groupService.getGroups(1).then((g) => {
+        if (g.length == 0) {
+          createButtonDisabled = true
+          createButtonDisabledReason = 'There are no groups in the Groups table'
+        }
+      }),
+    ])
+  })
   const handleRowClick = ({ detail }: any) => {
-    itemToUpdate = detail;
-    showUpdate = true;
-  };
+    itemToUpdate = detail
+    showUpdate = true
+  }
   const handleCreateClicked = () => {
-    showCreate = true;
-  };
+    showCreate = true
+  }
   const handleDeleteClicked = ({ detail }: any) => {
-    requestService.deleteRequest(detail.id_request).then(() => refreshItems());
-  };
+    requestService.deleteRequest(detail.id_request).then(() => refreshItems())
+  }
   const refreshItems = () => {
     requestService.getRequests().then((i) => {
-      items = i;
-    });
-  };
+      items = []
+      i.forEach((r) => {
+        items = [
+          ...items,
+          {
+            ...r,
+            date: dayjs(r.date).format('MMM DD, YYYY'),
+            return_date: dayjs(r.date).format('MMM DD, YYYY'),
+          },
+        ]
+      })
+    })
+  }
 </script>
 
 <Table
   bind:tablename
   bind:items
+  bind:createButtonDisabled
+  bind:createButtonDisabledReason
   createButtonText="Insert Request"
   on:row-clicked={handleRowClick}
   on:create-clicked={handleCreateClicked}

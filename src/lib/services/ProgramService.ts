@@ -1,4 +1,4 @@
-import BaseService from "./BaseService";
+import BaseService from './BaseService'
 import type {
   Program,
   ProgramCreate,
@@ -6,35 +6,36 @@ import type {
   SpecificProgram,
   SpecificProgramCreate,
   SpecificProgramUpdate,
-} from "../types/ProgramTypes";
+} from '../types/ProgramTypes'
+import { errorMessage } from '$stores/basic_stores'
 export default class ProgramService extends BaseService {
-  protected static instance: ProgramService;
+  protected static instance: ProgramService
 
   private constructor() {
-    super();
-    this.service = "/program";
+    super()
+    this.service = '/program'
   }
 
   public static getInstance(): ProgramService {
-    if (!ProgramService.instance) return new ProgramService();
-    return ProgramService.instance;
+    if (!ProgramService.instance) return new ProgramService()
+    return ProgramService.instance
   }
 
-  public async getPrograms(limit: number | "ALL" = "ALL"): Promise<Program[]> {
-    const queryParams = this.makeParams({ limit });
-    return await this.handleReq(undefined, queryParams, "GET");
+  public async getPrograms(limit: number | 'ALL' = 'ALL'): Promise<Program[]> {
+    const queryParams = this.makeParams({ limit })
+    return await this.handleReq(undefined, queryParams, 'GET')
   }
 
   public async createProgram(program: ProgramCreate): Promise<Program> {
-    return await this.handleReq(undefined, undefined, "POST", program);
+    return await this.handleReq(undefined, undefined, 'POST', program)
   }
 
   public async getProgram(id: string | number): Promise<Program> {
-    return await this.handleReq(this.url(id.toString()), undefined, "GET");
+    return await this.handleReq(this.url(id.toString()), undefined, 'GET')
   }
 
   public async deleteProgram(id: string | number): Promise<any> {
-    return await this.handleReq(this.url(id.toString()), undefined, "DELETE");
+    return await this.handleReq(this.url(id.toString()), undefined, 'DELETE')
   }
 
   public async updateProgram(
@@ -44,59 +45,59 @@ export default class ProgramService extends BaseService {
     return await this.handleReq(
       this.url(id.toString()),
       undefined,
-      "PUT",
+      'PUT',
       program
-    );
+    )
   }
 
   //specific programs
   public async getSpecificPrograms(
-    limit: number | "ALL" = "ALL"
+    limit: number | 'ALL' = 'ALL'
   ): Promise<SpecificProgram[]> {
-    const queryParams = this.makeParams({ limit });
+    const queryParams = this.makeParams({ limit })
     return await this.handleReq(
-      this.url("specific" + queryParams),
+      this.url('specific' + queryParams),
       undefined,
-      "GET"
-    );
+      'GET'
+    )
   }
 
   public async createSpecificProgram(
     program: SpecificProgramCreate
   ): Promise<SpecificProgram> {
     return await this.handleReq(
-      this.url("specific"),
+      this.url('specific'),
       undefined,
-      "POST",
+      'POST',
       program
-    );
+    )
   }
   public async getSpecificProgram(
     id: string | number
   ): Promise<SpecificProgram> {
     return await this.handleReq(
-      "specific/" + this.url(id.toString()),
+      'specific/' + this.url(id.toString()),
       undefined,
-      "GET"
-    );
+      'GET'
+    )
   }
 
   public async deleteSpecificProgram(id: string | number): Promise<any> {
     return await this.handleReq(
-      this.url("specific/" + id.toString()),
+      this.url('specific/' + id.toString()),
       undefined,
-      "DELETE"
-    );
+      'DELETE'
+    )
   }
   public async updateSpecificProgram(
     id: string | number,
     program: SpecificProgramUpdate
   ): Promise<SpecificProgram> {
     return await this.handleReq(
-      this.url("specific/" + id.toString()),
+      this.url('specific/' + id.toString()),
       undefined,
-      "PUT",
+      'PUT',
       program
-    );
+    )
   }
 }

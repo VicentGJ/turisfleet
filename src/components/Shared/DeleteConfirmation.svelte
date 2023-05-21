@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
-  import Button from "./Button.svelte";
-  export let showConfirmation = false;
-  const dispatch = createEventDispatcher();
+  import { createEventDispatcher } from 'svelte'
+  import Button from './Button.svelte'
+  export let showConfirmation = false
+  const dispatch = createEventDispatcher()
   const close = () => {
-    showConfirmation = false;
-  };
+    showConfirmation = false
+  }
   const confirm = () => {
-    dispatch("confirm");
-    showConfirmation = false;
-  };
+    dispatch('confirm')
+    showConfirmation = false
+  }
   const handlekeydown = (ev: KeyboardEvent) => {
-    if (ev.key === "Enter") confirm();
-    else if (ev.key === "Escape") close();
-  };
+    if (ev.key === 'Enter') confirm()
+    else if (ev.key === 'Escape') close()
+  }
 </script>
 
 <svelte:window

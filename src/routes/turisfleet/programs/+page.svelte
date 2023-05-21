@@ -1,41 +1,41 @@
 <script lang="ts">
-  import CreateProgram from "$/components/Forms/Program/CreateProgram.svelte";
-  import CreateSpecificProgram from "$/components/Forms/Program/CreateSpecificProgram.svelte";
-  import UpdateProgram from "$/components/Forms/Program/UpdateProgram.svelte";
-  import Table from "$/components/Table/Table.svelte";
-  import { view } from "$/lib/stores/basic_stores";
-  import type { Program, SpecificProgram } from "$/lib/types/ProgramTypes";
-  import { browser } from "$app/environment";
-  import { durationObjToStr } from "$lib/utils";
-  import { programService } from "$services";
-  import UpdateSpecificProgram from "$components/Forms/Program/UpdateSpecificProgram.svelte";
-  let showCreateProgram = false;
-  let createButtonText = "Insert Program";
-  let showUpdateProgram = false;
-  let tablename = "Programs";
-  let itemToUpdate: Program | SpecificProgram;
-  let items: Array<Program | SpecificProgram>;
+  import CreateProgram from '$/components/Forms/Program/CreateProgram.svelte'
+  import CreateSpecificProgram from '$/components/Forms/Program/CreateSpecificProgram.svelte'
+  import UpdateProgram from '$/components/Forms/Program/UpdateProgram.svelte'
+  import Table from '$/components/Table/Table.svelte'
+  import { view } from '$/lib/stores/basic_stores'
+  import type { Program, SpecificProgram } from '$/lib/types/ProgramTypes'
+  import { browser } from '$app/environment'
+  import { durationObjToStr } from '$lib/utils'
+  import { programService } from '$services'
+  import UpdateSpecificProgram from '$components/Forms/Program/UpdateSpecificProgram.svelte'
+  let showCreateProgram = false
+  let createButtonText = 'Insert Program'
+  let showUpdateProgram = false
+  let tablename = 'Programs'
+  let itemToUpdate: Program | SpecificProgram
+  let items: Array<Program | SpecificProgram>
 
   $: if (browser && $view) {
-    refreshItems();
+    refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {
-    itemToUpdate = detail;
-    showUpdateProgram = true;
-  };
+    itemToUpdate = detail
+    showUpdateProgram = true
+  }
   const handleCreateClicked = () => {
-    showCreateProgram = true;
-  };
+    showCreateProgram = true
+  }
   const handleDeleteClicked = ({ detail }: any) => {
-    programService.deleteProgram(detail.id_program).then(() => refreshItems());
-  };
+    programService.deleteProgram(detail.id_program).then(() => refreshItems())
+  }
 
   const refreshItems = () => {
     programService.getPrograms().then((i) => {
-      items = i;
-    });
-  };
+      items = i
+    })
+  }
 </script>
 
 <Table

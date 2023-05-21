@@ -1,111 +1,113 @@
 <script lang="ts">
-  import { view } from "$stores/basic_stores";
-  import { createEventDispatcher, onMount } from "svelte";
-  import Button from "../Shared/Button.svelte";
-  import DeleteConfirmation from "./../Shared/DeleteConfirmation.svelte";
-  export let items: any[] = [];
-  export let createButtonText = "";
-  export let tablename = "";
-  let headers: string[] = [];
-  let idColumn: string = "";
-  const dispatch = createEventDispatcher();
-  let itemToDelete: any = null;
-  let showConfirmation = false;
-  let filters: any = {};
-  let filteredItems: any[] = [];
+  import { view } from '$stores/basic_stores'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import Button from '../Shared/Button.svelte'
+  import DeleteConfirmation from './../Shared/DeleteConfirmation.svelte'
+  export let items: any[] = []
+  export let createButtonText = ''
+  export let createButtonDisabled = false
+  export let createButtonDisabledReason = ''
+  export let tablename = ''
+  let headers: string[] = []
+  let idColumn: string = ''
+  const dispatch = createEventDispatcher()
+  let itemToDelete: any = null
+  let showConfirmation = false
+  let filters: any = {}
+  let filteredItems: any[] = []
   let confirmation = {
-    identifier: "",
+    identifier: '',
     item: {},
-  };
+  }
 
   onMount(() => {
-    filteredItems = items;
-  });
+    filteredItems = items
+  })
   $: switch ($view) {
-    case "turisfleet/cars":
-      idColumn = "id_car";
-      break;
-    case "turisfleet/drivers":
-      idColumn = "id_driver";
-      break;
-    case "turisfleet/groups":
-      idColumn = "id_group";
-      break;
-    case "turisfleet/requests":
-      idColumn = "id_request";
-      break;
-    case "turisfleet/situations":
-      idColumn = "id_situation";
-      break;
-    case "turisfleet/programs":
-      idColumn = "id_program";
-      break;
-    case "turisfleet/programs/specific":
-      idColumn = "id_specific_program";
-      break;
+    case 'turisfleet/cars':
+      idColumn = 'id_car'
+      break
+    case 'turisfleet/drivers':
+      idColumn = 'id_driver'
+      break
+    case 'turisfleet/groups':
+      idColumn = 'id_group'
+      break
+    case 'turisfleet/requests':
+      idColumn = 'id_request'
+      break
+    case 'turisfleet/situations':
+      idColumn = 'id_situation'
+      break
+    case 'turisfleet/programs':
+      idColumn = 'id_program'
+      break
+    case 'turisfleet/programs/specific':
+      idColumn = 'id_specific_program'
+      break
     default:
-      idColumn = "";
-      break;
+      idColumn = ''
+      break
   }
   $: {
-    filteredItems = items;
+    filteredItems = items
     for (const [filterkey, filtervalue] of Object.entries(filters)) {
-      const value = filtervalue as string;
-      const toCompare = value.trim().toLowerCase();
+      const value = filtervalue as string
+      const toCompare = value.trim().toLowerCase()
       if (value.trim()) {
-        if (filterkey == "*") {
-          filteredItems = filteredItems.filter((i) => compareRow(i, toCompare));
+        if (filterkey == '*') {
+          filteredItems = filteredItems.filter((i) => compareRow(i, toCompare))
         } else {
           filteredItems = filteredItems.filter((i) =>
             compareRow(i, toCompare, filterkey)
-          );
+          )
         }
       } else {
-        delete filters[filterkey];
+        delete filters[filterkey]
       }
     }
   }
-  const compareRow = (row: any, value: string, key: string = "") => {
-    if (value == "-") {
+  const compareRow = (row: any, value: string, key: string = '') => {
+    if (value == '-') {
       if (!key) {
-        return Object.values(row).some((v) => v == null);
+        return Object.values(row).some((v) => v == null)
       } else {
-        return row[key] == null;
+        return row[key] == null
       }
     } else {
       const conditions = [
-        (v: string) => typeof v == "string" && v.toLowerCase().includes(value),
+        (v: string) => typeof v == 'string' && v.toLowerCase().includes(value),
         (v: string | number) =>
-          typeof v == "number" && v.toString().includes(value.toString()),
-      ];
+          typeof v == 'number' && v.toString().includes(value.toString()),
+      ]
 
       if (!key) {
         return Object.values(row).some((v) =>
           conditions.some((condition) => condition(v as string))
-        );
+        )
       } else {
-        return conditions.some((condition) => condition(row[key]));
+        return conditions.some((condition) => condition(row[key]))
       }
     }
-  };
+  }
 
   $: if (items && items.length > 0) {
-    headers = Object.keys(items[0]);
+    headers = Object.keys(items[0])
   }
   const rowClicked = (item: any) => {
-    dispatch("row-clicked", item);
-  };
+    dispatch('row-clicked', item)
+  }
   const createClicked = () => {
-    dispatch("create-clicked");
-  };
+    dispatch('create-clicked')
+  }
   const deleteClicked = (item: any) => {
-    showConfirmation = true;
-    itemToDelete = item;
-  };
+    showConfirmation = true
+    itemToDelete = item
+  }
   const deleteConfirmed = () => {
-    dispatch("delete-clicked", itemToDelete);
-    itemToDelete = null;
-  };
+    dispatch('delete-clicked', itemToDelete)
+    itemToDelete = null
+  }
 </script>
 
 <div class="table-container">
@@ -113,13 +115,18 @@
     <div class="input-container table-filter">
       <input
         type="text"
-        bind:value={filters["*"]}
+        bind:value={filters['*']}
         placeholder="table filter"
         disabled={items.length === 0}
       />
     </div>
     <h2 class="table-name-header">{tablename}</h2>
-    <Button on:click={createClicked} bind:text={createButtonText} />
+    <Button
+      on:click={createClicked}
+      bind:text={createButtonText}
+      bind:disabled={createButtonDisabled}
+      bind:tooltip={createButtonDisabledReason}
+    />
   </div>
   <div class="table-wrapper">
     {#if items.length}
@@ -129,7 +136,7 @@
             {#each headers as header}
               {#if header != idColumn}
                 <!-- content here -->
-                {@const h = header.split("_").join(" ")}
+                {@const h = header.split('_').join(' ')}
                 <th>
                   <div class="header-name-filter-wrapper">
                     <p class="header-name">{h}</p>
@@ -157,7 +164,7 @@
               {#each Object.entries(item) as [key, value]}
                 {#if key != idColumn}
                   <td>
-                    {value === null ? "-" : value}
+                    {value === null ? '-' : value}
                   </td>
                 {/if}
               {/each}
@@ -209,6 +216,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     margin: 5px 5px 5px 0;
     padding: 5px 15px;
     position: relative;

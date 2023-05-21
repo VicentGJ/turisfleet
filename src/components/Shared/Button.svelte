@@ -1,24 +1,27 @@
 <script lang="ts">
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher } from 'svelte'
 
-  export let text = "";
-  export let type: "primary" | "secondary" | "danger" = "primary";
-  export let disabled = false;
-  const dispatch = createEventDispatcher();
+  export let text = ''
+  export let type: 'primary' | 'secondary' | 'danger' = 'primary'
+  export let disabled = false
+  export let tooltip = ''
+  const dispatch = createEventDispatcher()
   const click = () => {
-    dispatch("click");
-  };
+    if (!disabled) dispatch('click')
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div on:click={click} class:disabled class="button noselect {type}">
-  {text}
-</div>
+<span title={tooltip}>
+  <div on:click={click} class:disabled class="button noselect {type}">
+    {text}
+  </div>
+</span>
 
 <style>
   .button {
     font-weight: 500;
-    padding: 6px 5px;
+    padding: 6px 10px;
     border-radius: 4px;
     width: fit-content;
     cursor: pointer;
@@ -41,5 +44,9 @@
   .danger {
     background-color: #a31000;
     color: white;
+  }
+  .disabled {
+    pointer-events: none;
+    opacity: 0.4;
   }
 </style>

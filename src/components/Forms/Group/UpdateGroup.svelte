@@ -1,32 +1,30 @@
 <script lang="ts">
-  import { LicenceCategory } from "$lib/types/DriverTypes";
-  import { createEventDispatcher } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  import { groupService } from "$services";
-  export let showUpdate = false;
-  export let itemToUpdate: any;
+  import { groupService } from '$services'
+  import { createEventDispatcher } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  export let showUpdate = false
+  export let itemToUpdate: any
 
-  const dispatch = createEventDispatcher();
+  const dispatch = createEventDispatcher()
   let values = {
     country: itemToUpdate.country,
     tourist_amount: itemToUpdate.tourist_amount,
-  };
+  }
 
   const cancel = () => {
-    showUpdate = false;
-    itemToUpdate = undefined;
-  };
+    showUpdate = false
+    itemToUpdate = undefined
+  }
   const update = async () => {
-   
-    await groupService.updateGroup(itemToUpdate.id_group, values);
-    
-    dispatch("updated");
-    itemToUpdate = undefined;
-    showUpdate = false;
-  };
+    await groupService.updateGroup(itemToUpdate.id_group, values)
+
+    dispatch('updated')
+    itemToUpdate = undefined
+    showUpdate = false
+  }
   const close = () => {
-    cancel();
-  };
+    cancel()
+  }
 </script>
 
 <BaseForm

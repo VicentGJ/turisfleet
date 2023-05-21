@@ -1,40 +1,41 @@
 <script lang="ts">
-  import { LicenceCategory } from "$lib/types/DriverTypes";
-  import { createEventDispatcher, onMount } from "svelte";
-  import BaseForm from "../BaseForm.svelte";
-  import { driverService, carService } from "$services";
-  export let showUpdate = false;
-  export let itemToUpdate: any;
-  let cars: any[] = [];
-  const dispatch = createEventDispatcher();
+  import { LicenseCategory } from '$/lib/types/CategoryTypes'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import BaseForm from '../BaseForm.svelte'
+  import { driverService } from '$services'
+  export let showUpdate = false
+  export let itemToUpdate: any
+  const dispatch = createEventDispatcher()
   onMount(async () => {
-    cars = [{ id_car: -1 }];
-   
-    await carService.getCars().then((c) => (cars = [...cars, ...c]));
-    
-  });
+    driverCategories = await driverService.getDriverCategories(
+      itemToUpdate.id_driver
+    )
+  })
+  let driverCategories: LicenseCategory[] = []
   let values = {
     name: itemToUpdate.name,
     address: itemToUpdate.address,
     id_number: itemToUpdate.id_number,
-    id_car: itemToUpdate.idcar,
-    category: itemToUpdate.category,
-  };
+  }
   const cancel = () => {
-    showUpdate = false;
-    itemToUpdate = undefined;
-  };
+    showUpdate = false
+    itemToUpdate = undefined
+  }
   const update = async () => {
-   
-    await driverService.updateDriver(itemToUpdate.id_number, values);
-    
-    dispatch("updated");
-    itemToUpdate = undefined;
-    showUpdate = false;
-  };
+    await driverService.updateDriver(itemToUpdate.id_driver, values)
+    await driverService.deleteDriverCategories(itemToUpdate.id_driver)
+    await driverService.setDriverCategories(
+      itemToUpdate.id_driver,
+      driverCategories
+    )
+
+    dispatch('updated')
+    itemToUpdate = undefined
+    showUpdate = false
+  }
   const close = () => {
-    cancel();
-  };
+    cancel()
+  }
 </script>
 
 <BaseForm
@@ -59,9 +60,9 @@
       />
     </div>
     <div class="input-container">
-      <label for="">Licence Category *</label>
-      <select name="" id="" bind:value={values.category}>
-        {#each Object.values(LicenceCategory) as category}
+      <label for="">License Category *</label>
+      <select name="" id="" bind:value={driverCategories} multiple>
+        {#each Object.values(LicenseCategory) as category}
           <option value={category}>{category}</option>
         {/each}
       </select>
@@ -74,26 +75,6 @@
         bind:value={values.address}
         placeholder="address"
       />
-    </div>
-    <div class="input-container">
-      <label for="">Car *</label>
-      <select name="" id="" bind:value={values.id_car}>
-        {#each cars as car}
-          {#if car.id_car === -1}
-            <option value={null} selected={itemToUpdate.idcar === null}>
-              None
-            </option>
-          {:else}
-            <option
-              value={car.id_car}
-              selected={itemToUpdate.idcar === car.id_car}
-            >
-              {[car.plate_number]}
-              {car.brand}
-            </option>
-          {/if}
-        {/each}
-      </select>
     </div>
   </div>
 </BaseForm>
@@ -111,6 +92,11 @@
   input {
     width: 100%;
   }
+  select {
+    width: 100%;
+    height: 150px;
+  }
+
   .input-container {
     width: 90%;
   }

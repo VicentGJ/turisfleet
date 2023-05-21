@@ -1,37 +1,34 @@
 <script lang="ts">
-  import CreateDriver from "$/components/Forms/Driver/CreateDriver.svelte";
-  import UpdateDriver from "$/components/Forms/Driver/UpdateDriver.svelte";
-  import Table from "$/components/Table/Table.svelte";
-  import { driverService } from "$/lib/services/services";
-  import type { Driver } from "$/lib/types/DriverTypes";
-  import { onMount } from "svelte";
-  let items: Driver[];
-  let showCreate = false;
-  let showUpdate = false;
-  let itemToUpdate: Driver;
-  let tablename = "Drivers"
+  import CreateDriver from '$/components/Forms/Driver/CreateDriver.svelte'
+  import UpdateDriver from '$/components/Forms/Driver/UpdateDriver.svelte'
+  import Table from '$/components/Table/Table.svelte'
+  import { driverService } from '$/lib/services/services'
+  import type { Driver, DriverWithCategory } from '$/lib/types/DriverTypes'
+  import { onMount } from 'svelte'
+  let items: DriverWithCategory[]
+  let showCreate = false
+  let showUpdate = false
+  let itemToUpdate: Driver
+  let tablename = 'Drivers'
   onMount(() => {
-    refreshItems();
-  });
+    refreshItems()
+  })
   const handleRowClick = ({ detail }: any) => {
-    itemToUpdate = detail;
-    showUpdate = true;
-  };
+    itemToUpdate = detail
+    showUpdate = true
+  }
   const handleCreateClicked = () => {
-    showCreate = true;
-  };
+    showCreate = true
+  }
   const handleDeleteClicked = ({ detail }: any) => {
-   
-    driverService.deleteDriver(detail.id_number).then(() => refreshItems());
-  };
+    driverService.deleteDriver(detail.id_driver).then(() => refreshItems())
+  }
 
   const refreshItems = () => {
-   
-    driverService.getDrivers().then((i) => {
-      
-      items = i;
-    });
-  };
+    driverService.getDriversWithCategories().then((i) => {
+      items = i
+    })
+  }
 </script>
 
 <Table

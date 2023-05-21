@@ -1,5 +1,5 @@
 <script>
-  import { fly } from "svelte/transition";
+  import { fly } from 'svelte/transition'
 </script>
 
 <div class="dropdown-main-container" transition:fly={{ duration: 200, y: -20 }}>

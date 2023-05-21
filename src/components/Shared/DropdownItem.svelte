@@ -1,9 +1,24 @@
 <script>
-  export let id;
+  import { createEventDispatcher } from 'svelte'
+  export let id
+  export let disabled = false
+  export let open = false
+  const dispatch = createEventDispatcher()
+  const handleclick = () => {
+    if (!disabled) {
+      open = false
+      dispatch('click')
+    }
+  }
 </script>
 
 <!-- svelte-ignore a11y-click-events-have-key-events -->
-<div {id} class="dropdown-item-container noselect" on:click>
+<div
+  {id}
+  class="dropdown-item-container noselect"
+  class:disabled
+  on:click={handleclick}
+>
   <div class="dropdown-item">
     <slot />
   </div>
@@ -19,5 +34,9 @@
   }
   .dropdown-item:hover {
     background-color: var(--item-hover-color);
+  }
+  .disabled {
+    pointer-events: none;
+    opacity: 0.4;
   }
 </style>

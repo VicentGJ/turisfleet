@@ -1,11 +1,11 @@
 :root {
-    --primary-color: #0072a6;
-    --secondary-color: #003c58;
+  --primary-color: #0072a6;
+  --secondary-color: #003c58;
 
-    --text-sm: 14px;
-    --text-md: 16px;
-    --text-lg: 18px;
+  --text-sm: 14px;
+  --text-md: 16px;
+  --text-lg: 18px;
 
-    --item-hover-color: rgb(148 163 184 / 0.3);
-    --default-shadow: 0px 1px 4px 0px #5a5a5a94
+  --item-hover-color: rgb(148 163 184 / 0.3);
+  --default-shadow: 0px 1px 4px 0px #5a5a5a94;
 }
