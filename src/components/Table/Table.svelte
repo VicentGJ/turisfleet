@@ -134,8 +134,7 @@
         <thead>
           <tr class:got-headers={headers.length > 0}>
             {#each headers as header}
-              {#if header != idColumn}
-                <!-- content here -->
+              {#if header != idColumn && header != 'disable' && header != 'disabled'}
                 {@const h = header.split('_').join(' ')}
                 <th>
                   <div class="header-name-filter-wrapper">
@@ -162,7 +161,7 @@
           {#each filteredItems as item}
             <tr on:click={() => rowClicked(item)}>
               {#each Object.entries(item) as [key, value]}
-                {#if key != idColumn}
+                {#if key != idColumn && key != 'disable' && key != 'disabled'}
                   <td>
                     {value === null ? '-' : value}
                   </td>

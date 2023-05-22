@@ -1,12 +1,13 @@
 <script>
+  import { view } from '$/lib/stores/basic_stores'
+  import Navbar from '$/components/Layout/Navbar/Navbar.svelte'
+  import Panel from '$/components/Layout/Panel/Panel.svelte'
   import ErrorMessage from '$/components/Shared/ErrorMessage.svelte'
   import Loading from '$/components/Shared/Loading.svelte'
-  import Navbar from '$/components/Layout/Navbar/Navbar.svelte'
   import '$/css/animations.css'
   import '$/css/app.css'
   import '$/css/variables.css'
-  import Panel from '$/components/Layout/Panel/Panel.svelte'
-  import { loading, errorMessage } from '$stores/basic_stores'
+  import { errorMessage, loading } from '$stores/basic_stores'
 </script>
 
 <div id="main-layout-container">
