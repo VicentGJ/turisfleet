@@ -17,7 +17,7 @@ export async function GET({ url }) {
       })
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -26,30 +26,26 @@ export async function POST({ request }) {
   const body = await request.json() //new group
   const result = await sequelize
     .transaction(async (t) => {
-      try {
-        await sequelize.query(
-          `SELECT insert_specific_program(:id_program, :description, :start, :duration, :km)`,
-          {
-            replacements: body,
-            type: sequelize.QueryTypes.SELECT,
-            transaction: t,
-          }
-        )
-        //since this happens inside a transaction the inserted value will always be the last until commit because of transaction isolation
-        const created = await sequelize.query(
-          `SELECT * FROM ${table} ORDER BY id_specific_program DESC LIMIT 1`,
-          {
-            type: sequelize.QueryTypes.SELECT,
-            transaction: t,
-          }
-        )
-        return created
-      } catch (e) {
-        throw error(400, e)
-      }
+      await sequelize.query(
+        `SELECT insert_specific_program(:id_program, :description, :start, :duration, :km)`,
+        {
+          replacements: body,
+          type: sequelize.QueryTypes.SELECT,
+          transaction: t,
+        }
+      )
+      //since this happens inside a transaction the inserted value will always be the last until commit because of transaction isolation
+      const created = await sequelize.query(
+        `SELECT * FROM ${table} ORDER BY id_specific_program DESC LIMIT 1`,
+        {
+          type: sequelize.QueryTypes.SELECT,
+          transaction: t,
+        }
+      )
+      return created
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result[0])
 }

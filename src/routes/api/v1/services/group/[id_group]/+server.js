@@ -17,7 +17,7 @@ export async function GET({ params }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length == 0)
     throw error(404, { message: `Group with id ${id_group} not found` })
@@ -39,7 +39,7 @@ export async function DELETE({ params }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -72,7 +72,7 @@ WHERE id_group = :identifier`,
       )
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length === 0)
     throw new error(404, { message: `Group with id ${identifier} not found` })

@@ -5,9 +5,9 @@
   export let title = ''
   export let primaryBtnTxt = ''
   export let secondaryBtnTxt = 'Cancel'
-  let form: HTMLFormElement
+  export let form: HTMLFormElement | undefined = undefined
   const primaryClicked = () => {
-    form.reportValidity() && dispatch('primary-clicked')
+    form?.reportValidity() && dispatch('primary-clicked')
   }
   const secondaryClicked = () => {
     dispatch('secondary-clicked')

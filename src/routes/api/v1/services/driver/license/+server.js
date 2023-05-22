@@ -16,7 +16,7 @@ LEFT JOIN ${driverCategoriesTable} ON ${driverTable}.id_driver = ${driverCategor
       )
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }

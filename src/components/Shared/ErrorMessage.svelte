@@ -70,7 +70,7 @@
     height: fit-content;
     overflow-y: scroll;
     width: fit-content;
-    /* max-width: 40vw; */
+    max-width: 40vw;
     min-width: 20vw;
     background-color: white;
     display: flex;
@@ -80,6 +80,7 @@
     box-shadow: var(--default-shadow);
     padding: 0;
     position: relative;
+    overflow-x: hidden;
   }
   .header {
     position: sticky;
@@ -92,7 +93,6 @@
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
-    border-bottom: 1px solid rgba(210, 208, 208, 0.587);
   }
   h2 {
     margin: 0;
@@ -119,6 +119,7 @@
     justify-content: flex-end;
     align-items: center;
     width: 100%;
+    padding: 8px 0;
   }
 
   .error {

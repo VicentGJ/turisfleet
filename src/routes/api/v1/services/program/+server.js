@@ -18,7 +18,7 @@ export async function GET({ url }) {
       })
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -47,7 +47,7 @@ export async function POST({ request }) {
       }
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result[0])
 }

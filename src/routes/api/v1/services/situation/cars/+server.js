@@ -17,7 +17,7 @@ export async function GET({ url }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -45,7 +45,7 @@ export async function POST({ request }) {
       }
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result[0])
 }
@@ -70,7 +70,7 @@ export async function DELETE({ url }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -112,7 +112,7 @@ export async function PUT({ params, request, url }) {
       )
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length === 0)
     throw new error(404, {

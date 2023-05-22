@@ -3,9 +3,9 @@
   import { programService } from '$/lib/services/services'
   import BaseForm from '../BaseForm.svelte'
   import { durationObjToStr } from '$/lib/utils'
+  import type { Program } from '$/lib/types/ProgramTypes'
   export let showCreate = false
-  let programs: any = []
-
+  let programs: Program[] = []
   const dispatch = createEventDispatcher()
   onMount(() => {
     programService.getPrograms().then((p) => {
@@ -13,6 +13,7 @@
       values.id_program = programs[0].id_program
     })
   })
+
   let values = {
     description: '',
     duration: {
@@ -21,22 +22,24 @@
       minutes: '',
     },
     id_program: 0,
-    km: 0,
+    km: '',
     start: '',
   }
   const cancel = () => {
     showCreate = false
   }
+
   const create = async () => {
     let parsedValues = {
       ...values,
       duration: durationObjToStr(values.duration),
+      km: parseInt(values.km),
     }
-
-    await programService.createSpecificProgram(parsedValues)
-
-    dispatch('created')
-    showCreate = false
+    try {
+      await programService.createSpecificProgram(parsedValues)
+      dispatch('created')
+      showCreate = false
+    } catch (e) {}
   }
   const close = () => {
     showCreate = false
@@ -85,6 +88,7 @@
           required
           type="number"
           min="0"
+          max="9999999"
           bind:value={values.duration.days}
           placeholder="days"
         />
@@ -92,6 +96,7 @@
           required
           type="number"
           min="0"
+          max="9999999"
           bind:value={values.duration.hours}
           placeholder="hours"
         />
@@ -99,6 +104,7 @@
           required
           type="number"
           min="0"
+          max="99999999"
           bind:value={values.duration.minutes}
           placeholder="minutes"
         />
@@ -107,6 +113,8 @@
     <div class="input-container">
       <label for="">Distance(Km) *</label>
       <input
+        min="0"
+        max="9999999"
         required
         type="number"
         bind:value={values.km}

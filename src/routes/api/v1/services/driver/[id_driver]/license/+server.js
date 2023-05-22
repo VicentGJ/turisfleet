@@ -16,7 +16,7 @@ export async function GET({ params }) {
       )
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -47,7 +47,7 @@ export async function PUT({ params, request }) {
       )
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length === 0)
     throw new error(404, { message: `Driver with id ${id_driver} not found` })

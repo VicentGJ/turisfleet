@@ -17,7 +17,7 @@ export async function GET({ params }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length == 0)
     throw error(404, {
@@ -41,7 +41,7 @@ export async function DELETE({ params }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }

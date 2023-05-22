@@ -17,7 +17,7 @@ export async function GET({ params }) {
       return result
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length == 0)
     throw error(404, { message: `Driver with id ${id_driver} not found` })
@@ -38,7 +38,7 @@ export async function DELETE({ params }) {
       )
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   return json(result)
 }
@@ -75,7 +75,7 @@ WHERE id_driver = :id_driver`,
       }
     })
     .catch((err) => {
-      throw error(400, err)
+      throw error(400, { message: err.message })
     })
   if (result.length === 0)
     throw new error(404, { message: `Driver with id ${id_driver} not found` })
