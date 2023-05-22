@@ -1,14 +1,29 @@
 <script lang="ts">
   import Button from '$/components/Shared/Button.svelte'
-  import type { Login } from '$/lib/types/AuthTypes'
+  import { authService } from '$/lib/services/services'
+  import { loggedUser, view } from '$/lib/stores/basic_stores'
+  import type { LoginType } from '$/lib/types/AuthTypes'
+  import { goto } from '$app/navigation'
   let form: HTMLFormElement
-  let login: Login = {
-    username: '',
-    password: '',
+  let login: LoginType = {
+    username: 'charlie',
+    password: 'password',
   }
-  const handleLogin = () => {
-    form.reportValidity()
-    //TODO
+  const handleLogin = async () => {
+    if (form.reportValidity()) {
+      const { id_user, username, id_role } = await authService.login(login)
+      if (id_user && username && id_role) {
+        const role_name = await authService.getRoleName(id_role)
+        $loggedUser = {
+          id_user,
+          username,
+          role_name,
+        }
+      }
+    }
+    // console.log($loggedUser)
+    $view = '/turisfleet/cars'
+    goto($view)
   }
 
   const handlekeydown = (ev: KeyboardEvent) => {
