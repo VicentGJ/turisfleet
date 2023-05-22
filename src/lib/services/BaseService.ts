@@ -65,10 +65,11 @@ export default abstract class BaseService {
     })
   }
   private parseError(error: any) {
+    console.error(error)
     let message = ''
     if (error.message) message = error.message
     else if (error.original?.hint) message = error.original.hint
-    else if (error.parent.code == '23503')
+    else if (error.parent?.code == '23503')
       message =
         'this item cant be deleted now, because is referenced in another place'
     else if (error.errors[0]?.message) message = error.errors[0].message

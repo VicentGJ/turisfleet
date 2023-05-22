@@ -57,7 +57,7 @@
   <div class="form-body">
     <div class="input-container">
       <label for="">Specific Program *</label>
-      <select name="" id="" bind:value={values.id_specific_program} required>
+      <select name="" id="" bind:value={values.id_specific_program} required class="program">
         {#each programs as program, index}
           <option value={program.id_specific_program}
             >{program.description}</option
@@ -95,12 +95,15 @@
     width: 100%;
     gap: 16px;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
   }
   input {
     width: 100%;
   }
   .input-container {
     width: 90%;
+  }
+  .program{
+    width: 300px;
   }
 </style>

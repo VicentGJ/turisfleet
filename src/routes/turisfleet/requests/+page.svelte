@@ -15,7 +15,7 @@
   let showCreate = false
   let showUpdate = false
   let itemToUpdate: Request
-  let createButtonDisabled = true
+  let createButtonDisabled = false
   let createButtonDisabledReason = ''
   let tablename = 'Requests'
   onMount(() => {

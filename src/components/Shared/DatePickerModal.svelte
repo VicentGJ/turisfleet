@@ -2,8 +2,9 @@
   import { createEventDispatcher } from 'svelte'
   import dayjs from 'dayjs'
   import Button from './Button.svelte'
-  export let value: Date | string = dayjs().format('YYYY-MMM-DD')
+  export let value: Date | string | undefined = undefined
   export let required = false
+  let form: HTMLFormElement
   const dispatch = createEventDispatcher()
   //   export let min: string;
   //   export let max: string;
@@ -12,37 +13,38 @@
   //   $: if (max) max = dayjs(max).format("YYYY-MM-DD");
 
   const handleSecondaryClicked = () => {
-    dispatch('selected')
+    dispatch('close')
   }
   const handlePrimaryClicked = () => {
-    dispatch('cancel')
+    if (form.reportValidity()) dispatch('selected')
   }
 </script>
 
 <div class="picker-backdrop">
   <div class="picker-wrapper">
-    <div class="header">Select a date</div>
-    <div class="body">
-      <!-- {min} {max} -->
-      <div class="input-container">
-        <label for="date-picker-input">Date {required ? '*' : ''}</label>
-        <input
-          id="date-picker-input"
-          type="date"
-          name="date-picker"
-          bind:value
-          {required}
-        />
+    <h3 class="header">Select a date</h3>
+    <form action="" bind:this={form}>
+      <div class="body">
+        <div class="input-container">
+          <label for="date-picker-input">Date {required ? '*' : ''}</label>
+          <input
+            id="date-picker-input"
+            type="date"
+            name="date-picker"
+            bind:value
+            {required}
+          />
+        </div>
       </div>
-    </div>
-    <div class="footer">
-      <Button
-        text="Cancel"
-        type="secondary"
-        on:click={handleSecondaryClicked}
-      />
-      <Button text="Select" on:click={handlePrimaryClicked} />
-    </div>
+      <div class="footer">
+        <Button
+          text="Cancel"
+          type="secondary"
+          on:click={handleSecondaryClicked}
+        />
+        <Button text="Select" on:click={handlePrimaryClicked} />
+      </div>
+    </form>
   </div>
 </div>
 
@@ -62,16 +64,20 @@
   .picker-wrapper {
     max-height: 90vh;
     height: fit-content;
-    overflow-y: scroll;
-    width: 40vw;
+    width: 30vw;
     background-color: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     border-radius: 4px;
     box-shadow: var(--default-shadow);
     padding: 15px;
     position: relative;
+  }
+  form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
     gap: 20px;
   }
   .body {
@@ -84,5 +90,11 @@
     flex-direction: row;
     justify-content: flex-end;
     gap: 16px;
+  }
+  input {
+    width: 100%;
+  }
+  .input-container {
+    width: 50%;
   }
 </style>

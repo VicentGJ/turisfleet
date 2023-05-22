@@ -9,8 +9,6 @@
   import dayjs from 'dayjs'
   import { onMount } from 'svelte'
   let open = false
-  let showDatemodal = false
-  let report3date: Date | undefined
   const reportList: ReportItemType[] = [
     { id: 'report-1', name: 'Drivers List', click: report1 },
     { id: 'report-2', name: 'Cars List', click: report2 },
@@ -56,11 +54,23 @@
       true
     )
   }
+
+  let showDatemodal = false
+  let report3date: Date | undefined = undefined
   async function report3(this: ReportItemType) {
+    console.log(report3date)
     if (!report3date) showDatemodal = true
     else {
+      showDatemodal = false
       let requests = await reportService.report3(report3date)
-      console.log(requests)
+      generatePDF(
+        requests,
+        `[Report #3][${dayjs().format(
+          'YYYY-MMM-DD'
+        )}] Requests on date: ${dayjs(report3date).format('MMM DD, YYYY')}`,
+        false,
+        true
+      )
       report3date = undefined
     }
   } //TODO
@@ -126,7 +136,7 @@
   <DatePickerModal
     required={true}
     bind:value={report3date}
-    on:cancel={() => {
+    on:close={() => {
       showDatemodal = false
     }}
     on:selected={report3}

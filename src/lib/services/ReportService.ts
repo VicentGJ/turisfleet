@@ -102,7 +102,7 @@ export default class ReportService extends BaseService {
   }
   public async report3(date: Date): Promise<Report3Type[]> {
     const params = this.makeParams({
-      date: dayjs(date).format('YYYY-MM-DD'),
+      date: dayjs(date).format('MMM DD, YYYY'),
     })
     return await this.handleReq(this.url('3'), params, 'GET').catch((err) => {
       //errorMessage.update(() => err.message);

@@ -104,9 +104,6 @@
     padding: 15px;
   }
   .text {
-    /* color: #e04242; */
-    /* text-align: justify; */
-    white-space: pre;
     font-weight: 700;
   }
   .footer {
