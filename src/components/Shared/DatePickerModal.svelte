@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte'
   import dayjs from 'dayjs'
   import Button from './Button.svelte'
+  import { fade, scale } from 'svelte/transition'
   export let value: Date | string | undefined = undefined
   export let required = false
   let form: HTMLFormElement
@@ -20,8 +21,18 @@
   }
 </script>
 
-<div class="picker-backdrop">
-  <div class="picker-wrapper">
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<div
+  class="picker-backdrop"
+  on:click|capture|preventDefault|stopPropagation|self={handleSecondaryClicked}
+  in:fade={{ duration: 200 }}
+  out:fade={{ delay: 100, duration: 200 }}
+>
+  <div
+    class="picker-wrapper"
+    in:scale={{ delay: 100, duration: 200 }}
+    out:scale={{ duration: 200 }}
+  >
     <h3 class="header">Select a date</h3>
     <form action="" bind:this={form}>
       <div class="body">
@@ -71,7 +82,7 @@
     padding: 15px;
     position: relative;
   }
-  form{
+  form {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
