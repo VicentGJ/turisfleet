@@ -1,5 +1,9 @@
 import sequelize from '$lib/db'
-import { driverSituationsTable as table } from '$lib/tables'
+import {
+  driverTable,
+  situationsTable,
+  driverSituationsTable as table,
+} from '$lib/tables'
 import { error, json } from '@sveltejs/kit'
 
 export async function GET({ url }) {
@@ -8,7 +12,11 @@ export async function GET({ url }) {
   const result = await sequelize
     .transaction(async (t) => {
       const result = await sequelize.query(
-        `SELECT * FROM ${table} ORDER BY date DESC LIMIT ${limit}`,
+        `SELECT st.situation_name,d.id_number,d.name,s.*
+        FROM ${table} s 
+        JOIN ${driverTable} d ON s.driver_id_driver=d.id_driver
+        JOIN ${situationsTable} st ON st.id_situation=s.situation_id_situation
+        ORDER BY date DESC LIMIT ${limit}`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,

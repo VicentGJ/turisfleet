@@ -11,8 +11,11 @@
   let drivers: Driver[] = []
   onMount(async () => {
     await Promise.all([
-      situationService.getSituations('ALL', 'driver').then((s) => {
-        situations = s
+      situationService.getSituations('ALL', 'D').then((s) => {
+        situations = [...s, ...situations]
+      }),
+      situationService.getSituations('ALL', 'CD').then((s) => {
+        situations = [...s, ...situations]
       }),
       driverService.getDrivers().then((d) => {
         drivers = d
@@ -103,7 +106,7 @@
         bind:value={values.date}
         required
         placeholder="date"
-        min={dayjs().format('YYYY-MM-DD')}
+        min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
         max={values.return_date
           ? dayjs(values.return_date).format('YYYY-MM-DD')
           : undefined}
@@ -118,7 +121,7 @@
         placeholder="return date"
         min={values.date
           ? dayjs(values.date).format('YYYY-MM-DD')
-          : dayjs().format('YYYY-MM-DD')}
+          : dayjs().add(1, 'day').format('YYYY-MM-DD')}
       />
     </div>
   </div>

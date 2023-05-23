@@ -1,20 +1,22 @@
 import sequelize from '$lib/db'
-import { carTable, driverTable, driversCarsTable } from '$lib/tables'
 import { error, json } from '@sveltejs/kit'
-export async function GET() {
+export async function GET({ url }) {
+  const id_request = url.searchParams.get('id_request')
   const result = await sequelize
     .transaction(async (t) => {
       let result = await sequelize.query(
-        `SELECT d.name as "Driver Name",c.brand as "Brand",c.plate_number as "Plate Number"
-          FROM ${driverTable} d
-          LEFT JOIN ${driversCarsTable} ds ON ds.id_driver=d.id_driver
-          LEFT JOIN ${carTable} c ON c.id_car=ds.id_car;`,
+        `SELECT dragging_cars_by_request(:id_request)`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,
+          replacements: { id_request },
         }
       )
-      return result
+      const cursor = result[0].dragging_cars_by_request
+      return await sequelize.query(`FETCH ALL IN "${cursor}"`, {
+        transaction: t,
+        type: sequelize.QueryTypes.SELECT,
+      })
     })
     .catch((err) => {
       throw error(400, { message: err.message })

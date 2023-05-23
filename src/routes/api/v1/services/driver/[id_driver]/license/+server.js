@@ -70,7 +70,6 @@ export async function DELETE({ params }) {
     .catch((err) => {
       //TODO
       if (err.message) {
-        console.log(err.message)
         throw error(400, err)
       } else
         throw error(500, {

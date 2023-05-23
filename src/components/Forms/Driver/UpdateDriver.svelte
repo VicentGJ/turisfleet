@@ -3,8 +3,9 @@
   import { createEventDispatcher, onMount } from 'svelte'
   import BaseForm from '../BaseForm.svelte'
   import { driverService } from '$services'
+  import type { Driver, DriverWithCategory } from '$/lib/types/DriverTypes'
   export let showUpdate = false
-  export let itemToUpdate: any
+  export let itemToUpdate: DriverWithCategory
   const dispatch = createEventDispatcher()
   onMount(async () => {
     driverCategories = await driverService.getDriverCategories(
@@ -12,6 +13,7 @@
     )
   })
   let driverCategories: LicenseCategory[] = []
+  let newCategories: LicenseCategory[] = []
   let values = {
     name: itemToUpdate.name,
     address: itemToUpdate.address,
@@ -19,18 +21,18 @@
   }
   const cancel = () => {
     showUpdate = false
-    itemToUpdate = undefined
+    // itemToUpdate = undefined
   }
   const update = async () => {
     await driverService.updateDriver(itemToUpdate.id_driver, values)
-    await driverService.deleteDriverCategories(itemToUpdate.id_driver)
+    // await driverService.deleteDriverCategories(itemToUpdate.id_driver)
     await driverService.setDriverCategories(
       itemToUpdate.id_driver,
-      driverCategories
+      newCategories
     )
 
     dispatch('updated')
-    itemToUpdate = undefined
+    // itemToUpdate = undefined
     showUpdate = false
   }
   const close = () => {
@@ -61,9 +63,16 @@
     </div>
     <div class="input-container">
       <label for="">License Category *</label>
-      <select name="" id="" bind:value={driverCategories} multiple>
+      <select name="" id="" bind:value={newCategories} multiple>
         {#each Object.values(LicenseCategory) as category}
-          <option value={category}>{category}</option>
+          {#if !driverCategories.includes(category)}
+            <option
+              value={category}
+              selected={driverCategories.includes(category)}
+            >
+              {category}
+            </option>
+          {/if}
         {/each}
       </select>
     </div>

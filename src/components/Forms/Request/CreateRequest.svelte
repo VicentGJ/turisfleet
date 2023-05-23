@@ -17,7 +17,8 @@
   let values = {
     id_group: -1,
     id_specific_program: -1,
-    start_date: dayjs().format('YYYY-MM-DD'),
+    start_date: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+    tourist_amount: 0,
   }
 
   onMount(async () => {
@@ -57,7 +58,13 @@
   <div class="form-body">
     <div class="input-container">
       <label for="">Specific Program *</label>
-      <select name="" id="" bind:value={values.id_specific_program} required class="program">
+      <select
+        name=""
+        id=""
+        bind:value={values.id_specific_program}
+        required
+        class="program"
+      >
         {#each programs as program, index}
           <option value={program.id_specific_program}
             >{program.description}</option
@@ -70,10 +77,20 @@
       <select name="" id="" bind:value={values.id_group} required>
         {#each groups as group, index}
           <option value={group.id_group}>
-            {`${group.country} (${group.tourist_amount})`}
+            {`${group.country}`}
           </option>
         {/each}
       </select>
+    </div>
+    <div class="input-container">
+      <label for="">Tourist amount *</label>
+      <input
+        required
+        type="number"
+        bind:value={values.tourist_amount}
+        min="1"
+        max="50"
+      />
     </div>
     <div class="input-container">
       <label for="">Start Date *</label>
@@ -81,7 +98,7 @@
         required
         type="date"
         bind:value={values.start_date}
-        min={dayjs().format('YYYY-MM-DD')}
+        min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
       />
     </div>
   </div>
@@ -103,7 +120,7 @@
   .input-container {
     width: 90%;
   }
-  .program{
+  .program {
     width: 300px;
   }
 </style>

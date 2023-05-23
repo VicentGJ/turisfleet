@@ -28,7 +28,7 @@ export async function POST({ request }) {
   const result = await sequelize
     .transaction(async (t) => {
       await sequelize.query(
-        `SELECT insert_request(:id_group, :id_specific_program, :start_date)`,
+        `SELECT insert_request(:id_group, :id_specific_program, :start_date, :tourist_amount)`,
         {
           replacements: body,
           type: sequelize.QueryTypes.SELECT,

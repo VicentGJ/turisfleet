@@ -5,7 +5,12 @@ export async function GET() {
   const result = await sequelize
     .transaction(async (t) => {
       let result = await sequelize.query(
-        `SELECT date,plate_number,situation_name,return_date from ${carSituationsTable} cs 
+        `SELECT 
+          date as "Date",
+          plate_number as "Car number",
+          situation_name as "Situation",
+          return_date as "Return Date"
+          FROM ${carSituationsTable} cs 
             JOIN ${situationsTable} s ON cs.situation_id_situation=s.id_situation
             JOIN ${carTable} ca ON ca.id_car=cs.car_id_car
             ORDER BY date DESC`,

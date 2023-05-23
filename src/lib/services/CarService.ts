@@ -1,7 +1,7 @@
 import BaseService from './BaseService'
 import type { CarCreate, CarUpdate, Car } from '../types/CarTypes'
 import type { Driver } from '../types/DriverTypes'
-import { errorMessage } from '$stores/basic_stores'
+import { popup } from '$stores/basic_stores'
 export default class CarService extends BaseService {
   protected static instance: CarService
 
@@ -17,9 +17,7 @@ export default class CarService extends BaseService {
 
   public async getCars(limit: number | 'ALL' = 'ALL'): Promise<Car[]> {
     const queryParams = this.makeParams({ limit })
-    return await this.handleReq(undefined, queryParams, 'GET').catch((err) => {
-      errorMessage.update((v) => ({ type: 'error', message: err.message }))
-    })
+    return await this.handleReq(undefined, queryParams, 'GET')
   }
 
   public async createCar(car: CarCreate): Promise<Car> {

@@ -1,5 +1,4 @@
-import BaseService from './BaseService'
-import type { CarCreate, CarUpdate, Car } from '../types/CarTypes'
+import dayjs from 'dayjs'
 import type {
   Report1Type,
   Report2Type,
@@ -11,8 +10,7 @@ import type {
   Report8Type,
   Report9Type,
 } from '../types/ReportTypes'
-import dayjs from 'dayjs'
-import { errorMessage } from '../stores/basic_stores'
+import BaseService from './BaseService'
 export default class ReportService extends BaseService {
   protected static instance: ReportService
 
@@ -25,63 +23,17 @@ export default class ReportService extends BaseService {
     if (!ReportService.instance) return new ReportService()
     return ReportService.instance
   }
-
+  //TODO PARSE DATA
   public async report1(): Promise<Report1Type[]> {
     return new Promise<Report1Type[]>(async (resolve, reject) => {
-      let data = await this.handleReq(this.url('1'), undefined, 'GET').catch(
-        (err) => {
-          //errorMessage.update(() => err.message);
-        }
-      )
+      let data = await this.handleReq(this.url('1'), undefined, 'GET')
+      resolve(data)
       const result: Report1Type[] = []
-      const driverMap = new Map<number, Report1Type>()
-      for (const driver of data) {
-        if (!driverMap.has(driver.id_driver)) {
-          driverMap.set(driver.id_driver, {
-            'ID Number': driver.id_number,
-            Name: driver.name,
-            Address: driver.address,
-            Categories: [driver.license_category_category_name],
-            Cars: driver.plate_number ? [driver.plate_number] : [],
-          })
-        } else {
-          const existingDriver = driverMap.get(driver.id_driver)
-          if (
-            !existingDriver?.Categories.includes(
-              driver.license_category_category_name
-            )
-          ) {
-            existingDriver?.Categories.push(
-              driver.license_category_category_name
-            )
-          }
-          if (
-            driver.plate_number &&
-            !existingDriver?.Cars.includes(driver.plate_number)
-          ) {
-            existingDriver?.Cars.push(driver.plate_number)
-          }
-        }
-      }
-
-      for (const driver of driverMap.values()) {
-        if (driver.Cars.length !== 1) {
-          driver.Cars = []
-        } else {
-          driver.Cars = [driver.Cars[0]]
-        }
-        result.push(driver)
-      }
-
-      resolve(result)
+      //   resolve(result)
     })
   }
   public async report2(): Promise<Report2Type[]> {
-    let data = await this.handleReq(this.url('2'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
-    )
+    let data = await this.handleReq(this.url('2'), undefined, 'GET')
     let result: Report2Type[] = []
     if (!data) return result
     else
@@ -104,50 +56,28 @@ export default class ReportService extends BaseService {
     const params = this.makeParams({
       date: dayjs(date).format('MMM DD, YYYY'),
     })
-    return await this.handleReq(this.url('3'), params, 'GET').catch((err) => {
-      //errorMessage.update(() => err.message);
-    })
+    return await this.handleReq(this.url('3'), params, 'GET')
   }
   public async report4(): Promise<Report4Type[]> {
-    return await this.handleReq(this.url('4'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
-    )
+    return await this.handleReq(this.url('4'), undefined, 'GET')
   }
   public async report5(): Promise<Report5Type[]> {
-    return await this.handleReq(this.url('5'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
-    )
+    return await this.handleReq(this.url('5'), undefined, 'GET')
   }
   public async report6(): Promise<Report6Type[]> {
-    return await this.handleReq(this.url('6'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
-    ) //TODO: this is uncompleted
+    return await this.handleReq(this.url('6'), undefined, 'GET') //TODO: this is uncompleted
   }
-  public async report7(): Promise<Report7Type[]> {
-    return await this.handleReq(this.url('7'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
+  public async report7(id_request: number): Promise<Report7Type[]> {
+    return await this.handleReq(
+      this.url('7'),
+      this.makeParams({ id_request }),
+      'GET'
     ) //TODO: this is uncompleted
   }
   public async report8(): Promise<Report8Type[]> {
-    return await this.handleReq(this.url('8'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
-    ) //TODO: this is uncompleted
+    return await this.handleReq(this.url('8'), undefined, 'GET') //TODO: this is uncompleted
   }
   public async report9(): Promise<Report9Type[]> {
-    return await this.handleReq(this.url('9'), undefined, 'GET').catch(
-      (err) => {
-        //errorMessage.update(() => err.message);
-      }
-    ) //TODO: this is uncompleted
+    return await this.handleReq(this.url('9'), undefined, 'GET') //TODO: this is uncompleted
   }
 }

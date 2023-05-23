@@ -1,16 +1,21 @@
 import sequelize from '$lib/db'
 import { error, json } from '@sveltejs/kit'
-import { carTable, driverCategoriesTable, driverTable } from '$lib/tables'
+import {
+  carTable,
+  driverCategoriesTable,
+  driverTable,
+  driversCarsTable,
+} from '$lib/tables'
 export async function GET({ params }) {
   const { identifier } = params
   const result = await sequelize
     .transaction(async (t) => {
       let result = await sequelize.query(
         `select d.*, dlc.license_category_category_name
-from ${driverTable} d 
-join ${carTable} c on c.id_driver=d.id_driver 
-join ${driverCategoriesTable} dlc on dlc.drivers_id_driver=d.id_driver
-where id_car=:identifier`,
+          from ${driverTable} d 
+          join ${driversCarsTable} dct on dct.id_driver=d.id_driver 
+          join ${driverCategoriesTable} dlc on dlc.drivers_id_driver=d.id_driver
+          where id_car=:identifier`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,

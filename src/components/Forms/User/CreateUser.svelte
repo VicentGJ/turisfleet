@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from 'svelte'
   import { userService } from '$/lib/services/services'
   import BaseForm from '../BaseForm.svelte'
-  import { errorMessage } from '$/lib/stores/basic_stores'
+  import { popup } from '$/lib/stores/basic_stores'
   import type { Role } from '$/lib/types/UserTypes'
   export let showCreate = false
   const dispatch = createEventDispatcher()
@@ -26,7 +26,7 @@
       dispatch('created')
       showCreate = false
     } else {
-      $errorMessage = {
+      $popup = {
         message: 'Passwords must match',
         type: 'error',
       }

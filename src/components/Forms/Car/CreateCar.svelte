@@ -1,10 +1,10 @@
 <script lang="ts">
+  import { LicenseCategory } from '$/lib/types/CategoryTypes'
+  import type { DriverWithCategory } from '$/lib/types/DriverTypes'
   import type { CarCreate } from '$lib/types/CarTypes'
+  import { carService, driverService } from '$services'
   import { createEventDispatcher, onMount } from 'svelte'
   import BaseForm from '../BaseForm.svelte'
-  import { carService, driverService } from '$services'
-  import { LicenseCategory } from '$/lib/types/CategoryTypes'
-  import type { Driver, DriverWithCategory } from '$/lib/types/DriverTypes'
   export let showCreate = false
   let drivers: DriverWithCategory[] = []
   let filteredDrivers: DriverWithCategory[] = []
@@ -21,7 +21,7 @@
     seat_amount: 1,
     available_km: 0,
     id_driver: -1,
-    id_category: LicenseCategory.A,
+    id_category: LicenseCategory.B,
   }
   const cancel = () => {
     showCreate = false
@@ -36,14 +36,24 @@
     showCreate = false
   }
 
-  $: if (values.id_category) {
-    filteredDrivers = drivers.filter((d) =>
-      d.categories.includes(values.id_category)
-    )
+  $: if (filteredDrivers.length === 0) {
+    values.id_driver = -1
+  }
+  $: if (values.id_driver === -1 && filteredDrivers.length > 0) {
+    values.id_driver = filteredDrivers[0].id_driver
+  }
 
-    if (filteredDrivers.length === 0) values.id_driver = -1
-    else if (values.id_driver === -1)
-      values.id_driver = filteredDrivers[0].id_driver
+  // $: if (
+  //   values.id_category &&
+  //   values.id_driver === -1 &&
+  //   filteredDrivers.length > 0
+  // ) {
+  //   values.id_driver = filteredDrivers[0].id_driver
+  // }
+  const filterDrivers = () => {
+    filteredDrivers = drivers.filter((d) => {
+      return d.categories.includes(values.id_category)
+    })
   }
 </script>
 
@@ -62,6 +72,7 @@
         type="text"
         bind:value={values.plate_number}
         placeholder="plate number"
+        max="255"
       />
     </div>
     <div class="input-container">
@@ -71,13 +82,24 @@
         type="text"
         bind:value={values.brand}
         placeholder="brand"
+        max="255"
       />
     </div>
     <div class="input-container">
       <label for="">Category *</label>
-      <select name="" id="" bind:value={values.id_category}>
+      <select
+        name=""
+        id=""
+        bind:value={values.id_category}
+        on:change={filterDrivers}
+      >
         {#each Object.values(LicenseCategory) as option}
-          <option value={option}>{option}</option>
+          <option
+            value={option}
+            disabled={!drivers.some((d) => d.categories.includes(option))}
+          >
+            {option}
+          </option>
         {/each}
       </select>
     </div>
@@ -87,7 +109,7 @@
         required
         type="number"
         min="1"
-        max="100"
+        max="300"
         bind:value={values.seat_amount}
         placeholder="seat amount"
       />

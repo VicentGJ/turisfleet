@@ -1,4 +1,4 @@
-import { errorMessage, loading } from '$stores/basic_stores'
+import { popup, loading } from '$stores/basic_stores'
 export default abstract class BaseService {
   protected static instance: BaseService
 
@@ -60,7 +60,7 @@ export default abstract class BaseService {
         .catch((err) => {
           console.error(err.message)
           loading.update(() => false)
-          reject(errorMessage)
+          reject(popup)
         })
     })
   }
@@ -73,7 +73,7 @@ export default abstract class BaseService {
       message =
         'this item cant be deleted now, because is referenced in another place'
     else if (error.errors[0]?.message) message = error.errors[0].message
-    errorMessage.update(() => ({
+    popup.update(() => ({
       type: 'error',
       message,
     }))

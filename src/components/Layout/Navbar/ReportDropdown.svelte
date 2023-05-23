@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { popup } from '$stores/basic_stores'
   import { loggedUser } from '$/lib/stores/basic_stores'
   import { reportService } from '$/lib/services/services'
   import { generatePDF } from '$/lib/utils'
@@ -87,71 +88,126 @@
   ]
   async function report1(this: ReportItemType) {
     let drivers = await reportService.report1()
-    generatePDF(
-      drivers,
-      `[Report #1][${dayjs().format('YYYY-MMM-DD')}] All Drivers`,
-      false,
-      true
-    )
+    if (drivers.length > 0) {
+      generatePDF(
+        drivers,
+        `[Report #1][${dayjs().format('YYYY-MMM-DD')}] All Drivers`,
+        false,
+        true
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
   }
   async function report2(this: ReportItemType) {
     let cars = await reportService.report2()
-    generatePDF(
-      cars,
-      `[Report #2][${dayjs().format('YYYY-MMM-DD')}] All Cars`,
-      false,
-      true
-    )
+    if (cars.length > 0) {
+      generatePDF(
+        cars,
+        `[Report #2][${dayjs().format('YYYY-MMM-DD')}] All Cars`,
+        false,
+        true
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
   }
 
   let showDatemodal = false
   let report3date: Date | undefined = undefined
   async function report3(this: ReportItemType) {
-    console.log(report3date)
     if (!report3date) showDatemodal = true
     else {
       showDatemodal = false
       let requests = await reportService.report3(report3date)
-      generatePDF(
-        requests,
-        `[Report #3][${dayjs().format(
-          'YYYY-MMM-DD'
-        )}] Requests on date: ${dayjs(report3date).format('MMM DD, YYYY')}`,
-        false,
-        true
-      )
+      if (requests.length > 0) {
+        generatePDF(
+          requests,
+          `[Report #3][${dayjs().format(
+            'YYYY-MMM-DD'
+          )}] Requests on date: ${dayjs(report3date).format('MMM DD, YYYY')}`,
+          false,
+          true
+        )
+      } else {
+        $popup = {
+          message: 'No data in report',
+          type: 'info',
+        }
+      }
       report3date = undefined
     }
-  } //TODO
+  }
 
   async function report4(this: ReportItemType) {
     const cs = await reportService.report4()
-    generatePDF(
-      cs,
-      `[Report #4][${dayjs().format('YYYY-MMM-DD')}] Car Situations`,
-      false,
-      true
-    )
+    if (cs.length > 0) {
+      generatePDF(
+        cs,
+        `[Report #4][${dayjs().format('YYYY-MMM-DD')}] Car Situations`,
+        false,
+        true
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
   }
   async function report5(this: ReportItemType) {
     const ds = await reportService.report5()
-    generatePDF(
-      ds,
-      `[Report #5][${dayjs().format('YYYY-MMM-DD')}] Driver Situations`,
-      false,
-      true
-    )
+    if (ds.length > 0) {
+      generatePDF(
+        ds,
+        `[Report #5][${dayjs().format('YYYY-MMM-DD')}] Driver Situations`,
+        false,
+        true
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
   }
   async function report6(this: ReportItemType) {
     const cd = await reportService.report6()
-    generatePDF(
-      cd,
-      `[Report #6][${dayjs().format('YYYY-MMM-DD')}] Car-Driver relation`,
-      false,
-      true
-    )
+    if (cd.length > 0) {
+      generatePDF(
+        cd,
+        `[Report #6][${dayjs().format('YYYY-MMM-DD')}] Car-Driver relation`,
+        false,
+        true
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
   }
-  async function report7(this: ReportItemType) {}
+
+  async function report7(this: ReportItemType) {
+    let res = await reportService.report7(24)
+    if (res.length > 0) {
+      generatePDF(
+        res,
+        `[Report #7][${dayjs().format('YYYY-MMM-DD')}] Drags list`
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
+  }
   async function report8(this: ReportItemType) {
     if ($loggedUser.role_name === 'driver') {
     } else {

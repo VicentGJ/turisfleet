@@ -9,7 +9,7 @@
   export let createButtonDisabledReason = ''
   export let tablename = ''
   let headers: string[] = []
-  let idColumn: string = ''
+  let idColumn: string[] = []
   const dispatch = createEventDispatcher()
   let itemToDelete: any = null
   let showConfirmation = false
@@ -24,29 +24,44 @@
     filteredItems = items
   })
   $: switch ($view) {
-    case 'turisfleet/cars':
-      idColumn = 'id_car'
+    case '/turisfleet/users':
+      idColumn = ['id_user']
       break
-    case 'turisfleet/drivers':
-      idColumn = 'id_driver'
+    case '/turisfleet/cars':
+      idColumn = ['id_car']
       break
-    case 'turisfleet/groups':
-      idColumn = 'id_group'
+    case '/turisfleet/drivers':
+      idColumn = ['id_driver']
       break
-    case 'turisfleet/requests':
-      idColumn = 'id_request'
+    case '/turisfleet/groups':
+      idColumn = ['id_group']
       break
-    case 'turisfleet/situations':
-      idColumn = 'id_situation'
+    case '/turisfleet/requests':
+      idColumn = [
+        'id_request',
+        'id_group',
+        'id_copilot',
+        'id_car',
+        'id_specific_program',
+      ]
       break
-    case 'turisfleet/programs':
-      idColumn = 'id_program'
+    case '/turisfleet/situations':
+      idColumn = ['id_situation']
       break
-    case 'turisfleet/programs/specific':
-      idColumn = 'id_specific_program'
+    case '/turisfleet/situations/car':
+      idColumn = ['car_id_car', 'situation_id_situation']
+      break
+    case '/turisfleet/situations/driver':
+      idColumn = ['driver_id_driver', 'situation_id_situation']
+      break
+    case '/turisfleet/programs':
+      idColumn = ['id_program']
+      break
+    case '/turisfleet/programs/specific':
+      idColumn = ['id_specific_program', 'id_program']
       break
     default:
-      idColumn = ''
+      idColumn = []
       break
   }
   $: {
@@ -134,7 +149,7 @@
         <thead>
           <tr class:got-headers={headers.length > 0}>
             {#each headers as header}
-              {#if header != idColumn && header != 'disable' && header != 'disabled'}
+              {#if !idColumn.includes(header) && header != 'disable' && header != 'disabled'}
                 {@const h = header.split('_').join(' ')}
                 <th>
                   <div class="header-name-filter-wrapper">
@@ -161,7 +176,7 @@
           {#each filteredItems as item}
             <tr on:click={() => rowClicked(item)}>
               {#each Object.entries(item) as [key, value]}
-                {#if key != idColumn && key != 'disable' && key != 'disabled'}
+                {#if !idColumn.includes(key) && key != 'disable' && key != 'disabled'}
                   <td>
                     {value === null ? '-' : value}
                   </td>

@@ -13,25 +13,15 @@ export async function GET({ params }) {
           replacements: { identifier },
         }
       )
-      if (result.length === 0) {
-        //try with serial id
-        result = await sequelize.query(
-          `SELECT * FROM ${table} WHERE id_car = :identifier`,
-          {
-            type: sequelize.QueryTypes.SELECT,
-            transaction: t,
-            replacements: { identifier },
-          }
-        )
-      }
       return result
     })
     .catch((err) => {
       throw error(400, { message: err.message })
     })
+
   if (result.length == 0)
     throw error(404, {
-      message: `Car with plate number ${identifier} not found`,
+      message: `Car with id ${identifier} not found`,
     })
   return json(result[0])
 }
@@ -61,11 +51,9 @@ export async function PUT({ params, request }) {
   const body = await request.json() //new attribute values for car
   const result = await sequelize.transaction(async (t) => {
     await sequelize.query(
-      `UPDATE ${table} 
-SET plate_number = :plate_number, seat_amount = :seat_amount, available_km = :available_km 
-WHERE id_car = :identifier`,
+      `SELECT update_car(:identifier,:plate_number,:seat_amount,:available_km,:id_driver)`,
       {
-        type: sequelize.QueryTypes.UPDATE,
+        type: sequelize.QueryTypes.SELECT,
         transaction: t,
         replacements: {
           ...body,

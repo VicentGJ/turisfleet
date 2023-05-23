@@ -1,6 +1,10 @@
 import sequelize from '$lib/db'
 import { json, error } from '@sveltejs/kit'
-import { carSituationsTable as table } from '$lib/tables'
+import {
+  carTable,
+  situationsTable,
+  carSituationsTable as table,
+} from '$lib/tables'
 
 export async function GET({ url }) {
   const { searchParams: params } = url //query parameters
@@ -8,7 +12,11 @@ export async function GET({ url }) {
   const result = await sequelize
     .transaction(async (t) => {
       const result = await sequelize.query(
-        `SELECT * FROM ${table} ORDER BY date DESC LIMIT ${limit}`,
+        `SELECT st.situation_name,c.plate_number,c.brand,s.*
+        FROM ${table} s 
+        JOIN ${carTable} c ON s.car_id_car=c.id_car
+        JOIN ${situationsTable} st ON st.id_situation=s.situation_id_situation
+        ORDER BY date DESC LIMIT ${limit}`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,

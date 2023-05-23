@@ -11,9 +11,9 @@ export const durationObjToStr = (duration: object): string => {
 
 export const durationStrToObj = (duration: string): object => {
   let result: any = {
-    days: '',
-    hours: '',
-    minutes: '',
+    days: '0',
+    hours: '0',
+    minutes: '0',
   }
   const arr = duration.trim().split(' ')
   for (let i = 0; i < arr.length; i += 2) {

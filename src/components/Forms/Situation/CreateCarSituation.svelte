@@ -9,15 +9,19 @@
   let cars: any = []
   const dispatch = createEventDispatcher()
   let values = {
-    date: dayjs().format('YYYY-MM-DD'),
-    car_id_car: '',
-    situation_id_situation: '',
+    date: dayjs().add(1, 'day').format('YYYY-MM-DD'),
+    car_id_car: -1,
+    situation_id_situation: -1,
     return_date: null,
   }
   onMount(async () => {
     await Promise.all([
-      situationService.getSituations(200, 'car').then((s) => {
-        situations = s
+      situationService.getSituations(200, 'C').then((s) => {
+        situations = [...s, ...situations]
+        values.situation_id_situation = situations[0].id_situation
+      }),
+      situationService.getSituations(200, 'CD').then((s) => {
+        situations = [...s, ...situations]
         values.situation_id_situation = situations[0].id_situation
       }),
       carService.getCars().then((c) => {
@@ -43,7 +47,7 @@
     (s: Situation) =>
       (s.situation_name == 'inside the country' ||
         s.situation_name == 'vacations') &&
-      s.id_situation.toString() == values.situation_id_situation
+      s.id_situation === values.situation_id_situation
   )
 </script>
 
@@ -80,7 +84,7 @@
         bind:value={values.date}
         required
         placeholder="date"
-        min={dayjs().format('YYYY-MM-DD')}
+        min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
         max={values.return_date
           ? dayjs(values.return_date).format('YYYY-MM-DD')
           : undefined}
@@ -95,7 +99,7 @@
         placeholder="date"
         min={values.date
           ? dayjs(values.date).format('YYYY-MM-DD')
-          : dayjs().format('YYYY-MM-DD')}
+          : dayjs().add(1, 'day').format('YYYY-MM-DD')}
       />
     </div>
   </div>

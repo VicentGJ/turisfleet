@@ -1,4 +1,4 @@
-import { errorMessage } from '../stores/basic_stores'
+import { popup } from '../stores/basic_stores'
 import type {
   Request,
   RequestCreate,

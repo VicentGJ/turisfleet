@@ -7,10 +7,11 @@
   import { authService } from '$services'
   import { page } from '$app/stores'
   let showChangePassword = false
-let routes:string[]=[] 
- if (browser) {
+  let routes: string[] = []
+  if (browser) {
     routes = authService.getAuthorizedRoutes()
-if (!routes.includes($page.url.pathname)) {      $view = routes[0]
+    if (!routes.includes($page.url.pathname)) {
+      $view = routes[0]
       goto($view)
     }
   }

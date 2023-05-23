@@ -3,7 +3,7 @@
   import type { User } from '$/lib/types/UserTypes'
   import { browser } from '$app/environment'
   import { authService, userService } from '$services'
-  import { errorMessage } from '$stores/basic_stores'
+  import { popup } from '$stores/basic_stores'
   import { createEventDispatcher } from 'svelte'
   import BaseForm from '../BaseForm.svelte'
   export let showUpdate = false
@@ -42,13 +42,13 @@
         dispatch('updated')
         showUpdate = false
       } else {
-        $errorMessage = {
+        $popup = {
           type: 'error',
           message: 'Wrong password',
         }
       }
     } else {
-      $errorMessage = {
+      $popup = {
         message: 'Passwords must match',
         type: 'error',
       }

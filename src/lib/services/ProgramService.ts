@@ -7,7 +7,7 @@ import type {
   SpecificProgramCreate,
   SpecificProgramUpdate,
 } from '../types/ProgramTypes'
-import { errorMessage } from '$stores/basic_stores'
+import { popup } from '$stores/basic_stores'
 export default class ProgramService extends BaseService {
   protected static instance: ProgramService
 

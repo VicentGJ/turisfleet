@@ -1,18 +1,21 @@
 <script lang="ts">
+  import type { Car } from '$/lib/types/CarTypes'
+  import type { Situation } from '$/lib/types/SituationTypes'
   import { carService, situationService } from '$services'
+  import dayjs from 'dayjs'
   import { createEventDispatcher, onMount } from 'svelte'
   import BaseForm from '../BaseForm.svelte'
-  import type { Situation } from '$/lib/types/SituationTypes'
-  import type { Car } from '$/lib/types/CarTypes'
-  import dayjs from 'dayjs'
   export let showUpdate = false
   export let itemToUpdate: any
   let situations: Situation[] = []
   let cars: Car[] = []
   onMount(async () => {
     await Promise.all([
-      situationService.getSituations('ALL', 'car').then((s) => {
-        situations = s
+      situationService.getSituations('ALL', 'C').then((s) => {
+        situations = [...s, ...situations]
+      }),
+      situationService.getSituations('ALL', 'CD').then((s) => {
+        situations = [...s, ...situations]
       }),
       carService.getCars().then((c) => {
         cars = c
@@ -84,7 +87,7 @@
         bind:value={values.date}
         required
         placeholder="date"
-        min={dayjs().format('YYYY-MM-DD')}
+        min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
         max={values.return_date
           ? dayjs(values.return_date).format('YYYY-MM-DD')
           : undefined}
@@ -99,7 +102,7 @@
         placeholder="return date"
         min={values.date
           ? dayjs(values.date).format('YYYY-MM-DD')
-          : dayjs().format('YYYY-MM-DD')}
+          : dayjs().add(1, 'day').format('YYYY-MM-DD')}
       />
     </div>
   </div>

@@ -1,4 +1,4 @@
-import { errorMessage } from '../stores/basic_stores'
+import { popup } from '../stores/basic_stores'
 import type {
   CarSituation,
   CarSituationCreate,
@@ -28,7 +28,7 @@ export default class SituationService extends BaseService {
 
   public async getSituations(
     limit: number | 'ALL' = 'ALL',
-    situation_type: 'any' | 'driver' | 'car' = 'any'
+    situation_type: 'any' | 'D' | 'C' | 'CD' = 'any'
   ): Promise<Situation[]> {
     const queryParams = this.makeParams({ limit, situation_type })
     return await this.handleReq(undefined, queryParams, 'GET')

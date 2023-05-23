@@ -32,9 +32,11 @@ export default class AuthService extends BaseService {
     const cars = '/turisfleet/cars'
     const groups = '/turisfleet/groups'
     const requests = '/turisfleet/requests'
+    const programs = '/turisfleet/programs'
+    const programs_specific = '/turisfleet/programs/specific'
     const situations = '/turisfleet/situations'
-    const situations_cars = '/turisfleet/situations/cars'
-    const situations_drivers = '/turisfleet/situations/drivers'
+    const situations_cars = '/turisfleet/situations/car'
+    const situations_drivers = '/turisfleet/situations/driver'
     const role = get(loggedUser).role_name
     switch (role) {
       case 'administrator':
@@ -44,6 +46,8 @@ export default class AuthService extends BaseService {
           cars,
           groups,
           requests,
+          programs,
+          programs_specific,
           situations,
           situations_cars,
           situations_drivers,
@@ -55,6 +59,8 @@ export default class AuthService extends BaseService {
           cars,
           groups,
           requests,
+          programs,
+          programs_specific,
           situations,
           situations_cars,
           situations_drivers,
@@ -69,9 +75,7 @@ export default class AuthService extends BaseService {
         authorized_routes = [users]
         break
       default:
-        authorized_routes = [
-          '/auth/login',
-        ]
+        authorized_routes = ['/auth/login']
     }
     return authorized_routes
   }

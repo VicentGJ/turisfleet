@@ -1,12 +1,12 @@
 <script>
+  import Popup from '$/components/Shared/Popup.svelte'
   import { authService } from '$/lib/services/services'
-  import ErrorMessage from '$/components/Shared/ErrorMessage.svelte'
   import Loading from '$/components/Shared/Loading.svelte'
   import '$/css/animations.css'
   import '$/css/app.css'
   import '$/css/variables.css'
   import { browser } from '$app/environment'
-  import { errorMessage, loading } from '$stores/basic_stores'
+  import { popup, loading } from '$stores/basic_stores'
   import { loggedUser, view } from '$stores/basic_stores'
   import { goto } from '$app/navigation'
   $: {
@@ -26,6 +26,6 @@
 {#if $loading}
   <Loading />
 {/if}
-{#if $errorMessage.message}
-  <ErrorMessage />
+{#if $popup.message}
+  <Popup />
 {/if}

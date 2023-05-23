@@ -9,10 +9,11 @@
   import { authService, driverService } from '$services'
   import { onMount } from 'svelte'
   import { page } from '$app/stores'
-let routes:string[]=[] 
- if (browser) {
+  let routes: string[] = []
+  if (browser) {
     routes = authService.getAuthorizedRoutes()
-if (!routes.includes($page.url.pathname)) {      $view = routes[0]
+    if (!routes.includes($page.url.pathname)) {
+      $view = routes[0]
       goto($view)
     }
   }
@@ -20,7 +21,7 @@ if (!routes.includes($page.url.pathname)) {      $view = routes[0]
   let items: DriverWithCategory[]
   let showCreate = false
   let showUpdate = false
-  let itemToUpdate: Driver
+  let itemToUpdate: DriverWithCategory
   let tablename = 'Drivers'
   onMount(() => {
     routes.includes($page.url.pathname) && refreshItems()

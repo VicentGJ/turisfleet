@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { errorMessage } from '$stores/basic_stores'
+  import { popup } from '$stores/basic_stores'
   import Button from '$/components/Shared/Button.svelte'
   import { authService } from '$/lib/services/services'
   import { loggedUser, view } from '$/lib/stores/basic_stores'
@@ -23,12 +23,11 @@
         }
       }
     }
-    // console.log($loggedUser)
     let routes = authService.getAuthorizedRoutes()
     if (routes.length > 0) $view = routes[0]
     else {
       $view = '/auth/login'
-      $errorMessage = { type: 'error', message: 'Something went wrong' }
+      $popup = { type: 'error', message: 'Something went wrong' }
     }
     goto($view)
   }

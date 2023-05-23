@@ -1,16 +1,28 @@
 <script lang="ts">
-  import { errorMessage } from '$stores/basic_stores'
+  import { popup } from '$stores/basic_stores'
   import { fade, scale } from 'svelte/transition'
   import Button from './Button.svelte'
   const close = () => {
-    $errorMessage = {
+    $popup = {
       type: 'error',
       message: '',
     }
   }
-  $: type = $errorMessage.type
+  $: type = $popup.type
   const keydown = (ev: KeyboardEvent) => {
     if (ev.key === 'Enter' || ev.key === 'Escape') close()
+  }
+  let header: string
+  $: switch (type) {
+    case 'info':
+      header = 'Info'
+      break
+    case 'error':
+      header = 'Error'
+      break
+    case 'warning':
+      header = 'Warning'
+      break
   }
 </script>
 
@@ -30,20 +42,18 @@
     <div class="header">
       {#if type == 'error'}
         <img src="/error.svg" alt="" />
+      {:else if (type = 'info')}
+        <img src="/info.png" alt="" />
       {:else}
         <img src="/warning.png" alt="" />
       {/if}
       <h2>
-        {#if type == 'error'}
-          Error!
-        {:else}
-          Warning!
-        {/if}
+        {header}
       </h2>
     </div>
     <div class="body">
       <p class="text">
-        <slot name="text">{$errorMessage.message}</slot>
+        <slot name="text">{$popup.message}</slot>
       </p>
     </div>
     <div class="footer">
@@ -124,5 +134,8 @@
   }
   .warning {
     background-color: rgb(250, 254, 212);
+  }
+  .info {
+    background-color: rgb(229, 229, 255);
   }
 </style>

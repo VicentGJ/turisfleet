@@ -10,14 +10,18 @@
   const dispatch = createEventDispatcher()
   let values = {
     date: dayjs().format('YYYY-MM-DD'),
-    driver_id_driver: '',
-    situation_id_situation: '',
+    driver_id_driver: -1,
+    situation_id_situation: -1,
     return_date: null,
   }
   onMount(async () => {
     await Promise.all([
-      situationService.getSituations(200, 'driver').then((s) => {
-        situations = s
+      situationService.getSituations(200, 'D').then((s) => {
+        situations = [...s, ...situations]
+        values.situation_id_situation = situations[0].id_situation
+      }),
+      situationService.getSituations(200, 'CD').then((s) => {
+        situations = [...s, ...situations]
         values.situation_id_situation = situations[0].id_situation
       }),
       driverService.getDrivers().then((d) => {
@@ -44,7 +48,7 @@
     (s: Situation) =>
       (s.situation_name == 'inside the country' ||
         s.situation_name == 'vacations') &&
-      s.id_situation.toString() == values.situation_id_situation
+      s.id_situation === values.situation_id_situation
   )
 </script>
 
@@ -81,7 +85,7 @@
         bind:value={values.date}
         required
         placeholder="date"
-        min={dayjs().format('YYYY-MM-DD')}
+        min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
         max={values.return_date
           ? dayjs(values.return_date).format('YYYY-MM-DD')
           : undefined}
@@ -90,12 +94,13 @@
     <div class="input-container">
       <label for="">Return date {req ? '*' : ''}</label>
       <input
+        required={req}
         type="date"
         bind:value={values.return_date}
         placeholder="date"
         min={values.date
           ? dayjs(values.date).format('YYYY-MM-DD')
-          : dayjs().format('YYYY-MM-DD')}
+          : dayjs().add(1, 'day').format('YYYY-MM-DD')}
       />
     </div>
   </div>

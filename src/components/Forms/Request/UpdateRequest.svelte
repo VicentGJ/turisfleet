@@ -44,7 +44,7 @@
     id_copilot: itemToUpdate.id_copilot || -1,
     date: itemToUpdate.date,
     id_specific_program: itemToUpdate.id_specific_program,
-    //TODO: what other values are updateable?
+    tourist_amount: itemToUpdate.tourist_amount,
   }
 
   const cancel = () => {
@@ -53,7 +53,6 @@
   const update = async () => {
     await requestService.updateRequest(itemToUpdate.id_request, {
       ...values,
-      // return_date: return_date ? null : return_date,
     })
 
     dispatch('updated')
@@ -101,7 +100,12 @@
     </div>
     <div class="input-container">
       <label for="">Date *</label>
-      <input type="date" name="" id="" min={dayjs().format('YYYY-MM-DD')} />
+      <input
+        type="date"
+        name=""
+        id=""
+        min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
+      />
     </div>
     <div class="input-container">
       <label for="">Specific Program *</label>

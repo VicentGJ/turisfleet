@@ -4,15 +4,16 @@
   import BaseForm from '../BaseForm.svelte'
   export let showCreate = false
   const dispatch = createEventDispatcher()
+  enum situation_types {
+    car = 'C',
+    driver = 'D',
+    both = 'CD',
+  }
   let values = {
     situation_name: '',
-    situation_type: 'car',
+    situation_type: situation_types.car,
   }
 
-  enum situation_types {
-    car = 'car',
-    driver = 'driver',
-  }
   const cancel = () => {
     showCreate = false
   }

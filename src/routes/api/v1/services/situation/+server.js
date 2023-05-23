@@ -8,17 +8,21 @@ export async function GET({ url }) {
   const situation_type = params.get('situation_type')
   const result = await sequelize
     .transaction(async (t) => {
-      return await sequelize.query(
-        `SELECT * FROM situations ${
-          situation_type != 'any'
-            ? "WHERE situation_type='" + situation_type + "'"
-            : ''
-        } LIMIT ${limit}`,
+      const result = await sequelize.query(
+        `SELECT get_situations(${
+          situation_type === 'any' ? null : "'" + situation_type + "'"
+        })`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,
         }
       )
+
+      const cursor = result[0].get_situations
+      return await sequelize.query(`FETCH ${limit} IN "${cursor}"`, {
+        type: sequelize.QueryTypes.SELECT,
+        transaction: t,
+      })
     })
     .catch((err) => {
       throw error(400, { message: err.message })

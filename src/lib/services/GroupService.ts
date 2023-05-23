@@ -1,6 +1,6 @@
 import BaseService from './BaseService'
 import type { Group, GroupCreate, GroupUpdate } from '../types/GroupTypes'
-import { errorMessage } from '$stores/basic_stores'
+import { popup } from '$stores/basic_stores'
 export default class GroupService extends BaseService {
   protected static instance: GroupService
 

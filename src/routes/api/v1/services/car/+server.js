@@ -12,11 +12,10 @@ export async function GET({ url }) {
       })
 
       const cursor = result[0].get_cars
-      const cars = await sequelize.query(`FETCH ${limit} IN "${cursor}"`, {
+      const cars = await sequelize.query(`FETCH ALL IN "${cursor}"`, {
         type: sequelize.QueryTypes.SELECT,
         transaction: t,
       })
-
       return cars
     })
     .catch((err) => {
@@ -45,7 +44,6 @@ export async function POST({ request }) {
         }
       )
     } catch (e) {
-      console.log(e)
       throw error(400, e)
     }
   })
