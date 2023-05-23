@@ -9,7 +9,7 @@
   const handleItemClick = () => {
     if ($view != item.route) {
       $view = item.route
-      goto('/' + $view)
+      goto($view)
     }
   }
   const handleArrowClick = () => {

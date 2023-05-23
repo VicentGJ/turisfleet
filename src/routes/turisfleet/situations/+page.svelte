@@ -1,15 +1,21 @@
 <script lang="ts">
-  import CreateCarSituation from '$/components/Forms/Situation/CreateCarSituation.svelte'
-  import CreateDriverSituation from '$/components/Forms/Situation/CreateDriverSituation.svelte'
   import CreateSituation from '$/components/Forms/Situation/CreateSituation.svelte'
-  import UpdateCarSituation from '$/components/Forms/Situation/UpdateCarSituation.svelte'
-  import UpdateDriverSituation from '$/components/Forms/Situation/UpdateDriverSituation.svelte'
   import UpdateSituation from '$/components/Forms/Situation/UpdateSituation.svelte'
   import Table from '$/components/Table/Table.svelte'
   import type { Situation } from '$/lib/types/SituationTypes'
   import { browser } from '$app/environment'
-  import { situationService } from '$services'
+  import { goto } from '$app/navigation'
+  import { authService, situationService } from '$services'
   import { view } from '$stores/basic_stores'
+  let routes: string[] = []
+  if (browser) {
+    routes = authService.getAuthorizedRoutes()
+    if (!routes.includes($view)) {
+      $view = routes[0]
+      goto($view)
+    }
+  }
+
   let showCreateSituation = false
   let showUpdateSituation = false
   let itemToUpdate: Situation
@@ -18,7 +24,7 @@
   let tablename = 'Situations'
   $: if (browser && $view) {
     items = []
-    refreshItems()
+    routes.includes($view) && refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {

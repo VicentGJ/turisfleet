@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { fade, scale } from 'svelte/transition'
   import { createEventDispatcher } from 'svelte'
   import Button from '../Shared/Button.svelte'
   const dispatch = createEventDispatcher()
@@ -17,8 +18,15 @@
   }
 
   const handlekeydown = (ev: KeyboardEvent) => {
-    if (ev.key === 'Enter') primaryClicked()
-    else if (ev.key === 'Escape') closeClicked()
+    if (ev.key === 'Enter') {
+      ev.preventDefault()
+      ev.stopPropagation()
+      primaryClicked()
+    } else if (ev.key === 'Escape') {
+      ev.preventDefault()
+      ev.stopPropagation()
+      closeClicked()
+    }
   }
 </script>
 
@@ -27,8 +35,14 @@
 <div
   class="form-base-container"
   on:click|self|capture|stopPropagation={closeClicked}
+  in:fade={{ duration: 200 }}
+  out:fade={{ duration: 200, delay: 100 }}
 >
-  <div class="form">
+  <div
+    class="form"
+    in:scale={{ duration: 200, delay: 100 }}
+    out:scale={{ duration: 200 }}
+  >
     <div class="separator">
       <div class="form-header">
         <h1>
@@ -52,12 +66,15 @@
     </div>
     <div class="form-footer">
       <div class="buttons-container">
+        <slot name="extra-footer-start" />
         <Button
           bind:text={secondaryBtnTxt}
           on:click={secondaryClicked}
           type="secondary"
         />
+        <slot name="extra-footer-middle" />
         <Button bind:text={primaryBtnTxt} on:click={primaryClicked} />
+        <slot name="extra-footer-end" />
       </div>
     </div>
   </div>

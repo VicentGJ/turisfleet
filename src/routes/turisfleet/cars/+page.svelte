@@ -1,17 +1,28 @@
 <script lang="ts">
-  import type { Car } from '$lib/types/CarTypes'
-  import Table from '$/components/Table/Table.svelte'
-  import { carService } from '$/lib/services/services'
   import CreateCar from '$/components/Forms/Car/CreateCar.svelte'
-  import { onMount } from 'svelte'
   import UpdateCar from '$/components/Forms/Car/UpdateCar.svelte'
+  import Table from '$/components/Table/Table.svelte'
+  import { authService, carService } from '$/lib/services/services'
+  import { view } from '$/lib/stores/basic_stores'
+  import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
+  import type { Car } from '$lib/types/CarTypes'
+  import { onMount } from 'svelte'
+  let routes: string[] = []
+  if (browser) {
+    routes = authService.getAuthorizedRoutes()
+    if (!routes.includes($view)) {
+      $view = routes[0]
+      goto($view)
+    }
+  }
   let items: Car[]
   let showCreate = false
   let showUpdate = false
   let itemToUpdate: Car
   let tablename = 'Cars'
   onMount(() => {
-    refreshItems()
+    routes.includes($view) && refreshItems()
   })
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail

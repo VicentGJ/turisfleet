@@ -2,7 +2,7 @@ import sequelize from '$lib/db'
 import { json, error } from '@sveltejs/kit'
 import { usersTable as table } from '$lib/tables'
 import CryptoJS from 'crypto-js';
-
+import cookie from 'cookie'
 export async function POST({ request }) {
     const body = await request.json()
     const { username, password } = body
@@ -17,7 +17,7 @@ export async function POST({ request }) {
                     type: sequelize.QueryTypes.SELECT,
                     replacements: { username }
                 })
-            if (s.length === 0) throw new Error('Invalid username or password')
+            if (s.length === 0) throw new Error('Incorrect username or password')
             const salt = s[0].salt
             const salted = CryptoJS.SHA256(salt + password).toString()
             const login = await sequelize.query(`SELECT login(:username, :salted)`, {
@@ -25,7 +25,7 @@ export async function POST({ request }) {
                 type: sequelize.QueryTypes.SELECT,
                 replacements: { username, salted }
             })
-            if (login.length === 0) throw new Error('Invalid username or password')
+            if (login.length === 0) throw new Error('Incorrect username or password')
             return login
         })
         .catch((err) => {
@@ -38,5 +38,14 @@ export async function POST({ request }) {
         username: loginArray[1],
         id_role: parseInt(loginArray[2])
     };
-    return json(login)
+    // const sessionID = login
+    // const headers = {
+    //     'Set-Cookie': cookie.serialize('sessionID', JSON.stringify(sessionID), {
+    //         // httpOnly: true,
+    //         maxAge: 60 * 60 * 24 // 1 day
+    //     })
+    // };
+    return json(login
+        // , { headers }
+    )
 }

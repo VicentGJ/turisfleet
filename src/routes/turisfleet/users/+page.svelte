@@ -1,19 +1,15 @@
 <script lang="ts">
-  import UpdateGroup from '$/components/Forms/Group/UpdateGroup.svelte'
+  import ChangePasswordUser from '$/components/Forms/User/ChangePasswordUser.svelte'
+  import UpdateUser from '$/components/Forms/User/UpdateUser.svelte'
   import Table from '$/components/Table/Table.svelte'
-  import { groupService } from '$/lib/services/services'
+  import { userService } from '$/lib/services/services'
   import { view } from '$/lib/stores/basic_stores'
-  import type { Group } from '$/lib/types/GroupTypes'
+  import type { User } from '$/lib/types/UserTypes'
   import { browser } from '$app/environment'
   import { goto } from '$app/navigation'
-  import CreateGroup from '$components/Forms/Group/CreateGroup.svelte'
+  import CreateUser from '$components/Forms/User/CreateUser.svelte'
   import { authService } from '$services'
   import { onMount } from 'svelte'
-  let items: Group[]
-  let showCreate = false
-  let showUpdate = false
-  let itemToUpdate: Group
-  let tablename = 'Groups'
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
@@ -22,6 +18,13 @@
       goto($view)
     }
   }
+
+  let items: User[]
+  let showCreate = false
+  let showUpdate = false
+  let showChangePasword = false
+  let itemToUpdate: User
+  let tablename = 'Users'
 
   onMount(() => {
     routes.includes($view) && refreshItems()
@@ -34,10 +37,10 @@
     showCreate = true
   }
   const handleDeleteClicked = ({ detail }: any) => {
-    groupService.deleteGroup(detail.id_group).then(() => refreshItems())
+    userService.deleteUser(detail.id_user).then(() => refreshItems())
   }
   const refreshItems = () => {
-    groupService.getGroups().then((i) => {
+    userService.getUsers().then((i) => {
       items = i
     })
   }
@@ -46,15 +49,28 @@
 <Table
   bind:tablename
   bind:items
-  createButtonText="Insert Group"
+  createButtonText="Insert User"
   on:row-clicked={handleRowClick}
   on:create-clicked={handleCreateClicked}
   on:delete-clicked={handleDeleteClicked}
 />
 {#if showCreate}
-  <CreateGroup bind:showCreate on:created={refreshItems} />
+  <CreateUser bind:showCreate on:created={refreshItems} />
 {/if}
 
 {#if showUpdate}
-  <UpdateGroup bind:showUpdate on:updated={refreshItems} bind:itemToUpdate />
+  <UpdateUser
+    bind:showUpdate
+    on:updated={refreshItems}
+    bind:itemToUpdate
+    on:change-password={() => (showChangePasword = true)}
+  />
+{/if}
+
+{#if showChangePasword}
+  <ChangePasswordUser
+    bind:showUpdate={showChangePasword}
+    bind:itemToUpdate
+    on:updated={refreshItems}
+  />
 {/if}

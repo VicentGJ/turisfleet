@@ -4,8 +4,18 @@
   import Table from '$/components/Table/Table.svelte'
   import type { CarSituation } from '$/lib/types/SituationTypes'
   import { browser } from '$app/environment'
-  import { situationService } from '$services'
+  import { goto } from '$app/navigation'
+  import { authService, situationService } from '$services'
   import { view } from '$stores/basic_stores'
+  let routes: string[] = []
+  if (browser) {
+    routes = authService.getAuthorizedRoutes()
+    if (!routes.includes($view)) {
+      $view = routes[0]
+      goto($view)
+    }
+  }
+
   let showCreateCarSituation = false
   let showUpdateCarSituation = false
   let itemToUpdate: CarSituation
@@ -14,7 +24,7 @@
   let tablename = 'Car Situations'
   $: if (browser && $view) {
     items = []
-    refreshItems()
+    routes.includes($view) && refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {

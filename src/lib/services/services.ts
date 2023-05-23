@@ -6,6 +6,7 @@ import ProgramService from './ProgramService'
 import RequestService from './RequestService'
 import ReportService from './ReportService'
 import AuthService from './AuthService'
+import UserService from './UserService'
 const carService = CarService.getInstance()
 const driverService = DriverService.getInstance()
 const groupService = GroupService.getInstance()
@@ -14,6 +15,7 @@ const programService = ProgramService.getInstance()
 const requestService = RequestService.getInstance()
 const reportService = ReportService.getInstance()
 const authService = AuthService.getInstance()
+const userService = UserService.getInstance()
 export {
   carService,
   driverService,
@@ -23,4 +25,5 @@ export {
   requestService,
   reportService,
   authService,
+  userService,
 }

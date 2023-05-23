@@ -1,14 +1,22 @@
 <script lang="ts">
-  import CreateProgram from '$/components/Forms/Program/CreateProgram.svelte'
   import CreateSpecificProgram from '$/components/Forms/Program/CreateSpecificProgram.svelte'
-  import UpdateProgram from '$/components/Forms/Program/UpdateProgram.svelte'
   import Table from '$/components/Table/Table.svelte'
   import { view } from '$/lib/stores/basic_stores'
   import type { SpecificProgram } from '$/lib/types/ProgramTypes'
   import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
   import UpdateSpecificProgram from '$components/Forms/Program/UpdateSpecificProgram.svelte'
   import { durationObjToStr } from '$lib/utils'
-  import { programService } from '$services'
+  import { authService, programService } from '$services'
+  let routes: string[] = []
+  if (browser) {
+    routes = authService.getAuthorizedRoutes()
+    if (!routes.includes($view)) {
+      $view = routes[0]
+      goto($view)
+    }
+  }
+
   let showCreateSpecificProgram = false
   let showUpdateSpecificProgram = false
   let itemToUpdate: SpecificProgram
@@ -17,7 +25,7 @@
   let tablename = 'Specific Programs'
   $: if (browser && $view) {
     items = []
-    refreshItems()
+    routes.includes($view) && refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {

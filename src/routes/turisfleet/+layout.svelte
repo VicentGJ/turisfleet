@@ -4,6 +4,11 @@
   import '$/css/animations.css'
   import '$/css/app.css'
   import '$/css/variables.css'
+  import { loggedUser } from '$/lib/stores/basic_stores'
+  import { get } from 'svelte/store'
+
+  $: minified =
+    $loggedUser.role_name === 'driver' || $loggedUser.role_name === 'support'
 </script>
 
 <div id="main-layout-container">
@@ -11,10 +16,10 @@
     <Navbar />
   </div>
   <div id="main-content-container">
-    <div id="panel-container">
+    <div id="panel-container" class:hide-panel={minified}>
       <Panel />
     </div>
-    <div id="slot-container">
+    <div id="slot-container" class:full-width={minified}>
       <slot />
     </div>
   </div>
@@ -50,5 +55,12 @@
     display: flex;
     justify-content: center;
     margin-top: 5px;
+  }
+  .hide-panel {
+    display: none;
+  }
+  .full-width {
+    width: 99vw !important;
+    margin-left: 4px;
   }
 </style>

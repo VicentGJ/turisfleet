@@ -9,6 +9,7 @@ export interface LoggedInTransition {
 }
 export interface LoggedInType {
   id_user: number
-  role_name: string
+  role_name: 'administrator' | 'driver' | 'agent' | 'support' | ''
+  id_role: number
   username: string
 }

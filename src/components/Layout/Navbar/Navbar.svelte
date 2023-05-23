@@ -8,6 +8,7 @@
       id_user: -1,
       role_name: '',
       username: '',
+      id_role: -1,
     }
     $view = '/auth/login'
     goto($view)
@@ -19,9 +20,11 @@
     <div class="app-name-container noselect">
       <h2>TurisFleet</h2>
     </div>
-    <div class="nav-main-elements-wrapper">
-      <ReportDropdown />
-    </div>
+    {#if $loggedUser.role_name !== 'support'}
+      <div class="nav-main-elements-wrapper">
+        <ReportDropdown />
+      </div>
+    {/if}
   </div>
   <div class="wrapper">
     <div class="logout-wrapper">

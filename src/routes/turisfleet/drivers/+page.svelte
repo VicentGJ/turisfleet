@@ -2,16 +2,28 @@
   import CreateDriver from '$/components/Forms/Driver/CreateDriver.svelte'
   import UpdateDriver from '$/components/Forms/Driver/UpdateDriver.svelte'
   import Table from '$/components/Table/Table.svelte'
-  import { driverService } from '$/lib/services/services'
+  import { view } from '$/lib/stores/basic_stores'
   import type { Driver, DriverWithCategory } from '$/lib/types/DriverTypes'
+  import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
+  import { authService, driverService } from '$services'
   import { onMount } from 'svelte'
+let routes:string[]=[] 
+ if (browser) {
+    routes = authService.getAuthorizedRoutes()
+    if (!routes.includes($view)) {
+      $view = routes[0]
+      goto($view)
+    }
+  }
+
   let items: DriverWithCategory[]
   let showCreate = false
   let showUpdate = false
   let itemToUpdate: Driver
   let tablename = 'Drivers'
   onMount(() => {
-    refreshItems()
+    routes.includes($view) && refreshItems()
   })
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail

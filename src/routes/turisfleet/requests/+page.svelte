@@ -1,9 +1,13 @@
 <script lang="ts">
   import CreateRequest from '$/components/Forms/Request/CreateRequest.svelte'
   import Table from '$/components/Table/Table.svelte'
+  import { view } from '$/lib/stores/basic_stores'
   import type { Request } from '$/lib/types/RequestTypes'
+  import { browser } from '$app/environment'
+  import { goto } from '$app/navigation'
   import UpdateRequest from '$components/Forms/Request/UpdateRequest.svelte'
   import {
+    authService,
     carService,
     driverService,
     groupService,
@@ -11,6 +15,15 @@
   } from '$services'
   import dayjs from 'dayjs'
   import { onMount } from 'svelte'
+  let routes: string[] = []
+  if (browser) {
+    routes = authService.getAuthorizedRoutes()
+    if (!routes.includes($view)) {
+      $view = routes[0]
+      goto($view)
+    }
+  }
+
   let items: Request[]
   let showCreate = false
   let showUpdate = false
@@ -19,29 +32,32 @@
   let createButtonDisabledReason = ''
   let tablename = 'Requests'
   onMount(() => {
-    refreshItems()
-    let disabled = false
-    Promise.all([
-      carService.getCars(1).then((c) => {
-        if (c.length == 0) {
-          createButtonDisabled = true
-          createButtonDisabledReason = 'There are no cars in the Cars table'
-        }
-      }),
-      driverService.getDrivers(1).then((d) => {
-        if (d.length == 0) {
-          createButtonDisabled = true
-          createButtonDisabledReason =
-            'There are no drivers in the Drivers table'
-        }
-      }),
-      groupService.getGroups(1).then((g) => {
-        if (g.length == 0) {
-          createButtonDisabled = true
-          createButtonDisabledReason = 'There are no groups in the Groups table'
-        }
-      }),
-    ])
+    if (routes.includes($view)) {
+      refreshItems()
+      let disabled = false
+      Promise.all([
+        carService.getCars(1).then((c) => {
+          if (c.length == 0) {
+            createButtonDisabled = true
+            createButtonDisabledReason = 'There are no cars in the Cars table'
+          }
+        }),
+        driverService.getDrivers(1).then((d) => {
+          if (d.length == 0) {
+            createButtonDisabled = true
+            createButtonDisabledReason =
+              'There are no drivers in the Drivers table'
+          }
+        }),
+        groupService.getGroups(1).then((g) => {
+          if (g.length == 0) {
+            createButtonDisabled = true
+            createButtonDisabledReason =
+              'There are no groups in the Groups table'
+          }
+        }),
+      ])
+    }
   })
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail

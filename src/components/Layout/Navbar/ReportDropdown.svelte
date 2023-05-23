@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { loggedUser } from '$/lib/stores/basic_stores'
   import { reportService } from '$/lib/services/services'
   import { generatePDF } from '$/lib/utils'
   import Dropdown from '$components/Shared/Dropdown.svelte'
@@ -10,30 +11,78 @@
   import { onMount } from 'svelte'
   let open = false
   const reportList: ReportItemType[] = [
-    { id: 'report-1', name: 'Drivers List', click: report1 },
-    { id: 'report-2', name: 'Cars List', click: report2 },
+    {
+      id: 'report-1',
+      name: 'Drivers List',
+      click: report1,
+      show:
+        $loggedUser.role_name === 'administrator' ||
+        $loggedUser.role_name === 'agent',
+    },
+    {
+      id: 'report-2',
+      name: 'Cars List',
+      click: report2,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
+    },
     {
       id: 'report-3',
       name: 'Request on date',
       click: report3,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
     },
-    { id: 'report-4', name: 'Car situations', click: report4 },
+    {
+      id: 'report-4',
+      name: 'Car situations',
+      click: report4,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
+    },
     {
       id: 'report-5',
       name: 'Driver situations',
       click: report5,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
     },
     {
       id: 'report-6',
       name: 'Car-Driver relation list',
       click: report6,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
     },
-    { id: 'report-7', name: 'Drags list', click: report7 },
-    { id: 'report-8', name: 'Routing Sheets', click: report8 },
+    {
+      id: 'report-7',
+      name: 'Drags list',
+      click: report7,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
+    },
+    {
+      id: 'report-8',
+      name: 'Routing Sheets',
+      click: report8,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent' ||
+        $loggedUser.role_name === 'driver',
+    },
     {
       id: 'report-9',
       name: 'Request modifications',
       click: report9,
+      show:
+        $loggedUser.role_name == 'administrator' ||
+        $loggedUser.role_name == 'agent',
     },
   ]
   async function report1(this: ReportItemType) {
@@ -103,7 +152,11 @@
     )
   }
   async function report7(this: ReportItemType) {}
-  async function report8(this: ReportItemType) {}
+  async function report8(this: ReportItemType) {
+    if ($loggedUser.role_name === 'driver') {
+    } else {
+    }
+  }
   async function report9(this: ReportItemType) {}
 
   let container: HTMLDivElement
@@ -125,8 +178,10 @@
   <DropdownToggler bind:open>Reports</DropdownToggler>
   {#if open}
     <Dropdown>
-      {#each reportList as { name, id, click }}
-        <DropdownItem {id} on:click={click} bind:open>{name}</DropdownItem>
+      {#each reportList as { name, id, click, show }}
+        {#if show}
+          <DropdownItem {id} on:click={click} bind:open>{name}</DropdownItem>
+        {/if}
       {/each}
     </Dropdown>
   {/if}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { errorMessage } from '$stores/basic_stores'
   import Button from '$/components/Shared/Button.svelte'
   import { authService } from '$/lib/services/services'
   import { loggedUser, view } from '$/lib/stores/basic_stores'
@@ -7,7 +8,7 @@
   let form: HTMLFormElement
   let login: LoginType = {
     username: 'charlie',
-    password: 'password',
+    password: 'Def password(1)',
   }
   const handleLogin = async () => {
     if (form.reportValidity()) {
@@ -18,11 +19,17 @@
           id_user,
           username,
           role_name,
+          id_role,
         }
       }
     }
     // console.log($loggedUser)
-    $view = '/turisfleet/cars'
+    let routes = authService.getAuthorizedRoutes()
+    if (routes.length > 0) $view = routes[0]
+    else {
+      $view = '/auth/login'
+      $errorMessage = { type: 'error', message: 'Something went wrong' }
+    }
     goto($view)
   }
 

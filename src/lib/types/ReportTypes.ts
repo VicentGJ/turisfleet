@@ -4,6 +4,7 @@ export interface ReportItemType {
   id: string
   name: string
   click: () => void
+  show:boolean
 }
 
 export interface Report1Type {
