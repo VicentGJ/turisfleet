@@ -7,10 +7,11 @@
   import { browser } from '$app/environment'
   import { goto } from '$app/navigation'
   import { authService, programService } from '$services'
+  import { page } from '$app/stores'
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
@@ -24,7 +25,7 @@
   let items: Array<Program | SpecificProgram>
 
   $: if (browser && $view) {
-    routes.includes($view) && refreshItems()
+    routes.includes($page.url.pathname) && refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {

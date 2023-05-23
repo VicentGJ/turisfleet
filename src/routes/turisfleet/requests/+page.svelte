@@ -5,6 +5,7 @@
   import type { Request } from '$/lib/types/RequestTypes'
   import { browser } from '$app/environment'
   import { goto } from '$app/navigation'
+  import { page } from '$app/stores'
   import UpdateRequest from '$components/Forms/Request/UpdateRequest.svelte'
   import {
     authService,
@@ -18,7 +19,7 @@
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
@@ -32,7 +33,7 @@
   let createButtonDisabledReason = ''
   let tablename = 'Requests'
   onMount(() => {
-    if (routes.includes($view)) {
+    if (routes.includes($page.url.pathname)) {
       refreshItems()
       let disabled = false
       Promise.all([

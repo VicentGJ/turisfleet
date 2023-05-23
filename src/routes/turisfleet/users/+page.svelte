@@ -10,10 +10,11 @@
   import CreateUser from '$components/Forms/User/CreateUser.svelte'
   import { authService } from '$services'
   import { onMount } from 'svelte'
+  import { page } from '$app/stores'
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
@@ -27,7 +28,7 @@
   let tablename = 'Users'
 
   onMount(() => {
-    routes.includes($view) && refreshItems()
+    routes.includes($page.url.pathname) && refreshItems()
   })
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail

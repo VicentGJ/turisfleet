@@ -6,10 +6,10 @@
   export let item: PanelItemType
   export let isSubItem = false
   let showSubItems = false
-  const handleItemClick = () => {
+  const handleItemClick = async () => {
     if ($view != item.route) {
       $view = item.route
-      goto($view)
+      await goto($view)
     }
   }
   const handleArrowClick = () => {

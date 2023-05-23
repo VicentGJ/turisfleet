@@ -9,6 +9,7 @@
   import CreateGroup from '$components/Forms/Group/CreateGroup.svelte'
   import { authService } from '$services'
   import { onMount } from 'svelte'
+  import { page } from '$app/stores'
   let items: Group[]
   let showCreate = false
   let showUpdate = false
@@ -17,14 +18,14 @@
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
   }
 
   onMount(() => {
-    routes.includes($view) && refreshItems()
+    routes.includes($page.url.pathname) && refreshItems()
   })
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail

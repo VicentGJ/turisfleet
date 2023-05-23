@@ -8,10 +8,12 @@
   import { goto } from '$app/navigation'
   import type { Car } from '$lib/types/CarTypes'
   import { onMount } from 'svelte'
+  import { page } from '$app/stores'
   let routes: string[] = []
+  let authorized = true
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
@@ -22,7 +24,7 @@
   let itemToUpdate: Car
   let tablename = 'Cars'
   onMount(() => {
-    routes.includes($view) && refreshItems()
+    routes.includes($page.url.pathname) && refreshItems()
   })
   const handleRowClick = ({ detail }: any) => {
     itemToUpdate = detail

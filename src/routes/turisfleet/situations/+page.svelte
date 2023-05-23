@@ -6,11 +6,12 @@
   import { browser } from '$app/environment'
   import { goto } from '$app/navigation'
   import { authService, situationService } from '$services'
+  import { page } from '$app/stores'
   import { view } from '$stores/basic_stores'
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
@@ -24,7 +25,7 @@
   let tablename = 'Situations'
   $: if (browser && $view) {
     items = []
-    routes.includes($view) && refreshItems()
+    routes.includes($page.url.pathname) && refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {

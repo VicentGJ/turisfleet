@@ -8,10 +8,11 @@
   import UpdateSpecificProgram from '$components/Forms/Program/UpdateSpecificProgram.svelte'
   import { durationObjToStr } from '$lib/utils'
   import { authService, programService } from '$services'
+  import { page } from '$app/stores'
   let routes: string[] = []
   if (browser) {
     routes = authService.getAuthorizedRoutes()
-    if (!routes.includes($view)) {
+    if (!routes.includes($page.url.pathname)) {
       $view = routes[0]
       goto($view)
     }
@@ -25,7 +26,7 @@
   let tablename = 'Specific Programs'
   $: if (browser && $view) {
     items = []
-    routes.includes($view) && refreshItems()
+    routes.includes($page.url.pathname) && refreshItems()
   }
 
   const handleRowClick = ({ detail }: any) => {
