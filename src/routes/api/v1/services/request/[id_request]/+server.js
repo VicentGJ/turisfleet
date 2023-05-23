@@ -52,7 +52,7 @@ export async function PUT({ params, request }) {
       await sequelize.query(
         `
             UPDATE ${table}
-            SET id_car=:id_car,id_copilot=:id_copilot,date=:date,id_specific_program=:id_specific_program
+            SET id_car=:id_car,id_copilot=:id_copilot,date=:date,id_specific_program=:id_specific_program,tourist_amount=:tourist_amount
             WHERE id_request = :identifier
             `,
         {

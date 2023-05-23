@@ -15,9 +15,9 @@
   })
   const dispatch = createEventDispatcher()
   let values = {
-    available_km: Number(itemToUpdate.available_km),
-    plate_number: itemToUpdate.plate_number,
-    seat_amount: itemToUpdate.seat_amount,
+    // available_km: Number(itemToUpdate.available_km),
+    // plate_number: itemToUpdate.plate_number,
+    // seat_amount: itemToUpdate.seat_amount,
     id_driver: itemToUpdate.id_driver,
   }
 
@@ -45,7 +45,7 @@
   on:secondary-clicked={cancel}
 >
   <div class="form-body">
-    <div class="input-container">
+    <!-- <div class="input-container">
       <label for="">Plate Number *</label>
       <input
         required
@@ -75,7 +75,7 @@
         bind:value={values.available_km}
         placeholder="available km"
       />
-    </div>
+    </div> -->
     <div class="input-container">
       <label for="">Driver *</label>
       <select name="" id="" bind:value={values.id_driver} required>
@@ -102,9 +102,9 @@
     justify-content: center;
     align-items: center;
   }
-  input {
+  /* input {
     width: 100%;
-  }
+  } */
   .input-container {
     width: 90%;
   }

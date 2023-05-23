@@ -105,6 +105,7 @@
         name=""
         id=""
         min={dayjs().add(1, 'day').format('YYYY-MM-DD')}
+        bind:value={values.date}
       />
     </div>
     <div class="input-container">

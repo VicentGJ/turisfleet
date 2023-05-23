@@ -77,7 +77,7 @@
       <select name="" id="" bind:value={values.id_group} required>
         {#each groups as group, index}
           <option value={group.id_group}>
-            {`${group.country}`}
+            ({group.id_group}){group.country}
           </option>
         {/each}
       </select>

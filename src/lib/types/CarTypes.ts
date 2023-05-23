@@ -20,8 +20,8 @@ export interface CarCreate {
 }
 
 export interface CarUpdate {
-  plate_number: string
-  seat_amount: number
-  available_km: number
+  // plate_number: string
+  // seat_amount: number
+  // available_km: number
   id_driver: number
 }

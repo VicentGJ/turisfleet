@@ -51,7 +51,7 @@ export async function PUT({ params, request }) {
   const body = await request.json() //new attribute values for car
   const result = await sequelize.transaction(async (t) => {
     await sequelize.query(
-      `SELECT update_car(:identifier,:plate_number,:seat_amount,:available_km,:id_driver)`,
+      `SELECT update_car(:identifier,null,null,null,:id_driver)`,
       {
         type: sequelize.QueryTypes.SELECT,
         transaction: t,

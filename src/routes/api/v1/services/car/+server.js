@@ -12,7 +12,7 @@ export async function GET({ url }) {
       })
 
       const cursor = result[0].get_cars
-      const cars = await sequelize.query(`FETCH ALL IN "${cursor}"`, {
+      const cars = await sequelize.query(`FETCH ${limit} IN "${cursor}"`, {
         type: sequelize.QueryTypes.SELECT,
         transaction: t,
       })

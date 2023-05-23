@@ -96,9 +96,11 @@ export default class ReportService extends BaseService {
       'GET'
     )
   }
-  public async report8(): Promise<Report8Type[]> {
-    return await this.handleReq(this.url('8'), undefined, 'GET') //TODO: this is uncompleted
+  public async report8(id_car: number, date: string): Promise<any> {
+    const query = this.makeParams({ id_car, date })
+    return await this.handleReq(this.url('8'), query, 'GET') //TODO: this is uncompleted
   }
+
   public async report9(): Promise<Report9Type[]> {
     return await this.handleReq(this.url('9'), undefined, 'GET')
   }

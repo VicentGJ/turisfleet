@@ -32,7 +32,7 @@ export async function GET({ url }) {
       LEFT OUTER JOIN ${driversCarsTable} a ON c.id_car=a.id_car
       LEFT OUTER JOIN ${driverTable} d ON a.id_driver=d.id_driver
       LEFT JOIN ${driverTable} cp ON cp.id_driver=r.id_copilot
-      WHERE r.date = :date
+      WHERE r.date = :date AND d.id_driver=get_car_driver_on_date((r.date + sp.start),c.id_car)
 `,
         {
           type: sequelize.QueryTypes.SELECT,

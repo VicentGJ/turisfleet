@@ -11,6 +11,9 @@
   import DatePickerModal from '$/components/Shared/DatePickerModal.svelte'
   import dayjs from 'dayjs'
   import { onMount } from 'svelte'
+  import SelectCarModal from '$/components/Shared/SelectCarModal.svelte'
+  import jsPDF from 'jspdf'
+  import autoTable from 'jspdf-autotable'
   let open = false
   const reportList: ReportItemType[] = [
     {
@@ -209,10 +212,36 @@
       }
     }
   }
+
+  let showSelectCar = false
   async function report8(this: ReportItemType) {
-    if ($loggedUser.role_name === 'driver') {
-    } else {
+    showSelectCar = true
+  }
+  async function report8Step2({ detail }: any) {
+    showSelectCar = false
+    const { date, id_car } = detail
+    const data = await reportService.report8(id_car, date)
+    const doc = new jsPDF()
+    let title = `[Report #8][${dayjs().format('YYYY-MMM-DD')}] Routing list`
+    doc.setFont('Helvetica', 'normal')
+    doc.setTextColor(0, 0, 0)
+    doc.text(title, 14, 22)
+    doc.text('Plate number ' + data.cursor.plate_number, 14, 40)
+    doc.text('Remaining KM: ' + data.cursor.km_remaining.toString(), 14, 50)
+    doc.text('Driver Name: ' + data.cursor.name, 14, 60)
+    if (data.map && data.map.length > 0) {
+      const headers = Object.keys(data.map[0])
+      const body = data.map.map((row: any) =>
+        headers.map((header) => row[header])
+      )
+      autoTable(doc, {
+        head: [headers],
+        body,
+        startY: 80,
+      })
     }
+    doc.save(title + '.pdf')
+    window.open(doc.output('bloburl'), '_blank')
   }
   let showSelectRequest = false
   let requestselected: number | undefined = undefined
@@ -282,9 +311,17 @@
     bind:selected={requestselected}
     on:close={() => {
       showSelectRequest = false
-      // requestselected = undefined
     }}
     on:selected={report9}
+  />
+{/if}
+
+{#if showSelectCar}
+  <SelectCarModal
+    on:selected={report8Step2}
+    on:close={() => {
+      showSelectCar = false
+    }}
   />
 {/if}
 
