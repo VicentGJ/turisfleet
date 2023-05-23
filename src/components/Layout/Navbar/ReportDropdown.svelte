@@ -1,4 +1,5 @@
 <script lang="ts">
+  import SelectRequestModal from '$components/Shared/SelectRequestModal.svelte'
   import { popup } from '$stores/basic_stores'
   import { loggedUser } from '$/lib/stores/basic_stores'
   import { reportService } from '$/lib/services/services'
@@ -213,18 +214,27 @@
     } else {
     }
   }
+  let showSelectRequest = false
+  let requestselected: number | undefined = undefined
   async function report9(this: ReportItemType) {
-    const res = await reportService.report9()
-    if (res.length > 0) {
-      generatePDF(
-        res,
-        `[Report #8][${dayjs().format('YYYY-MMM-DD')}] Modifications`
-      )
+    console.log(requestselected)
+    if (requestselected === undefined) {
+      showSelectRequest = true
     } else {
-      $popup = {
-        message: 'No data in report',
-        type: 'info',
+      const res = await reportService.report9()
+      if (res.length > 0) {
+        generatePDF(
+          res,
+          `[Report #9][${dayjs().format('YYYY-MMM-DD')}] Modifications`
+        )
+      } else {
+        $popup = {
+          message: 'No data in report',
+          type: 'info',
+        }
       }
+      showSelectRequest = false
+      requestselected = undefined
     }
   }
 
@@ -264,6 +274,17 @@
       showDatemodal = false
     }}
     on:selected={report3}
+  />
+{/if}
+
+{#if showSelectRequest}
+  <SelectRequestModal
+    bind:selected={requestselected}
+    on:close={() => {
+      showSelectRequest = false
+      // requestselected = undefined
+    }}
+    on:selected={report9}
   />
 {/if}
 

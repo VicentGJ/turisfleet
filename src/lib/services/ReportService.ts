@@ -51,7 +51,6 @@ export default class ReportService extends BaseService {
           result.push(drivers[driver['Driver ID']])
         }
       })
-      console.log(result)
       resolve(result)
     })
   }

@@ -30,7 +30,7 @@ export default class RequestService extends BaseService {
   public async getRequest(id: string | number): Promise<Request> {
     return await this.handleReq(this.url(id.toString()), undefined, 'GET')
   }
-
+  
   public async deleteRequest(id: string | number): Promise<any> {
     return await this.handleReq(this.url(id.toString()), undefined, 'DELETE')
   }

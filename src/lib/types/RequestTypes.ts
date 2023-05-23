@@ -7,6 +7,8 @@ export interface Request {
   date: Date | string
   return_date: Date | string
   tourist_amount: number
+  description?: string
+  country?: string
 }
 
 export interface RequestCreate {

@@ -75,7 +75,7 @@
   .picker-wrapper {
     max-height: 90vh;
     height: fit-content;
-    width: 30vw;
+    width: 35vw;
     background-color: white;
     border-radius: 4px;
     box-shadow: var(--default-shadow);
@@ -88,7 +88,7 @@
     justify-content: space-between;
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
+    /* overflow-y: scroll; */
     gap: 20px;
   }
   .body {

@@ -6,7 +6,7 @@ export async function GET({ params }) {
   const result = await sequelize
     .transaction(async (t) => {
       let result = await sequelize.query(
-        `SELECT * FROM ${table} WHERE id_car = :identifier`,
+        `SELECT * FROM ${table} WHERE id_car = :identifier and disable=FALSE`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,

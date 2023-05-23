@@ -7,8 +7,9 @@ export async function GET() {
     .transaction(async (t) => {
       return await sequelize.query(
         `SELECT ${driverTable}.*, ${driverCategoriesTable}.license_category_category_name
-FROM ${driverTable}
-LEFT JOIN ${driverCategoriesTable} ON ${driverTable}.id_driver = ${driverCategoriesTable}.drivers_id_driver`,
+        FROM ${driverTable}
+        LEFT JOIN ${driverCategoriesTable} ON ${driverTable}.id_driver = ${driverCategoriesTable}.drivers_id_driver
+        WHERE ${driverTable}.disable=false`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,

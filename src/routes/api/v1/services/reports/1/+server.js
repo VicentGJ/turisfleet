@@ -10,12 +10,6 @@ export async function GET() {
   const result = await sequelize
     .transaction(async (t) => {
       let result = await sequelize.query(
-        // `SELECT dt.*, dct.license_category_category_name, ct.plate_number
-        //     FROM ${driverTable} dt
-        //     LEFT JOIN ${carTable} ct ON ct.id_driver=dt.id_driver
-        //     LEFT JOIN ${driverCategoriesTable} dct ON dct.drivers_id_driver=dt.id_driver
-        //     ORDER BY dt.name
-        //     `,
         `SELECT 
         dt.id_number as "Driver ID", 
         dt.name as "Driver name", 

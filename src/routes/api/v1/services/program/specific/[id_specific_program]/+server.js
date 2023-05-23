@@ -7,7 +7,7 @@ export async function GET({ params }) {
   const result = await sequelize
     .transaction(async (t) => {
       const result = await sequelize.query(
-        `SELECT * FROM ${table} WHERE id_specific_program = :id_specific_program`,
+        `SELECT * FROM ${table} WHERE id_specific_program = :id_specific_program and disable=false`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,
@@ -51,11 +51,9 @@ export async function PUT({ params, request }) {
   const body = await request.json() //new attribute values for car
   const result = await sequelize.transaction(async (t) => {
     await sequelize.query(
-      `
-            UPDATE ${table}
-            SET id_program=:id_program, description=:description, start=:start, duration=:duration, km=:km
-            WHERE id_specific_program = :identifier
-            `,
+      `UPDATE ${table}
+        SET id_program=:id_program, description=:description, start=:start, duration=:duration, km=:km
+        WHERE id_specific_program = :identifier`,
       {
         type: sequelize.QueryTypes.UPDATE,
         transaction: t,

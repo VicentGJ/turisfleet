@@ -38,7 +38,7 @@ export async function POST({ request }) {
         )
         //since this happens inside a transaction the inserted value will always be the last until commit because of transaction isolation
         const created = await sequelize.query(
-          `SELECT * FROM ${table} ORDER BY id_group DESC LIMIT 1`,
+          `SELECT * FROM ${table} ORDER BY id_group DESC LIMIT 1 where disable=false`,
           {
             type: sequelize.QueryTypes.SELECT,
             transaction: t,

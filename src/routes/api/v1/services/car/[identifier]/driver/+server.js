@@ -15,7 +15,7 @@ export async function GET({ params }) {
           from ${driverTable} d 
           join ${driversCarsTable} dct on dct.id_driver=d.id_driver 
           join ${driverCategoriesTable} dlc on dlc.drivers_id_driver=d.id_driver
-          where id_car=:identifier`,
+          where id_car=:identifier and d.disable=false`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,

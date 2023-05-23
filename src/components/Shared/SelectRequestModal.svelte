@@ -1,19 +1,28 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
+  import type { Request } from '$lib/types/RequestTypes'
   import dayjs from 'dayjs'
   import Button from './Button.svelte'
   import { fade, scale } from 'svelte/transition'
-  export let value: Date | string | undefined = undefined
-  export let required = false
-  let form: HTMLFormElement
+  import { requestService } from '$/lib/services/services'
+  import { popup } from '$/lib/stores/basic_stores'
+  export let selected: number | undefined
   const dispatch = createEventDispatcher()
-  //   export let min: string;
-  //   export let max: string;
-
-  //   $: if (min) min = dayjs(min).format("YYYY-MM-DD");
-  //   $: if (max) max = dayjs(max).format("YYYY-MM-DD");
-
+  let requests: Request[] = []
+  let form: HTMLFormElement
+  onMount(async () => {
+    requests = await requestService.getRequests()
+    if (requests.length > 0) selected = requests[0].id_request
+    else {
+      $popup = {
+        message: 'There are no requests',
+        type: 'info',
+      }
+      handleSecondaryClicked()
+    }
+  })
   const handleSecondaryClicked = () => {
+    selected = undefined
     dispatch('close')
   }
   const handlePrimaryClicked = () => {
@@ -33,18 +42,18 @@
     in:scale={{ delay: 100, duration: 200 }}
     out:scale={{ duration: 200 }}
   >
-    <h3 class="header">Select a date</h3>
+    <h3 class="header">Select a request</h3>
     <form action="" bind:this={form}>
       <div class="body">
         <div class="input-container">
-          <label for="date-picker-input">Date {required ? '*' : ''}</label>
-          <input
-            id="date-picker-input"
-            type="date"
-            name="date-picker"
-            bind:value
-            {required}
-          />
+          <label for="date-picker-input">Request*</label>
+          <select name="" id="" required bind:value={selected}>
+            {#each requests as item, index}
+              <option value={item.id_request}>
+                ({item.date}) [{item.country}] {item.description}
+              </option>
+            {/each}
+          </select>
         </div>
       </div>
       <div class="footer">
@@ -75,7 +84,7 @@
   .picker-wrapper {
     max-height: 90vh;
     height: fit-content;
-    width: 30vw;
+    width: fit-content;
     background-color: white;
     border-radius: 4px;
     box-shadow: var(--default-shadow);
@@ -85,25 +94,21 @@
   form {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     width: 100%;
     height: 100%;
-    overflow-y: scroll;
     gap: 20px;
   }
   .body {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
   }
   .footer {
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     gap: 16px;
-  }
-  input {
-    width: 100%;
   }
   .input-container {
     width: 50%;

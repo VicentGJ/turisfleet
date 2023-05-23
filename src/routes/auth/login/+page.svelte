@@ -7,8 +7,8 @@
   import { goto } from '$app/navigation'
   let form: HTMLFormElement
   let login: LoginType = {
-    username: 'charlie',
-    password: 'Def password(1)',
+    username: '',
+    password: '',
   }
   const handleLogin = async () => {
     if (form.reportValidity()) {

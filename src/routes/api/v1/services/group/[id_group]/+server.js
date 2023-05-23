@@ -7,7 +7,7 @@ export async function GET({ params }) {
   const result = await sequelize
     .transaction(async (t) => {
       const result = await sequelize.query(
-        `SELECT * FROM ${table} WHERE id_group = :id_group`,
+        `SELECT * FROM ${table} WHERE id_group = :id_group and disable=false`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,
@@ -51,8 +51,8 @@ export async function PUT({ params, request }) {
     .transaction(async (t) => {
       await sequelize.query(
         `UPDATE ${table}
-SET country = :country, tourist_amount = :tourist_amount
-WHERE id_group = :identifier`,
+        SET country = :country, tourist_amount = :tourist_amount
+        WHERE id_group = :identifier`,
         {
           type: sequelize.QueryTypes.UPDATE,
           transaction: t,
@@ -63,7 +63,7 @@ WHERE id_group = :identifier`,
         }
       )
       return await sequelize.query(
-        `SELECT * FROM ${table} WHERE id_group = :identifier`,
+        `SELECT * FROM ${table} WHERE id_group = :identifier and disable=false`,
         {
           type: sequelize.QueryTypes.SELECT,
           transaction: t,
