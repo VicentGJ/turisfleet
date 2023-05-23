@@ -108,6 +108,17 @@
       />
     </div>
     <div class="input-container">
+      <label for="">Tourist amount *</label>
+      <input
+        required
+        type="number"
+        min="1"
+        max="50"
+        id=""
+        bind:value={values.tourist_amount}
+      />
+    </div>
+    <div class="input-container">
       <label for="">Specific Program *</label>
       <select name="" id="" bind:value={values.id_specific_program} required>
         {#each programs as program}

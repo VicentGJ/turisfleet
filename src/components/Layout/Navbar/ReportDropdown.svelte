@@ -213,7 +213,20 @@
     } else {
     }
   }
-  async function report9(this: ReportItemType) {}
+  async function report9(this: ReportItemType) {
+    const res = await reportService.report9()
+    if (res.length > 0) {
+      generatePDF(
+        res,
+        `[Report #8][${dayjs().format('YYYY-MMM-DD')}] Modifications`
+      )
+    } else {
+      $popup = {
+        message: 'No data in report',
+        type: 'info',
+      }
+    }
+  }
 
   let container: HTMLDivElement
   const toggle = (ev: MouseEvent): void => {

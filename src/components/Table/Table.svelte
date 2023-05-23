@@ -25,10 +25,10 @@
   })
   $: switch ($view) {
     case '/turisfleet/users':
-      idColumn = ['id_user']
+      idColumn = ['id_user', 'id_role']
       break
     case '/turisfleet/cars':
-      idColumn = ['id_car']
+      idColumn = ['id_car', 'id_driver']
       break
     case '/turisfleet/drivers':
       idColumn = ['id_driver']

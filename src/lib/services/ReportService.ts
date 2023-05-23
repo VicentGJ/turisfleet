@@ -27,9 +27,32 @@ export default class ReportService extends BaseService {
   public async report1(): Promise<Report1Type[]> {
     return new Promise<Report1Type[]>(async (resolve, reject) => {
       let data = await this.handleReq(this.url('1'), undefined, 'GET')
-      resolve(data)
+      // resolve(data)
       const result: Report1Type[] = []
-      //   resolve(result)
+      let drivers: any = {}
+      data.forEach((driver: any) => {
+        if (drivers[driver['Driver ID']]) {
+          if (!drivers[driver['Driver ID']]['Car'].includes(driver['Car'])) {
+            drivers[driver['Driver ID']]['Car'].push(driver['Car'])
+          }
+          if (
+            !drivers[driver['Driver ID']]['Category'].includes(
+              driver['Category']
+            )
+          ) {
+            drivers[driver['Driver ID']]['Category'].push(driver['Category'])
+          }
+        } else {
+          drivers[driver['Driver ID']] = {
+            ...driver,
+            Car: [driver['Car']],
+            Category: [driver['Category']],
+          }
+          result.push(drivers[driver['Driver ID']])
+        }
+      })
+      console.log(result)
+      resolve(result)
     })
   }
   public async report2(): Promise<Report2Type[]> {
@@ -65,19 +88,19 @@ export default class ReportService extends BaseService {
     return await this.handleReq(this.url('5'), undefined, 'GET')
   }
   public async report6(): Promise<Report6Type[]> {
-    return await this.handleReq(this.url('6'), undefined, 'GET') //TODO: this is uncompleted
+    return await this.handleReq(this.url('6'), undefined, 'GET')
   }
   public async report7(id_request: number): Promise<Report7Type[]> {
     return await this.handleReq(
       this.url('7'),
       this.makeParams({ id_request }),
       'GET'
-    ) //TODO: this is uncompleted
+    )
   }
   public async report8(): Promise<Report8Type[]> {
     return await this.handleReq(this.url('8'), undefined, 'GET') //TODO: this is uncompleted
   }
   public async report9(): Promise<Report9Type[]> {
-    return await this.handleReq(this.url('9'), undefined, 'GET') //TODO: this is uncompleted
+    return await this.handleReq(this.url('9'), undefined, 'GET')
   }
 }
